@@ -281,15 +281,14 @@ export default function App() {
           <form onSubmit={submit}>
             <div className="query-header">
               <label htmlFor="query" className="query-label">
-                Research Inquiry
+                Enquiry
               </label>
               <div className="example-query-wrapper">
-                <span className="example-query-label">💡 Example Query:</span>
                 <button
                   type="button"
                   className="example-query-chip"
                   onClick={() => setQuery(EXAMPLE_QUERY)}
-                  title="Click to populate research question"
+                  title="Click to populate question"
                 >
                   {EXAMPLE_QUERY}
                 </button>
@@ -313,10 +312,10 @@ export default function App() {
               <button type="submit" className="submit-btn" disabled={loading || !query.trim()}>
                 {loading ? (
                   <>
-                    <span className="btn-spinner" /> Synthesising Evidence…
+                    <span className="btn-spinner" /> Searching…
                   </>
                 ) : (
-                  'Run Research'
+                  'Search'
                 )}
               </button>
             </div>
@@ -481,7 +480,7 @@ export default function App() {
         {!loading && !error && !result && (
           <section className="empty-state-panel">
             <div className="empty-icon">🔬</div>
-            <h2>Ready for AMR Research Inquiry</h2>
+            <h2>Ready for AMR Enquiry</h2>
             <p>Enter any clinical question, resistance gene, mutation, drug pair, or comparative query above to synthesize evidence.</p>
             <div className="empty-suggestions">
               <span>Try asking:</span>

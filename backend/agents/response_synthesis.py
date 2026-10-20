@@ -423,7 +423,7 @@ def _literature_record_has_traceable_support(record, query=None, entities=None):
     return True
 
 
-def _mutation_table(evidence, max_rows=20, query=None, entities=None):
+def _mutation_table(evidence, max_rows=None, query=None, entities=None):
     """Reference rows own the table; literature-only rows must explicitly support
     the requested phenotype. Unclear and opposite-phenotype literature stays out
     of a directional resistance/susceptibility findings table."""
@@ -431,7 +431,8 @@ def _mutation_table(evidence, max_rows=20, query=None, entities=None):
     requested_phenotype = _requested_phenotype(query)
     entities = entities or {}
     # Organism-unspecified NCBI records stay reference grounding only.
-    db_records = [r for r in (ref.get("mutations") or []) if r.get("organism_specific") is not False]
+    all_ref_records = ref.get("all_mutations") or ref.get("mutations") or []
+    db_records = [r for r in all_ref_records if r.get("organism_specific") is not False]
     db_records = [r for r in db_records if _phenotype_matches(r, requested_phenotype)]
     requested_subs = {
         parse_substitution(v)
@@ -467,7 +468,7 @@ def _mutation_table(evidence, max_rows=20, query=None, entities=None):
         seen.add(key)
         records.append(r)
     # A paper may support a complete catalogue mutation that is outside the
-    # user-facing 20-row catalogue preview. Surface that one explicit finding
+    # user-facing catalogue preview. Surface that one explicit finding
     # (with the curated classification and its paper evidence) rather than
     # claiming the literature was ignored. Never duplicate a displayed row.
     literature_extras = []
@@ -521,7 +522,8 @@ def _mutation_table(evidence, max_rows=20, query=None, entities=None):
         return ""
     rows = ["### Mutation findings", "", "| Mutation | Phenotype / resistance status | Evidence source |",
             "|---|---|---|"]
-    for r in records[:max_rows]:
+    target_records = records[:max_rows] if max_rows else records
+    for r in target_records:
         mutation = r.get("mutation") or r.get("reported_mutation") or "Not reported"
         if r.get("query_notation") and r.get("query_notation_scheme"):
             mutation = f"{mutation} (written {r['query_notation']}; {r['query_notation_scheme']})"
@@ -544,14 +546,6 @@ def _mutation_table(evidence, max_rows=20, query=None, entities=None):
         else:
             source_display = f"[{source}]({source_url})" if source_url else source
         rows.append(f"| {mutation} | {phenotype} | {source_display} |")
-    total = ref.get("total_matching_records")
-    shown = min(len(records), max_rows)
-    if db_records and total and total > shown and not requested_subs:
-        rows.append("")
-        rows.append(
-            f"Showing {shown} of {total} matching reference records (display limit {max_rows}); "
-            "the complete set was used when screening the literature."
-        )
     return "\n".join(rows)
 
 
@@ -802,9 +796,10 @@ def _mutation_focused_response(query, understanding, evidence, references):
     gene_label = ", ".join(genes)
     drug_label = ", ".join(drugs)
     organism_label = ", ".join(organisms)
-    table = _mutation_table(evidence, max_rows=20, query=query, entities=entities)
+    table = _mutation_table(evidence, max_rows=None, query=query, entities=entities)
+    all_ref_rows = ref.get("all_mutations") or ref.get("mutations") or []
     reference_rows = [
-        r for r in (ref.get("mutations") or [])
+        r for r in all_ref_rows
         if r.get("organism_specific") is not False and _phenotype_matches(r, phenotype)
     ]
     table_rows = []
@@ -1864,8 +1859,8 @@ def _extract_all_mutation_profiles(passages, evidence, genes, query):
     seen_subs = set()
 
     # 1. Curated mutation reference (e.g. WHO catalogue)
-    ref_muts = (evidence.get("mutation_reference") or {}).get("mutations") or []
-    for r in ref_muts:
+    all_ref_muts = (evidence.get("mutation_reference") or {}).get("all_mutations") or (evidence.get("mutation_reference") or {}).get("mutations") or []
+    for r in all_ref_muts:
         m = str(r.get("mutation") or r.get("reported_mutation") or "").strip()
         if m and m not in seen_subs:
             seen_subs.add(m)
@@ -2082,7 +2077,7 @@ def _synthesize_mutation_determinant_matrix(mutation_profiles, ref_evidence, can
     canonical_keys = ["G238S", "E104K", "M182T", "R164S", "R164H", "R65L", "V84I", "P65R", "M69I", "M69V", "R244S", "S450L", "H445Y", "D435V", "S315T", "S83L", "D87N"]
     ordered_keys = [k for k in canonical_keys if k in mutation_profiles] + [k for k in mutation_profiles if k not in canonical_keys]
 
-    for k in ordered_keys[:15]:
+    for k in ordered_keys:
         p = mutation_profiles[k]
         m_name = f"**{p['mutation']}**"
         domain = p["domain"]

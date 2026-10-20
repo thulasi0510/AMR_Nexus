@@ -15,10 +15,9 @@ from config import NCBI_AMR_PATH, WHO_TB_PATH, WHO_TB_INDEX_PATH
 from agents.entity_aliases import canonical_drug, canonical_organism, dedupe_by_key
 from agents.mutation_matching import MutationIndex, parse_substitution
 
-# User-facing display limit ONLY. The complete reference result is always kept
-# in retrieve_mutations()["all_mutations"]; nothing downstream (literature
-# filtering, evidence matching) may be restricted to the displayed subset.
-MAX_DISPLAY = 20
+# User-facing display limit: 0 = unlimited. All matching reference mutations
+# are curated and presented based on available evidence.
+MAX_DISPLAY = int(os.getenv("AMR_MUTATION_MAX_DISPLAY", "0"))
 
 
 AA3 = {
@@ -294,10 +293,9 @@ def retrieve_mutations(understanding):
             )
     unique = list(merged.values())
 
-    # The user-facing mutation list is capped; the complete, ranked reference
-    # result is retained in "all_mutations" for literature matching.
-    displayed = unique[:MAX_DISPLAY]
-    truncated = max(0, len(unique) - MAX_DISPLAY)
+    # All accurate validated mutations are curated without arbitrary truncation.
+    displayed = unique if not MAX_DISPLAY else unique[:MAX_DISPLAY]
+    truncated = 0 if not MAX_DISPLAY else max(0, len(unique) - MAX_DISPLAY)
     by_source = {}
     for r in unique:
         by_source[r.get("source")] = by_source.get(r.get("source"), 0) + 1
@@ -305,7 +303,7 @@ def retrieve_mutations(understanding):
         "status": "found" if unique else "no_reference_mutations",
         "mutations": displayed,
         "all_mutations": unique,
-        "display_limit": MAX_DISPLAY,
+        "display_limit": MAX_DISPLAY if MAX_DISPLAY else None,
         "sources": sorted(set(r.get("source") for r in unique if r.get("source"))),
         "total_matching_records": len(unique),
         "truncated_records": truncated,

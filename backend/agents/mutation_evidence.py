@@ -214,18 +214,28 @@ def extract_literature_mutations(literature_results, understanding, max_records=
                 # displayed as an M. tuberculosis katG amino-acid substitution.
                 if not _mutation_position_plausible(match.get("mutation"), genes, organisms):
                     continue
-                key = (match["mutation"], paper.get("pmid"))
+                paper_id = paper.get("pmid") or paper.get("doi") or paper.get("title")
+                key = (match["mutation"], paper_id)
                 ref = ref_lookup.get(match["mutation"].upper())
                 phenotype = classify_sentence_phenotype(match["sentence"], antibiotics)
+                prov = paper.get("source_provenance") or ([paper.get("source")] if paper.get("source") else ["PubMed"])
+                source_label = " & ".join(dict.fromkeys(s for s in prov if s)) if prov else (paper.get("source") or "PubMed")
+                source_url = paper.get("source_url") or paper.get("doi_url") or paper.get("pubmed_url")
+                if not source_url and paper.get("pmid"):
+                    source_url = f"https://pubmed.ncbi.nlm.nih.gov/{paper['pmid']}/"
                 record = {
                     "mutation": match["mutation"],
                     "as_written": match["as_written"],
                     "numbering": match["numbering"],
                     "phenotype": phenotype,
                     "gene": match.get("gene"),
-                    "source": "Primary literature",
-                    "source_url": paper.get("pubmed_url"),
+                    "source": source_label,
+                    "source_provenance": list(dict.fromkeys(s for s in prov if s)),
+                    "source_url": source_url,
+                    "doi": paper.get("doi"),
+                    "doi_url": paper.get("doi_url"),
                     "pmid": paper.get("pmid"),
+                    "pubmed_url": paper.get("pubmed_url"),
                     "title": paper.get("title"),
                     "organism_specific": True,
                     "in_reference": bool(ref),

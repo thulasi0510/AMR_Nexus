@@ -115,6 +115,45 @@ def _numbered_references(references):
     return numbered
 
 
+def _format_reference_citation_entry(r):
+    n = r.get("reference_number", 1)
+    title = str(r.get("title") or "Untitled publication").strip()
+    title = re.sub(r"\.+$", "", title).strip()
+    authors = r.get("authors") or []
+    author_text = f"{authors[0]} et al. " if len(authors) > 1 else (f"{authors[0]}. " if authors else "")
+
+    meta_parts = []
+    journal = r.get("journal")
+    year = r.get("year")
+    if journal:
+        meta_parts.append(f"*{journal}*")
+    if year:
+        meta_parts.append(f"({year})")
+    meta_str = (" " + " ".join(meta_parts)) if meta_parts else ""
+
+    prov = r.get("source_provenance") or ([r.get("source")] if r.get("source") else ["PubMed"])
+    prov_clean = list(dict.fromkeys(s for s in prov if s and s not in ("Primary literature", "Database")))
+    source_tag = f" [Sources: {', '.join(prov_clean)}]" if prov_clean else ""
+
+    links = []
+    doi = r.get("doi")
+    doi_url = r.get("doi_url") or (f"https://doi.org/{doi}" if doi else None)
+    if doi_url:
+        links.append(f"[DOI]({doi_url})")
+
+    pmid = r.get("pmid")
+    pubmed_url = r.get("pubmed_url") or (f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None)
+    if pubmed_url:
+        links.append(f"[PubMed: {pmid}]({pubmed_url})")
+
+    source_url = r.get("source_url")
+    if source_url and source_url not in (doi_url, pubmed_url) and not links:
+        links.append(f"[Article Link]({source_url})")
+
+    links_str = f" — {' | '.join(links)}" if links else (f" — PMID: {pmid}" if pmid else "")
+    return f"[{n}] {author_text}**{title}**{meta_str}{source_tag}{links_str}"
+
+
 def _paper_identity(paper):
     return paper.get("pmid") or paper.get("doi") or paper.get("title")
 
@@ -422,6 +461,53 @@ def _literature_record_has_traceable_support(record, query=None, entities=None):
         return False
     return True
 
+def _format_mutation_source_display(r):
+    # Reference source (e.g. WHO Catalogue)
+    ref_match = r.get("reference_classification") or {}
+    ref_source = r.get("reference_source") or ref_match.get("source")
+    if not ref_source and "WHO" in str(r.get("source")):
+        ref_source = r.get("source")
+    ref_url = r.get("reference_source_url")
+    if not ref_url and ref_source and "WHO" in str(ref_source):
+        ref_url = "https://www.who.int/publications/i/item/9789240082410"
+
+    # Literature match or direct literature provenance
+    lit_match = r.get("literature_match") or {}
+    prov = list(r.get("source_provenance") or lit_match.get("source_provenance") or [])
+    if not prov:
+        src = r.get("literature_source") or lit_match.get("source") or r.get("source")
+        if src and "WHO" not in str(src) and str(src) not in ("Database", "Primary literature"):
+            prov = [src]
+
+    clean_prov = []
+    for p in prov:
+        p_str = str(p).strip()
+        if p_str and "WHO" not in p_str and p_str not in ("Database", "Primary literature"):
+            if p_str not in clean_prov:
+                clean_prov.append(p_str)
+
+    lit_url = r.get("literature_source_url") or lit_match.get("source_url") or r.get("source_url") or lit_match.get("doi_url") or r.get("doi_url")
+    pmid = r.get("pmid") or lit_match.get("pmid")
+    if not lit_url and pmid:
+        lit_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+
+    displays = []
+    if ref_source:
+        pheno_tag = f": {r.get('phenotype', 'classification')}" if "WHO" in str(ref_source) else ""
+        label = f"{ref_source}{pheno_tag}"
+        displays.append(f"[{label}]({ref_url})" if ref_url else f"[{label}]")
+
+    if clean_prov:
+        label = " & ".join(clean_prov)
+        displays.append(f"[{label}]({lit_url})" if lit_url else f"[{label}]")
+    elif not ref_source:
+        label = r.get("source") or "Scholarly Literature"
+        if label in ("Primary literature", "Database"):
+            label = "Scholarly Literature"
+        displays.append(f"[{label}]({lit_url})" if lit_url else f"[{label}]")
+
+    return " & ".join(displays)
+
 
 def _mutation_table(evidence, max_rows=None, query=None, entities=None):
     """Reference rows own the table; literature-only rows must explicitly support
@@ -460,13 +546,28 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
             if str(r.get("mutation") or "").upper() in matched_canon
             or str(r.get("reported_mutation") or "").upper() in matched_canon
         ]
+
+    lit_by_mutation = {}
+    for lm in evidence.get("literature_mutations") or []:
+        m_key = str(lm.get("mutation") or "").upper().strip()
+        if m_key and m_key not in lit_by_mutation:
+            lit_by_mutation[m_key] = lm
+        w_key = str(lm.get("as_written") or "").upper().replace("P.", "").strip()
+        if w_key and w_key not in lit_by_mutation:
+            lit_by_mutation[w_key] = lm
+
     records, seen = [], set()
     for r in db_records:
-        key = str(r.get("mutation") or r.get("reported_mutation") or "").upper()
+        r_copy = dict(r)
+        key = str(r_copy.get("mutation") or r_copy.get("reported_mutation") or "").upper()
         if key and key in seen:
             continue
         seen.add(key)
-        records.append(r)
+        lm = lit_by_mutation.get(key)
+        if lm:
+            r_copy["literature_match"] = lm
+        records.append(r_copy)
+
     # A paper may support a complete catalogue mutation that is outside the
     # user-facing catalogue preview. Surface that one explicit finding
     # (with the curated classification and its paper evidence) rather than
@@ -484,10 +585,13 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
         extra = dict(item)
         classification = item.get("reference_classification") or {}
         if classification:
-            extra["source"] = classification.get("source") or extra.get("source")
-            extra["source_url"] = "https://www.who.int/publications/i/item/9789240082410" if "WHO" in str(extra.get("source")) else extra.get("source_url")
+            extra["reference_source"] = classification.get("source")
+            extra["reference_source_url"] = "https://www.who.int/publications/i/item/9789240082410" if "WHO" in str(classification.get("source")) else None
             extra["confidence"] = classification.get("confidence") or extra.get("confidence")
             extra["phenotype"] = classification.get("phenotype") or extra.get("phenotype")
+        extra["literature_source"] = item.get("source")
+        extra["literature_source_url"] = item.get("source_url") or item.get("doi_url") or (f"https://pubmed.ncbi.nlm.nih.gov/{item['pmid']}/" if item.get("pmid") else None)
+        extra["source_provenance"] = item.get("source_provenance") or ([item.get("source")] if item.get("source") else [])
         literature_extras.append(extra)
         seen.add(key)
     if literature_extras:
@@ -496,9 +600,6 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
         by_mutation = {}
         for r in evidence.get("literature_mutations") or []:
             phenotype = str(r.get("phenotype") or "").lower()
-            # Literature-only rows require an explicit directional phenotype;
-            # a sentence that merely mentions a resistance-determining region
-            # is not evidence that the listed allele causes resistance.
             explicit_phenotype = phenotype in {
                 "resistance-associated evidence", "susceptibility-associated evidence"
             }
@@ -509,8 +610,6 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
             if requested_subs:
                 sub = parse_substitution(r.get("mutation") or r.get("as_written"))
                 if sub not in requested_subs:
-                    # Alternate numbering is only accepted when a reference
-                    # mapping above establishes the canonical mutation.
                     canon, _numbering = index.lookup(sub) if sub else (None, None)
                     if not canon or str(canon).upper() not in matched_canon:
                         continue
@@ -539,12 +638,7 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
             phenotype = f"{phenotype} (WHO grade 1)"
         elif confidence.startswith("2)"):
             phenotype = f"{phenotype} (WHO grade 2; interim)"
-        source = r.get("source") or "Database"
-        source_url = r.get("source_url")
-        if source == "WHO TB Mutation Catalogue 2023":
-            source_display = f"[{source}: {r.get('phenotype', 'classification')}]({source_url})" if source_url else f"[{source}: {r.get('phenotype', 'classification')}]"
-        else:
-            source_display = f"[{source}]({source_url})" if source_url else source
+        source_display = _format_mutation_source_display(r)
         rows.append(f"| {mutation} | {phenotype} | {source_display} |")
     return "\n".join(rows)
 
@@ -889,15 +983,19 @@ def _mutation_focused_response(query, understanding, evidence, references):
     # evidence can be shown as supporting claims. Do not paste unrelated abstract
     # sentences into the answer; list the supported mutation and its citation.
     refs = _numbered_references(references)
-    ref_index = {_paper_identity(r): r for r in refs}
-    pmid_index = {str(r.get("pmid")): r for r in refs if r.get("pmid")}
+    ref_index = {}
+    for r in refs:
+        if r.get("pmid"):
+            ref_index[str(r["pmid"]).strip()] = r
+        if r.get("doi"):
+            ref_index[str(r["doi"]).strip().lower()] = r
+        title_k = _clean_title_key(r.get("title"))
+        if title_k and len(title_k) >= 20:
+            ref_index[title_k] = r
+
     explicit_query_variants = {
         str(v).upper() for v in [*(entities.get("mutations") or []), *(entities.get("variants") or [])]
     }
-    # A PMID is not itself proof of a mutation-phenotype relationship. Keep
-    # only records carrying the actual extracted sentence, then display that
-    # sentence so the user can audit why each mutation was included. Group by
-    # mutation (rather than printing one repetitive generic bullet per PMID).
     support_by_mutation = {}
     for m in evidence.get("literature_mutations") or []:
         mphenotype = str(m.get("phenotype") or "").lower()
@@ -905,17 +1003,16 @@ def _mutation_focused_response(query, understanding, evidence, references):
             continue
         if not _phenotype_matches(m, phenotype):
             continue
-        pmid = str(m.get("pmid") or "")
-        ref_item = pmid_index.get(pmid)
+        pmid = str(m.get("pmid") or "").strip()
+        doi = str(m.get("doi") or "").strip().lower()
+        title_k = _clean_title_key(m.get("title"))
+        ref_item = (ref_index.get(pmid) if pmid else None) or (ref_index.get(doi) if doi else None) or (ref_index.get(title_k) if len(title_k) >= 20 else None)
         if not ref_item:
             continue
         mutation = str(m.get("mutation") or "").upper().strip()
         sentence = re.sub(r"\s+", " ", str(m.get("evidence_sentence") or "")).strip()
         if not mutation or not sentence:
             continue
-        # The extracted quote must contain the mutation as written or in the
-        # canonical form. This prevents a paper-level match from being shown as
-        # allele-specific support when the stored record has no traceable quote.
         forms = {mutation}
         written = str(m.get("as_written") or "").strip()
         if written:
@@ -939,13 +1036,7 @@ def _mutation_focused_response(query, understanding, evidence, references):
     if support_by_mutation:
         support_lines = []
         for mutation, bucket in support_by_mutation.items():
-            # Two distinct, directly extracted passages per mutation are enough
-            # for a readable audit trail; all matching records remain available
-            # in the retrieval/debug report.
             passages = bucket["records"][:2]
-            # Preserve the established alternate-numbering annotation in the
-            # answer. The evidence audit must not hide how a literature allele
-            # was mapped to the canonical/reference mutation.
             first_record = passages[0]["record"] if passages else {}
             label = mutation
             written_label = str(first_record.get("as_written") or "").strip()
@@ -963,15 +1054,18 @@ def _mutation_focused_response(query, understanding, evidence, references):
                 source_kind = "full-text/abstract excerpt"
                 if passage["record"].get("numbering") not in (None, "reference numbering", "as written"):
                     source_kind += f"; reported numbering: {passage['record']['numbering']}"
+                prov = ref_item.get("source_provenance") or ([ref_item.get("source")] if ref_item.get("source") else ["PubMed"])
+                prov_clean = list(dict.fromkeys(s for s in prov if s and s not in ("Primary literature", "Database")))
+                source_tag = f" [Sources: {', '.join(prov_clean)}]" if prov_clean else ""
                 quote = passage["sentence"].replace("\n", " ").strip()
-                support_lines.append(f"  - {source_kind}: “{quote}” [{n}]")
+                support_lines.append(f"  - {source_kind}{source_tag}: “{quote}” [{n}]")
         parts.append("### Supporting literature (auditable excerpts)\n" + "\n".join(support_lines))
         if pmc_note:
             parts.append(pmc_note)
         cited_refs = [r for r in refs if r["reference_number"] in cited_numbers]
         if cited_refs:
             parts.append("### References\n" + "\n".join(
-                f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+                _format_reference_citation_entry(r)
                 for r in cited_refs
             ))
     else:
@@ -1004,7 +1098,7 @@ def _mutation_focused_response(query, understanding, evidence, references):
             parts.append("\n".join(clarification_lines))
             if pmc_note:
                 parts.append(pmc_note)
-            parts.append(f"### References\n[{n}] {vp.get('title')} — PMID: {vp.get('pmid') or 'N/A'}")
+            parts.append("### References\n" + _format_reference_citation_entry(vp))
         elif passages and not requested_variants:
             lit_lines = ["### Supporting Literature (Auditable Excerpts)"]
             cited_nums = set()
@@ -1020,7 +1114,7 @@ def _mutation_focused_response(query, understanding, evidence, references):
             cited_refs = [r for r in auditable_refs if r.get("reference_number") in cited_nums]
             if cited_refs:
                 parts.append("### References\n" + "\n".join(
-                    f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+                    _format_reference_citation_entry(r)
                     for r in cited_refs
                 ))
         else:
@@ -1484,12 +1578,12 @@ def _mechanism_focused_response(query, understanding, evidence, references):
         cited_refs = [r for r in refs if r.get("reference_number") in cited_nums]
         if cited_refs:
             parts.append("### References\n" + "\n".join(
-                f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+                _format_reference_citation_entry(r)
                 for r in cited_refs
             ))
     elif references:
         parts.append("### References\n" + "\n".join(
-            f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+            _format_reference_citation_entry(r)
             for r in refs[:5]
         ))
 
@@ -1678,7 +1772,7 @@ def _comparison_focused_response(query, understanding, evidence, references):
         cited_refs = [r for r in refs if r.get("reference_number") in cited_nums]
         if cited_refs:
             parts.append("### References\n" + "\n".join(
-                f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+                _format_reference_citation_entry(r)
                 for r in cited_refs
             ))
 
@@ -1887,7 +1981,13 @@ def _extract_all_mutation_profiles(passages, evidence, genes, query):
         if m and m not in seen_subs:
             seen_subs.add(m)
             pmid = lm.get("pmid")
-            cite_tag = f"PMID: {pmid}" if pmid else "Literature"
+            prov = lm.get("source_provenance") or ([lm.get("source")] if lm.get("source") else ["PubMed"])
+            prov_clean = list(dict.fromkeys(s for s in prov if s and s not in ("Primary literature", "Database")))
+            source_names = " & ".join(prov_clean) if prov_clean else (lm.get("source") or "Literature")
+            url = lm.get("source_url") or lm.get("doi_url") or (f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None)
+            cite_tag = f"[{source_names}]({url})" if url else source_names
+            if pmid:
+                cite_tag += f" (PMID: {pmid})"
             kb = _KNOWN_AMR_MUTATION_KNOWLEDGE.get(m, {})
             domain = kb.get("domain", "Literature-identified variant")
             mech = kb.get("mechanism", "Identified in experimental/clinical resistance studies")
@@ -2304,12 +2404,12 @@ def _general_amr_response(query, understanding, evidence, references):
         cited_refs = [r for r in refs if r.get("reference_number") in cited_nums]
         if cited_refs:
             parts.append("### References\n" + "\n".join(
-                f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+                _format_reference_citation_entry(r)
                 for r in cited_refs
             ))
     elif refs:
         parts.append("### References\n" + "\n".join(
-            f"[{r['reference_number']}] {r.get('title')} — PMID: {r.get('pmid') or 'N/A'}"
+            _format_reference_citation_entry(r)
             for r in refs[:8]
         ))
 

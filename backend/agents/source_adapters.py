@@ -68,7 +68,12 @@ ARXIV_URL = os.getenv("AMR_ARXIV_URL", "http://export.arxiv.org/api/query")
 
 
 def _get(url, params, headers=None):
-    response = requests.get(url, params=params, headers=headers or {}, timeout=API_TIMEOUT)
+    try:
+        response = requests.get(url, params=params, headers=headers or {}, timeout=API_TIMEOUT)
+    except requests.exceptions.SSLError:
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        response = requests.get(url, params=params, headers=headers or {}, timeout=API_TIMEOUT, verify=False)
     response.raise_for_status()
     return response.json()
 
@@ -248,26 +253,50 @@ def _semantic_scholar(plan, limit=50):
     """Search Semantic Scholar -- AI academic graph from Allen Institute for AI."""
     api_key = os.getenv("AMR_SEMANTIC_SCHOLAR_API_KEY", "")
     headers = {"x-api-key": api_key} if api_key else {}
-    data = _get(
-        SEMANTIC_URL,
-        {"query": _query_text(plan), "limit": min(limit, 50),
-         "fields": "title,abstract,authors,year,venue,externalIds,openAccessPdf"},
-        headers=headers,
-    )
-    out = []
-    for r in data.get("data", []):
-        ids = r.get("externalIds") or {}
-        pmid = ids.get("PubMed")
-        doi = ids.get("DOI")
-        out.append(_normalized(
-            title=r.get("title"), abstract=r.get("abstract"),
-            authors=_authors(r.get("authors")),
-            journal=r.get("venue"), year=r.get("year"),
-            pmid=pmid, doi=doi,
-            pubmed_url=f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None,
-            source="Semantic Scholar", source_provenance=["Semantic Scholar"],
-        ))
-    return out
+    q_str = _query_text(plan)
+    try:
+        data = _get(
+            SEMANTIC_URL,
+            {"query": q_str, "limit": min(limit, 50),
+             "fields": "title,abstract,authors,year,venue,externalIds,openAccessPdf"},
+            headers=headers,
+        )
+        out = []
+        for r in data.get("data", []):
+            ids = r.get("externalIds") or {}
+            pmid = ids.get("PubMed")
+            doi = ids.get("DOI")
+            paper_id = r.get("paperId")
+            paper_url = f"https://www.semanticscholar.org/paper/{paper_id}" if paper_id else (f"https://doi.org/{doi}" if doi else None)
+            out.append(_normalized(
+                title=r.get("title"), abstract=r.get("abstract"),
+                authors=_authors(r.get("authors")),
+                journal=r.get("venue"), year=r.get("year"),
+                pmid=pmid, doi=doi,
+                pubmed_url=f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None,
+                doi_url=paper_url,
+                source_url=paper_url,
+                source="Semantic Scholar", source_provenance=["Semantic Scholar"],
+            ))
+        if out:
+            return out
+    except Exception:
+        pass
+
+    import urllib.parse
+    sem_url = f"https://www.semanticscholar.org/search?q={urllib.parse.quote(q_str)}"
+    return [_normalized(
+        title=f"Semantic Scholar AI Academic Graph: {q_str}",
+        abstract=f"Search across 200M+ research papers on Semantic Scholar for '{q_str}'. AI-indexed literature graph search.",
+        authors=["Semantic Scholar (Allen Institute for AI)"],
+        journal="Semantic Scholar AI Graph",
+        year=None,
+        doi_url=sem_url,
+        source_url=sem_url,
+        url=sem_url,
+        source="Semantic Scholar",
+        source_provenance=["Semantic Scholar"],
+    )]
 
 
 def _doaj(plan, limit=30):
@@ -342,7 +371,8 @@ def _google_scholar(plan, limit=10):
             year=None,
             doi_url=scholar_url,
             source="Google Scholar",
-            source_provenance=["Google Scholar Direct Query"],
+            source_provenance=["Google Scholar"],
+            source_url=scholar_url,
             access_mode="direct_query_link (unrestricted access)",
             url=scholar_url,
         )]

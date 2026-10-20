@@ -217,20 +217,29 @@ def _ensure_references_section(answer, cited_refs):
             meta_parts.append(str(year))
         meta_str = f" *{', '.join(meta_parts)}*" if meta_parts else ""
         ids = []
-        if pmid:
-            ids.append(f"PMID: {pmid}")
+        links = []
         if doi:
             ids.append(f"DOI: {doi}")
-        id_str = f" | {' · '.join(ids)}" if ids else ""
+            links.append(f"[DOI]({ref.get('doi_url') or f'https://doi.org/{doi}'})")
+        if pmid:
+            ids.append(f"PMID: {pmid}")
+            links.append(f"[PubMed: {pmid}]({ref.get('pubmed_url') or f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'})")
+        if ref.get("source_url") and not links:
+            links.append(f"[Article Link]({ref.get('source_url')})")
+
+        id_str = f" | {' | '.join(ids)}" if ids else ""
+        links_str = f" — {' | '.join(links)}" if links else ""
 
         # Publication status badge
         pub_status = ref.get("publication_status", "Peer-reviewed")
         server = ref.get("preprint_server")
         status_tag = f" [{pub_status}: {server}]" if (pub_status == "Preprint" and server) else f" [{pub_status}]"
 
-        citation = f"[{n}] {author_text}**{title}**.{status_tag}{meta_str}{id_str}"
-        if url:
-            citation += f"\n    Direct link: {url}"
+        prov = ref.get("source_provenance") or ([ref.get("source")] if ref.get("source") else ["PubMed"])
+        prov_clean = list(dict.fromkeys(s for s in prov if s and s not in ("Primary literature", "Database")))
+        source_tag = f" [Sources: {', '.join(prov_clean)}]" if prov_clean else ""
+
+        citation = f"[{n}] {author_text}**{title}**.{status_tag}{meta_str}{id_str}{source_tag}{links_str}"
         lines.append(citation)
     return clean_answer + "\n" + "\n".join(lines)
 

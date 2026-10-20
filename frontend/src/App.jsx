@@ -215,6 +215,208 @@ function SourceStatus({ result }) {
   );
 }
 
+const LITERATURE_SOURCES = [
+  {
+    id: 'pubmed',
+    name: 'PubMed',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/',
+    description: '36M+ biomedical citations & MEDLINE abstracts from the National Library of Medicine (NCBI). Primary peer-reviewed medical index.',
+    records: '36M+ citations',
+    logo: (
+      <div className="pubmed-brand">
+        <span className="pubmed-pub">Pub</span>
+        <span className="pubmed-med">Med</span>
+      </div>
+    ),
+  },
+  {
+    id: 'europepmc',
+    name: 'Europe PMC',
+    url: 'https://europepmc.org/',
+    description: '44M+ life science publications, PMC open access full texts, preprints, patents, and biological database cross-references.',
+    records: '44M+ records',
+    logo: (
+      <svg viewBox="0 0 36 36" className="source-svg-logo" aria-label="Europe PMC">
+        <circle cx="14" cy="14" r="8" fill="#0077c8" fillOpacity="0.9" />
+        <circle cx="22" cy="14" r="8" fill="#dc2626" fillOpacity="0.9" />
+        <circle cx="14" cy="22" r="7.5" fill="#06b6d4" fillOpacity="0.85" />
+        <circle cx="22" cy="22" r="7.5" fill="#f59e0b" fillOpacity="0.85" />
+      </svg>
+    ),
+  },
+  {
+    id: 'semanticscholar',
+    name: 'Semantic Scholar',
+    url: 'https://www.semanticscholar.org/',
+    description: '200M+ AI-indexed scientific papers with deep citation graphs and influential citations from the Allen Institute for AI.',
+    records: '200M+ papers',
+    logo: (
+      <svg viewBox="0 0 36 36" className="source-svg-logo" aria-label="Semantic Scholar">
+        <path d="M7 9 L18 15 L18 29 L7 23 Z" fill="#1e3a8a" />
+        <path d="M18 15 L29 9 L29 23 L18 29 Z" fill="#2563eb" />
+        <path d="M11 17 L17 23 L31 10" fill="none" stroke="#ea580c" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    id: 'crossref',
+    name: 'Crossref',
+    url: 'https://search.crossref.org/',
+    description: '150M+ scholarly digital object identifiers (DOIs) and verified publisher metadata across global journals and book chapters.',
+    records: '150M+ DOIs',
+    logo: (
+      <svg viewBox="0 0 36 36" className="source-svg-logo" aria-label="Crossref">
+        <polygon points="18,5 28,11 18,17 8,11" fill="#f59e0b" />
+        <polygon points="8,13 18,19 18,31 8,25" fill="#ef4444" />
+        <polygon points="18,19 28,13 28,25 18,31" fill="#2563eb" />
+        <polygon points="13,16 23,10 23,16 13,22" fill="#10b981" fillOpacity="0.95" />
+      </svg>
+    ),
+  },
+  {
+    id: 'openalex',
+    name: 'OpenAlex',
+    url: 'https://openalex.org/',
+    description: '250M+ fully open universal scholarly knowledge graph connecting papers, researchers, institutions, and topics.',
+    records: '250M+ works',
+    logo: (
+      <svg viewBox="0 0 36 36" className="source-svg-logo" aria-label="OpenAlex">
+        <polygon points="18,4 30,11 18,18 6,11" fill="#7c3aed" />
+        <polygon points="6,11 18,18 18,32 6,25" fill="#db2777" />
+        <polygon points="18,18 30,11 30,25 18,32" fill="#f59e0b" />
+        <polygon points="18,10 24,14 18,18 12,14" fill="#4f46e5" />
+        <circle cx="18" cy="18" r="4" fill="#ffffff" />
+        <circle cx="18" cy="18" r="2.2" fill="#6d28d9" />
+      </svg>
+    ),
+  },
+  {
+    id: 'googlescholar',
+    name: 'Google Scholar',
+    url: 'https://scholar.google.com/',
+    description: 'Broadly searches across disciplines and sources: articles, theses, books, abstracts and court opinions.',
+    records: 'Comprehensive Index',
+    logo: (
+      <svg viewBox="0 0 36 36" className="source-svg-logo" aria-label="Google Scholar">
+        <path d="M30.5 18.3c0-.9-.1-1.7-.3-2.5H18v4.8h7.1c-.3 1.6-1.2 3-2.6 3.9v3.2h4.2c2.5-2.3 3.9-5.7 3.9-9.4z" fill="#4285F4" />
+        <path d="M18 31c3.6 0 6.6-1.2 8.8-3.2l-4.2-3.2c-1.2.8-2.7 1.3-4.6 1.3-3.5 0-6.5-2.4-7.6-5.6H6.1v3.3C8.3 27.8 12.8 31 18 31z" fill="#34A853" />
+        <path d="M10.4 20.3c-.3-.9-.4-1.8-.4-2.8s.1-1.9.4-2.8v-3.3H6.1C5.2 13.2 4.7 15.5 4.7 18s.5 4.8 1.4 6.6l4.3-3.3z" fill="#FBBC05" />
+        <path d="M18 9.1c2 0 3.7.7 5.1 2l3.8-3.8C24.6 5.2 21.6 4 18 4 12.8 4 8.3 7.2 6.1 11.4l4.3 3.3c1.1-3.2 4.1-5.6 7.6-5.6z" fill="#EA4335" />
+      </svg>
+    ),
+  },
+  {
+    id: 'biorxiv',
+    name: 'bioRxiv',
+    url: 'https://www.biorxiv.org/',
+    description: 'Cold Spring Harbor Laboratory preprint repository for biological sciences, delivering early AMR genomics findings.',
+    records: 'Preprint Archive',
+    logo: (
+      <div className="source-brand-text">
+        <span className="brand-dark">bio</span>
+        <span className="brand-red">R</span>
+        <span className="brand-dark">xiv</span>
+      </div>
+    ),
+  },
+  {
+    id: 'medrxiv',
+    name: 'medRxiv',
+    url: 'https://www.medrxiv.org/',
+    description: 'Cold Spring Harbor Laboratory preprint server for health and clinical sciences, covering emergent AMR isolates.',
+    records: 'Clinical Preprints',
+    logo: (
+      <div className="source-brand-text">
+        <span className="brand-dark">med</span>
+        <span className="brand-red">R</span>
+        <span className="brand-dark">xiv</span>
+      </div>
+    ),
+  },
+];
+
+function IntegratedLiteratureSources({ onOpenModal }) {
+  return (
+    <section className="panel literature-sources-card" aria-label="Integrated Literature Sources">
+      <div className="literature-sources-header">
+        <div className="literature-sources-title-group">
+          <span className="literature-sources-icon-badge">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </span>
+          <h2 className="literature-sources-title">Integrated Literature Sources</h2>
+        </div>
+        <button
+          type="button"
+          className="view-all-sources-btn"
+          onClick={onOpenModal}
+          title="View federated research sources details"
+        >
+          View all sources <span className="chevron">&rsaquo;</span>
+        </button>
+      </div>
+
+      <div className="literature-sources-grid">
+        {LITERATURE_SOURCES.map((source) => (
+          <a
+            key={source.id}
+            href={source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="source-item-card"
+            title={`${source.name}: ${source.records} — click to visit database portal`}
+          >
+            <div className="source-item-logo">{source.logo}</div>
+            <div className="source-item-name">{source.name}</div>
+            <div className="source-item-dot" title="Active & integrated into AMR research" />
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SourcesModal({ onClose }) {
+  return (
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="sources-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="sources-modal-header">
+          <div>
+            <h2 className="sources-modal-title">Integrated Literature Sources</h2>
+            <p className="sources-modal-subtitle">
+              AMR Nexus queries and synthesizes scientific evidence across 8 federated databases in parallel alongside CARD and NCBI AMRFinderPlus.
+            </p>
+          </div>
+          <button type="button" className="sources-modal-close" onClick={onClose} aria-label="Close dialog">
+            &times;
+          </button>
+        </div>
+        <div className="sources-modal-list">
+          {LITERATURE_SOURCES.map((s) => (
+            <div key={s.id} className="source-modal-item">
+              <div className="source-modal-logo-col">{s.logo}</div>
+              <div className="source-modal-info-col">
+                <div className="source-modal-name-row">
+                  <span className="source-modal-name">{s.name}</span>
+                  <span className="source-modal-badge">{s.records}</span>
+                  <span className="source-modal-status-badge">● Active in Pipeline</span>
+                </div>
+                <p className="source-modal-desc">{s.description}</p>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" className="source-modal-link">
+                  Visit database portal &rarr;
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const EXAMPLE_QUERY = "Which mutations in rpoB are associated with rifampicin resistance in Mycobacterium tuberculosis?";
 
 export default function App() {
@@ -222,6 +424,7 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showSourcesModal, setShowSourcesModal] = useState(false);
 
   async function submit(event) {
     event?.preventDefault?.();
@@ -269,11 +472,6 @@ export default function App() {
             Autonomous multi-agent research engine for investigating antimicrobial resistance determinants, genetic variants, resistance mechanisms, and scholarly literature.
           </p>
         </div>
-        <div className="header-meta">
-          <div className="status-badge-live">
-            <span className="pulse-indicator" /> System Online
-          </div>
-        </div>
       </header>
 
       <main className="copilot-workspace">
@@ -281,7 +479,7 @@ export default function App() {
           <form onSubmit={submit}>
             <div className="query-header">
               <label htmlFor="query" className="query-label">
-                Enquiry
+                AMR Research Query
               </label>
               <div className="example-query-wrapper">
                 <button
@@ -300,7 +498,7 @@ export default function App() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter an AMR research query here..."
+              placeholder="Ask AMR Nexus..."
               rows={4}
               aria-describedby="query-help"
             />
@@ -433,6 +631,17 @@ export default function App() {
                                   Peer-reviewed
                                 </span>
                               )}
+                              {reference.source_provenance && reference.source_provenance.length > 0 ? (
+                                reference.source_provenance.map((src) => (
+                                  <span key={src} className="source-pill reference-source-tag">
+                                    {src}
+                                  </span>
+                                ))
+                              ) : reference.source ? (
+                                <span className="source-pill reference-source-tag">
+                                  {reference.source}
+                                </span>
+                              ) : null}
                             </div>
                             <div className="reference-meta">
                               {authors && (
@@ -478,25 +687,11 @@ export default function App() {
         )}
 
         {!loading && !error && !result && (
-          <section className="empty-state-panel">
-            <div className="empty-icon">🔬</div>
-            <h2>Ready for AMR Enquiry</h2>
-            <p>Enter any clinical question, resistance gene, mutation, drug pair, or comparative query above to synthesize evidence.</p>
-            <div className="empty-suggestions">
-              <span>Try asking:</span>
-              <button type="button" onClick={() => setQuery("Compare MexAB-OprM and AdeABC efflux pumps")}>
-                Compare MexAB-OprM and AdeABC efflux pumps
-              </button>
-              <button type="button" onClick={() => setQuery("katG S315T")}>
-                katG S315T
-              </button>
-              <button type="button" onClick={() => setQuery("ompK")}>
-                ompK
-              </button>
-            </div>
-          </section>
+          <IntegratedLiteratureSources onOpenModal={() => setShowSourcesModal(true)} />
         )}
       </main>
+
+      {showSourcesModal && <SourcesModal onClose={() => setShowSourcesModal(false)} />}
     </div>
   );
 }

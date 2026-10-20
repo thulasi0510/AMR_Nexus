@@ -65,9 +65,19 @@ def _all_references(literature_results):
                     existing["doi_url"] = ref.get("doi_url")
                 if not existing.get("source_url") and ref.get("source_url"):
                     existing["source_url"] = ref.get("source_url")
+                sources = set(existing.get("source_provenance") or ([existing.get("source")] if existing.get("source") else []))
+                new_sources = ref.get("source_provenance") or ([ref.get("source")] if ref.get("source") else [])
+                sources.update(new_sources)
+                existing["source_provenance"] = sorted(s for s in sources if s)
+                if not existing.get("source"):
+                    existing["source"] = ref.get("source") or "PubMed"
                 continue
 
             ref_copy = dict(ref)
+            if not ref_copy.get("source"):
+                ref_copy["source"] = "PubMed"
+            if not ref_copy.get("source_provenance"):
+                ref_copy["source_provenance"] = [ref_copy["source"]]
             if pmid:
                 seen_pmids.add(pmid)
             if doi:

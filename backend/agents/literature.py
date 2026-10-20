@@ -919,10 +919,12 @@ def search_literature(plan, top_n=TOP_N):
             existing = by_title[title_key]
 
         if existing:
-            existing["source_provenance"] = sorted(set(
-                existing.get("source_provenance", [existing.get("source")])
-                + p.get("source_provenance", [p.get("source")])
-            ))
+            prov = set(existing.get("source_provenance") or ([existing.get("source")] if existing.get("source") else []))
+            new_prov = p.get("source_provenance") or ([p.get("source")] if p.get("source") else [])
+            prov.update(new_prov)
+            existing["source_provenance"] = sorted(s for s in prov if s)
+            if not existing.get("source"):
+                existing["source"] = p.get("source") or "PubMed"
             if not existing.get("pmid") and pmid:
                 existing["pmid"] = pmid
                 by_pmid[pmid] = existing
@@ -942,6 +944,10 @@ def search_literature(plan, top_n=TOP_N):
             return
 
         item = dict(p)
+        if not item.get("source"):
+            item["source"] = "PubMed"
+        if not item.get("source_provenance"):
+            item["source_provenance"] = [item["source"]]
         all_papers_list.append(item)
         if pmid:
             by_pmid[pmid] = item
@@ -972,6 +978,8 @@ def search_literature(plan, top_n=TOP_N):
                 errors.append(f"PubMed query failed: {failure}")
                 continue
             for paper in papers:
+                paper.setdefault("source", "PubMed")
+                paper.setdefault("source_provenance", ["PubMed"])
                 _ingest_paper(paper)
     query_counts.sort(key=lambda item: queries.index(item["query"]) if item["query"] in queries else 999)
 

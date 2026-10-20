@@ -91,10 +91,20 @@ def _numbered_references(references):
                 existing["doi_url"] = ref.get("doi_url")
             if not existing.get("source_url") and ref.get("source_url"):
                 existing["source_url"] = ref.get("source_url")
+            sources = set(existing.get("source_provenance") or ([existing.get("source")] if existing.get("source") else []))
+            new_sources = ref.get("source_provenance") or ([ref.get("source")] if ref.get("source") else [])
+            sources.update(new_sources)
+            existing["source_provenance"] = sorted(s for s in sources if s)
+            if not existing.get("source"):
+                existing["source"] = ref.get("source") or "PubMed"
             continue
 
         item = dict(ref)
         item["reference_number"] = len(numbered) + 1
+        if not item.get("source"):
+            item["source"] = "PubMed"
+        if not item.get("source_provenance"):
+            item["source_provenance"] = [item["source"]]
         if pmid:
             seen_pmids.add(pmid)
         if doi:

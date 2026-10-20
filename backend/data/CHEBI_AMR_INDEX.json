@@ -1,0 +1,1046 @@
+{
+  "ciprofloxacin": {
+    "chebi_id": "CHEBI:100241",
+    "name": "ciprofloxacin",
+    "synonyms": [
+      "1-cyclopropyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "1-Cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-yl-1,4-dihydro-quinoline-3-carboxylic acid",
+      "1-CYCLOPROPYL-6-FLUORO-4-OXO-7-PIPERAZIN-1-YL-1,4-DIHYDROQUINOLINE-3-CARBOXYLIC ACID",
+      "1-cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-ylquinoline-3-carboxylic acid",
+      "1-Cyclopropyl-6-fluoro-7-(4-methyl-piperazin-1-yl)-4-oxo-1,4-dihydro-quinoline-3-carboxylic acid",
+      "1-cyclopropyl-6-fluoro-7-hexahydro-1-pyrazinyl-4-oxo-1,4-dihydro-3-quinolinecarboxylic acid",
+      "Ciprofloxacin",
+      "ciprofloxacin",
+      "ciprofloxacin",
+      "ciprofloxacine",
+      "ciprofloxacino",
+      "ciprofloxacinum"
+    ],
+    "definition": "A  quinolone that is quinolin-4(1<em>H</em>)-one bearing cyclopropyl, carboxylic acid, fluoro and piperazin-1-yl substituents at positions 1, 3, 6 and 7, respectively."
+  },
+  "norfloxacin": {
+    "chebi_id": "CHEBI:100246",
+    "name": "norfloxacin",
+    "synonyms": [
+      "1,4-Dihydro-1-ethyl-6-fluoro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "1-Ethyl-6-fluor-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-chinolincarbonsaeure",
+      "1-Ethyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "NFLX",
+      "norfloxacin",
+      "norfloxacine",
+      "norfloxacino",
+      "norfloxacinum"
+    ],
+    "definition": "A quinolinemonocarboxylic acid with broad-spectrum antibacterial activity against most gram-negative and gram-positive bacteria. Norfloxacin is bactericidal and its mode of action depends on blocking of bacterial DNA replication by binding itself to an enzyme called DNA gyrase."
+  },
+  "ceftolozane": {
+    "chebi_id": "CHEBI:134719",
+    "name": "ceftolozane",
+    "synonyms": [
+      "(6R,7R)-3-[(5-amino-4-{[(2-aminoethyl)carbamoyl]amino}-1-methyl-1H-pyrazol-2-ium-2-yl)methyl]-7-{[(2Z)-2-(5-amino-1,2,4-thiadiazol-3-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylate",
+      "7-{[(2Z)-2-(5-amino-1,2,4-thiadiazol-3-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-3-[ (5-amino-4-{[(2-aminoethyl)carbamoyl]amino}-1-methyl-1H-pyrazol-2-ium-2-yl)methyl]-3,4-didehydrocepham-4-carboxylate",
+      "7-{[(2Z)-2-(5-amino-1,2,4-thiadiazol-3-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-3-[ (5-amino-4-{[(2-aminoethyl)carbamoyl]amino}-1-methyl-1H-pyrazol-2-ium-2-yl)methyl]-3,4-didehydrocepham-4-carboxylate",
+      "ceftolozane",
+      "ceftolozane",
+      "ceftolozano",
+      "ceftolozanum",
+      "CXA-101"
+    ],
+    "definition": "A fifth-generation cephalosporin antibiotic having (5-amino-4-{[(2-aminoethyl)carbamoyl]amino}-1-methyl-1<em>H</em>-pyrazol-2-ium-2-yl)methyl and"
+  },
+  "doripenem": {
+    "chebi_id": "CHEBI:135928",
+    "name": "doripenem",
+    "synonyms": [
+      "doribax",
+      "doripenem hydrate"
+    ],
+    "definition": null
+  },
+  "glycopeptide": {
+    "chebi_id": "CHEBI:141615",
+    "name": "(2S,5R,10R,13R)-16-\\{[(2R,3S,4R,5R)-3-\\{[(2S,3R,4R,5S,6R)-3-acetamido-4,5-dihydroxy-6-(hydroxymethyl)oxan-2-yl]oxy\\}-5-(ethylamino)-6-hydroxy-2-(hydroxymethyl)oxan-4-yl]oxy\\}-5-(4-aminobutyl)-10-carbamoyl-2,13-dimethyl-4,7,12,15-tetraoxo-3,6,11,14-tetraazaheptadecan-1-oic acid",
+    "synonyms": [
+      "Glycopeptide"
+    ],
+    "definition": null
+  },
+  "tigecycline": {
+    "chebi_id": "CHEBI:142708",
+    "name": "tigecycline(1+)",
+    "synonyms": [
+      "(1S,4aS,11aR,12aS)-8-[2-(tert-butylammonio)acetamido]-3-carbamoyl-10-(dimethylamino)-1-(dimethylammonio)-4a,5,7-trihydroxy-4,6-dioxo-1,4,4a,6,11,11a,12,12a-octahydrotetracen-2-olate",
+      "(1S,4aS,11aR,12aS)-8-[2-(tert-butylammonio)acetamido]-3-carbamoyl-10-(dimethylamino)-1-(dimethylammonio)-4a,5,7-trihydroxy-4,6-dioxo-1,4,4a,6,11,11a,12,12a-octahydrotetracen-2-olate",
+      "tigecycline"
+    ],
+    "definition": "An ammonium ion that is the conjugate acid of tigecycline; major species at pH 7.3."
+  },
+  "aztreonam": {
+    "chebi_id": "CHEBI:161680",
+    "name": "aztreonam",
+    "synonyms": [
+      "(2S,3S)-3-{(2Z)-2-(2-ammonio-1,3-thiazol-4-yl)-2-[(2-carboxypropan-2-yloxy)imino]acetamido}-2-methyl-4-oxoazetidine-1-sulfonate",
+      "(2S,3S)-3-{(2Z)-2-(2-ammonio-1,3-thiazol-4-yl)-2-[(2-carboxypropan-2-yloxy)imino]acetamido}-2-methyl-4-oxoazetidine-1-sulfonate",
+      "(Z,)-2-((((2-Amino-4-thiazolyl)(((2S,3S,)-2-methyl-4-oxo-1-sulfo-3-azetidinyl)carbamoyl)methylene)amino)oxy)-2-methylpropionic acid",
+      "Azactam",
+      "AZT",
+      "aztreonam",
+      "aztreonamum",
+      "Primbactam"
+    ],
+    "definition": "A synthetic monocyclic \u03b2-lactam antibiotic (monobactam), used primarily to treat infections caused by Gram-negative bacteria. It inhibits mucopeptide synthesis in the bacterial cell wall, thereby blocking peptidoglycan crosslinking."
+  },
+  "streptomycin": {
+    "chebi_id": "CHEBI:17076",
+    "name": "streptomycin",
+    "synonyms": [
+      "2,4-Diguanidino-3,5,6-trihydroxycyclohexyl 5-deoxy-2-O-(2-deoxy-2-methylamino-alpha-L-glucopyranosyl)-3-C-formyl-beta-L-lyxopentanofuranoside",
+      "[2-deoxy-2-(dimethylamino)-alpha-L-glucopyranosyl]-(1->2)-[5-deoxy-3-C-formyl-alpha-L-lyxofuranosyl]-(1->4)-{N',N'''-[(1,3,5/2,4,6)-2,4,5,6-tetrahydroxycyclohexane-1,3-diyl]diguanidine}",
+      "Kantrex",
+      "N,N'''-[(1R,2R,3S,4R,5R,6S)-4-{5-deoxy-2-O-[2-deoxy-2-(methylamino)-alpha-L-glucopyranosyl]-3-C-formyl-alpha-L-lyxofuranosyloxy}-2,5,6-trihydroxycyclohexane-1,3-diyl]diguanidine",
+      "N,N'''-[(1R,2R,3S,4R,5R,6S)-4-{5-deoxy-2-O-[2-deoxy-2-(methylamino)-alpha-L-glucopyranosyl]-3-C-formyl-alpha-L-lyxofuranosyloxy}-2,5,6-trihydroxycyclohexane-1,3-diyl]diguanidine",
+      "SM",
+      "streomycin",
+      "STREPTOMYCIN",
+      "streptomycin"
+    ],
+    "definition": "A amino cyclitol glycoside that consists of streptidine having a disaccharyl moiety attached at the 4-position. The parent of the streptomycin class"
+  },
+  "penicillin": {
+    "chebi_id": "CHEBI:17334",
+    "name": "penicillin",
+    "synonyms": [
+      "Penicillin",
+      "penicillins",
+      "penicillins",
+      "penicillins"
+    ],
+    "definition": "Any member of the group of substituted penams containing two methyl substituents at position 2, a carboxylate substituent at position 3 and a carboxamido group at position 6."
+  },
+  "penicillins": {
+    "chebi_id": "CHEBI:17334",
+    "name": "penicillin",
+    "synonyms": [
+      "Penicillin",
+      "penicillins",
+      "penicillins",
+      "penicillins"
+    ],
+    "definition": "Any member of the group of substituted penams containing two methyl substituents at position 2, a carboxylate substituent at position 3 and a carboxamido group at position 6."
+  },
+  "chloramphenicol": {
+    "chebi_id": "CHEBI:17698",
+    "name": "chloramphenicol",
+    "synonyms": [
+      "(-)-chloramphenicol",
+      "2,2-dichloro-N-[(1R,2R)-2-hydroxy-1-(hydroxymethyl)-2-(4-nitrophenyl)ethyl]acetamide",
+      "2,2-dichloro-N-[(1R,2R)-2-hydroxy-1-(hydroxymethyl)-2-(4-nitrophenyl)ethyl]acetamide",
+      "Amphicol",
+      "Chloramex",
+      "CHLORAMPHENICOL",
+      "Chloramphenicol",
+      "chloramphenicol",
+      "chloramphenicol",
+      "chloramphenicolum",
+      "chlornitromycin",
+      "Chlorocid",
+      "Chlorocol",
+      "Chloromycetin",
+      "cloramfenicol",
+      "D-(-)-2,2-dichloro-N-(beta-hydroxy-alpha-(hydroxymethyl)-p-nitrophenylethyl)acetamide",
+      "D-(-)-threo-1-p-nitrophenyl-2-dichloroacetylamino-1,3-propanediol",
+      "Econochlor",
+      "Fenicol",
+      "Globenicol",
+      "Halomycetin",
+      "laevomycetinum",
+      "levomicetina",
+      "levomycetin",
+      "Oleomycetin",
+      "Sificetina"
+    ],
+    "definition": "An organochlorine compound that is dichloro-substituted acetamide containing a nitrobenzene ring, an amide bond and two alcohol functions."
+  },
+  "gentamicin": {
+    "chebi_id": "CHEBI:17833",
+    "name": "gentamycin",
+    "synonyms": [
+      "4,6-diamino-3-[3-deoxy-4-C-methyl-3-(methylamino)pentopyranosyloxy]-2-hydroxycyclohexyl 2-amino-2,3,4,6,7-pentadeoxy-6-(methylamino)heptopyranoside",
+      "4,6-diamino-3-[3-deoxy-4-C-methyl-3-(methylamino)pentopyranosyloxy]-2-hydroxycyclohexyl 2-amino-2,3,4,6,7-pentadeoxy-6-(methylamino)heptopyranoside",
+      "Gentamicin",
+      "gentamycins"
+    ],
+    "definition": "Any of a group of aminoglycoside antibiotics produced by fermentation of some <em>Micromonospora</em> spp."
+  },
+  "imipenem": {
+    "chebi_id": "CHEBI:190509",
+    "name": "imipenem zwitterion",
+    "synonyms": [
+      "(5R,6S)-6-[(1R)-1-hydroxyethyl]-3-({2-[(iminiomethyl)amino]ethyl}sulfanyl)-7-oxo-1-azabicyclo[3.2.0]hept-2-ene-2-carboxylate",
+      "(5R,6S)-6-[(1R)-1-hydroxyethyl]-3-({2-[(iminiomethyl)amino]ethyl}sulfanyl)-7-oxo-1-azabicyclo[3.2.0]hept-2-ene-2-carboxylate",
+      "imipenem"
+    ],
+    "definition": "Zwitterionic form of imipenem having an anionic carboxy group and a protonated methaneimidamido group; major species at pH 7.3."
+  },
+  "cefotaxime": {
+    "chebi_id": "CHEBI:204928",
+    "name": "cefotaxime",
+    "synonyms": [
+      "(6R,7R)-3-(acetoxymethyl)-7-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "(6R,7R)-3-Acetoxymethyl-7-{2-(2-amino-thiazol-4-yl)-2-[(Z)-methoxyimino]-acetylamino}-8-oxo-5-thia-1-aza-bicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "(6R,7R,Z)-3-(acetoxymethyl)-7-(2-(2-aminothiazol-4-yl)-2-(methoxyimino)acetamido)-8-oxo-5-thia-1-aza-bicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "3-(acetoxymethyl)-7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3,4-didehydrocepham-4-carboxylic acid",
+      "3-(acetoxymethyl)-7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3,4-didehydrocepham-4-carboxylic acid",
+      "cefotaxima",
+      "cefotaxime",
+      "cefotaximum",
+      "Cephotaxime"
+    ],
+    "definition": "A cephalosporin compound having acetoxymethyl and"
+  },
+  "cefoxitin": {
+    "chebi_id": "CHEBI:209807",
+    "name": "cefoxitin",
+    "synonyms": [
+      "(6R,7S)-3-[(carbamoyloxy)methyl]-7-methoxy-8-oxo-7-[(2-thienylacetyl)amino]-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "(6R,7S)-4-[(carbamoyloxy)methyl]-7-methoxy-8-oxo-7-[(thiophen-2-enyl)acetamido]-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "(6R,7S)-4-[(carbamoyloxy)methyl]-7-methoxy-8-oxo-7-[(thiophen-2-enyl)acetamido]-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "3-[(carbamoyloxy)methyl]-7alpha-methoxy-7beta-[(thiophen-2-yl)acetamido]-3,4-didehydrocepham-4-carboxylic acid",
+      "3-[(carbamoyloxy)methyl]-7alpha-methoxy-7beta-[(thiophen-2-yl)acetamido]-3,4-didehydrocepham-4-carboxylic acid",
+      "Cefoxitin",
+      "cefoxitin",
+      "cefoxitina",
+      "cefoxitine",
+      "cefoxitinum",
+      "ceftoxitin",
+      "Cephoxitin",
+      "CFX",
+      "Rephoxitin"
+    ],
+    "definition": "A semisynthetic cephamycin antibiotic which, in addition to the methoxy group at the 7\u03b1 position, has 2-thienylacetamido and carbamoyloxymethyl side-groups. It is resistant to \u03b2-lactamase."
+  },
+  "cephalosporin": {
+    "chebi_id": "CHEBI:23066",
+    "name": "cephalosporin",
+    "synonyms": [
+      "cephalosphorin",
+      "cephalosphorins",
+      "Cephalosporin",
+      "cephalosporins"
+    ],
+    "definition": "A class of \u03b2-lactam antibiotics differing from the penicillins in having a 6-membered, rather than a 5-membered, side ring.  Although cephalosporins are among the most commonly used antibiotics in the treatment of routine infections, and their use is increasing over time, they can cause a range of hypersensitivity reactions, from mild, delayed-onset cutaneous reactions to life-threatening anaphylaxis in patients with immunoglobulin E (IgE)-mediated allergy."
+  },
+  "cephalosporins": {
+    "chebi_id": "CHEBI:23066",
+    "name": "cephalosporin",
+    "synonyms": [
+      "cephalosphorin",
+      "cephalosphorins",
+      "Cephalosporin",
+      "cephalosporins"
+    ],
+    "definition": "A class of \u03b2-lactam antibiotics differing from the penicillins in having a 6-membered, rather than a 5-membered, side ring.  Although cephalosporins are among the most commonly used antibiotics in the treatment of routine infections, and their use is increasing over time, they can cause a range of hypersensitivity reactions, from mild, delayed-onset cutaneous reactions to life-threatening anaphylaxis in patients with immunoglobulin E (IgE)-mediated allergy."
+  },
+  "azithromycin": {
+    "chebi_id": "CHEBI:231550",
+    "name": "azithromycin(2+)",
+    "synonyms": [
+      "(2R,3S,4R,5R,8R,10R,11R,12S,13S,14R)-2-ethyl-3,4,10-trihydroxy-3,5,6,8,10,12,14-heptamethyl-15-oxo-11-{[3,4,6-trideoxy-3-(dimethylazaniumyl)-beta-D-xylo-hexopyranosyl]oxy}-1-oxa-6-azoniacyclopentadecan-13-yl 2,6-dideoxy-3-C-methyl-3-O-methyl-alpha-L-ribo-hexopyranoside",
+      "(2R,3S,4R,5R,8R,10R,11R,12S,13S,14R)-2-ethyl-3,4,10-trihydroxy-3,5,6,8,10,12,14-heptamethyl-15-oxo-11-{[3,4,6-trideoxy-3-(dimethylazaniumyl)-beta-D-xylo-hexopyranosyl]oxy}-1-oxa-6-azoniacyclopentadecan-13-yl 2,6-dideoxy-3-C-methyl-3-O-methyl-alpha-L-ribo-hexopyranoside",
+      "azithromycin",
+      "azithromycin dication"
+    ],
+    "definition": "A tertiary ammonium ion resulting from the protonation of the two amino groups of azithromycin; major species at pH 7.3."
+  },
+  "quinolone": {
+    "chebi_id": "CHEBI:23765",
+    "name": "quinolone",
+    "synonyms": [
+      "quinolones"
+    ],
+    "definition": null
+  },
+  "quinolones": {
+    "chebi_id": "CHEBI:23765",
+    "name": "quinolone",
+    "synonyms": [
+      "quinolones"
+    ],
+    "definition": null
+  },
+  "glycopeptides": {
+    "chebi_id": "CHEBI:24396",
+    "name": "glycopeptide",
+    "synonyms": [
+      "glycopeptides",
+      "glycopeptides"
+    ],
+    "definition": "Any carbohydrate derivative that consists of glycan moieties covalently attached to the side chains of the amino acid residues that constitute the peptide."
+  },
+  "macrolide": {
+    "chebi_id": "CHEBI:25106",
+    "name": "macrolide",
+    "synonyms": [
+      "macrolide",
+      "macrolides",
+      "macrolides",
+      "macrolides",
+      "Makrolid"
+    ],
+    "definition": "A macrocyclic lactone with a ring of twelve or more members derived from a polyketide."
+  },
+  "macrolides": {
+    "chebi_id": "CHEBI:25106",
+    "name": "macrolide",
+    "synonyms": [
+      "macrolide",
+      "macrolides",
+      "macrolides",
+      "macrolides",
+      "Makrolid"
+    ],
+    "definition": "A macrocyclic lactone with a ring of twelve or more members derived from a polyketide."
+  },
+  "amikacin": {
+    "chebi_id": "CHEBI:2637",
+    "name": "amikacin",
+    "synonyms": [
+      "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+      "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+      "1-N-(L(-)-gamma-amino-alpha-hydroxybutyryl)kanamycin A",
+      "Amikacin",
+      "amikacin",
+      "amikacina",
+      "amikacine",
+      "amikacinum",
+      "O-3-amino-3-deoxy-alpha-D-glucopyranosyl-(1->4)-O-(6-amino-6-deoxy-alpha-D-glucopyranosyl-(1->6))-N(3)-(4-amino-L-2-hydroxybutyryl)-2-deoxy-L-streptamine"
+    ],
+    "definition": "An amino cyclitol glycoside that is kanamycin A acylated at the N-1 position by a 4-amino-2-hydroxybutyryl group."
+  },
+  "amoxicillin": {
+    "chebi_id": "CHEBI:2676",
+    "name": "amoxicillin",
+    "synonyms": [
+      "(2S,5R,6R)-6-{[(2R)-2-amino-2-(4-hydroxyphenyl)acetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "6-(p-hydroxy-alpha-aminophenylacetamido)penicillanic acid",
+      "6beta-[(2R)-2-amino-2-(4-hydroxyphenyl)acetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-[(2R)-2-amino-2-(4-hydroxyphenyl)acetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "alpha-amino-p-hydroxybenzylpenicillin",
+      "Amolin",
+      "Amopenixin",
+      "amoxicilina",
+      "Amoxicillin",
+      "amoxicillin",
+      "Amoxicillin anhydrous",
+      "amoxicilline",
+      "amoxicillinum",
+      "amoxycilin",
+      "amoxycillin",
+      "AMPC",
+      "AX",
+      "Clamoxyl",
+      "Moxal",
+      "p-hydroxyampicillin"
+    ],
+    "definition": "A penicillin in which the substituent at position 6 of the penam ring is a 2-amino-2-(4-hydroxyphenyl)acetamido group."
+  },
+  "tetracyclines": {
+    "chebi_id": "CHEBI:26895",
+    "name": "tetracyclines",
+    "synonyms": [],
+    "definition": "A subclass of polyketides having an octahydrotetracene-2-carboxamide skeleton, substituted with many hydroxy and other groups."
+  },
+  "tetracycline": {
+    "chebi_id": "CHEBI:27902",
+    "name": "tetracycline",
+    "synonyms": [
+      "(4S,4aS,5aS,12aS)-4-(Dimethylamino)-1,4,4a,5,5a,6,11,12a-octahydro-3,6,10,12,12a-pentahydroxy-6-methyl-1,11-dioxo-2-naphthacenecarboxamide",
+      "(4S,4aS,5aS,6S,12aS)-4-(dimethylamino)-3,6,10,12,12a-pentahydroxy-6-methyl-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "(4S,4aS,5aS,6S,12aS)-4-(dimethylamino)-3,6,10,12,12a-pentahydroxy-6-methyl-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "Abramycin",
+      "Achromycin",
+      "Anhydrotetracycline",
+      "Deschlorobiomycin",
+      "Liquamycin",
+      "Tetracyclin",
+      "TETRACYCLINE",
+      "Tetracycline",
+      "tetracycline",
+      "tetracycline",
+      "tetracyclinum",
+      "Tetrazyklin",
+      "Tsiklomitsin"
+    ],
+    "definition": "A broad-spectrum polyketide antibiotic produced by the <em>Streptomyces genus</em> of actinobacteria."
+  },
+  "vancomycin": {
+    "chebi_id": "CHEBI:28001",
+    "name": "vancomycin",
+    "synonyms": [
+      "(1S,2R,18R,22S,25R,28R,40S)-22-(2-amino-2-oxoethyl)-48-[2-O-(3-amino-2,3,6-trideoxy-3-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-5,15-dichloro-2,18,32,35,37-pentahydroxy-19-[(N-methyl-D-leucyl)amino]-20,23,26,42,44-pentaoxo-7,13-dioxa-21,24,27,41,43-pentaazaoctacyclo[26.14.2.2(3,6).2(14,17).1(8,12).1(29,33).0(10,25).0(34,39)]pentaconta-3,5,8(48),9,11,14,16,29(45),30,32,34,36,38,46,49-pentadecaene-40-carboxylic acid",
+      "(2.2Sp,3.5Sa,2.6Sp)-O(4.2),C(3.4):C(5.4),O(4.6):C(3.5),C(2.7)-tricyclo[N-methyl-D-leucyl-3-chloro-(R)-beta-hydroxy-D-tyrosyl-L-asparaginyl-D-2-(4-{[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyl]oxy}phenyl)glycyl-D-2-(4-hydroxyphenyl)glycyl-3-chloro-(R)-beta-hydroxy-L-tyrosyl-L-2-(3,5-dihydroxyphenyl)glycine]",
+      "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+      "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+      "Vancocin",
+      "vancomicin",
+      "vancomicina",
+      "VANCOMYCIN",
+      "Vancomycin",
+      "vancomycin",
+      "vancomycine",
+      "vancomycinum"
+    ],
+    "definition": "A complex glycopeptide from <em>Streptomyces orientalis</em>. It inhibits a specific step in the synthesis of the peptidoglycan layer in the Gram-positive bacteria <em>Staphylococcus aureus</em> and <em>Clostridium difficile</em>."
+  },
+  "rifampicin": {
+    "chebi_id": "CHEBI:28077",
+    "name": "rifampicin",
+    "synonyms": [
+      "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "3-(((4-Methyl-1-piperazinyl)imino)methyl)rifamycin SV",
+      "RFP",
+      "rifamcin",
+      "Rifampicin",
+      "rifampicin",
+      "rifampicina",
+      "rifampicinum",
+      "Rifampin"
+    ],
+    "definition": "A member of the class of rifamycins that is a a semisynthetic antibiotic derived from <em>Amycolatopsis rifamycinica</em> (previously known as <em>Amycolatopsis mediterranei</em> and <em>Streptomyces mediterranei</em>)."
+  },
+  "rifampin": {
+    "chebi_id": "CHEBI:28077",
+    "name": "rifampicin",
+    "synonyms": [
+      "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "3-(((4-Methyl-1-piperazinyl)imino)methyl)rifamycin SV",
+      "RFP",
+      "rifamcin",
+      "Rifampicin",
+      "rifampicin",
+      "rifampicina",
+      "rifampicinum",
+      "Rifampin"
+    ],
+    "definition": "A member of the class of rifamycins that is a a semisynthetic antibiotic derived from <em>Amycolatopsis rifamycinica</em> (previously known as <em>Amycolatopsis mediterranei</em> and <em>Streptomyces mediterranei</em>)."
+  },
+  "tobramycin": {
+    "chebi_id": "CHEBI:28864",
+    "name": "tobramycin",
+    "synonyms": [
+      "(1S,2S,3R,4S,6R)-4,6-diamino-3-(2,6-diamino-2,3,6-trideoxy-alpha-D-ribo-hexopyranosyloxy)-2-hydroxycyclohexyl 3-amino-3-deoxy-alpha-D-glucopyranoside",
+      "(1S,2S,3R,4S,6R)-4,6-diamino-3-(2,6-diamino-2,3,6-trideoxy-alpha-D-ribo-hexopyranosyloxy)-2-hydroxycyclohexyl 3-amino-3-deoxy-alpha-D-glucopyranoside",
+      "3'-Deoxykanamycin B",
+      "Nebramycin 6",
+      "Nebramycin factir 6",
+      "O-3-Amino-3-deoxy-alpha-D-glucopyranosyl-(1-4)-O-(2,6-diamino-2,3,6-trideoxy-alpha-D-ribohexopyranosyl-(1-4))-2-deoxy-D-streptamine",
+      "Tobracin (TN)",
+      "Tobramycin",
+      "Tobrex (TN)"
+    ],
+    "definition": "A amino cyclitol glycoside that is kanamycin B lacking the 3-hydroxy substituent from the 2,6-diaminoglucose ring."
+  },
+  "fosfomycin": {
+    "chebi_id": "CHEBI:28915",
+    "name": "fosfomycin",
+    "synonyms": [
+      "(-)-(1R,2S)-(1,2-Epoxypropyl)phosphonic acid",
+      "(1R,2S)-epoxypropylphosphonic acid",
+      "(2R-cis)-(3-Methyloxiranyl)phosphonic acid",
+      "1R-cis-(1,2-epoxypropyl)phosphonic acid",
+      "[(2R,3S)-3-methyloxiran-2-yl]phosphonic acid",
+      "[(2R,3S)-3-methyloxiran-2-yl]phosphonic acid",
+      "cis-(1R,2S)-epoxypropylphosphonic acid",
+      "FCM",
+      "fosfomicina",
+      "FOSFOMYCIN",
+      "fosfomycin",
+      "fosfomycine",
+      "fosfomycinum",
+      "L-cis-1,2-epoxypropylphosphonic acid",
+      "Phosphomycin",
+      "phosphonemycin",
+      "Phosphonomycin"
+    ],
+    "definition": "A phosphonic acid having an (<i>R</i>,<i>S</i>)-1,2-epoxypropyl group attached to phosphorus."
+  },
+  "ampicillin": {
+    "chebi_id": "CHEBI:28971",
+    "name": "ampicillin",
+    "synonyms": [
+      "(2S,5R,6R)-6-{[(2R)-2-amino-2-phenylacetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "(2S,5R,6R)-6-{[(2R)-2-AMINO-2-PHENYLETHANOYL]AMINO}-3,3-DIMETHYL-7-OXO-4-THIA-1-AZABICYCLO[3.2.0]HEPTANE-2-CARBOXYLIC ACID",
+      "(2S,6R)-6-{[(2R)-2-amino-2-phenylethanoyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "6-(D-(2-amino-2-phenylacetamido))-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo(3.2.0)heptane-2-carboxylic acid",
+      "6beta-[(2R)-2-amino-2-phenylacetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-[(2R)-2-amino-2-phenylacetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "ABPC",
+      "aminobenzylpenicillin",
+      "AMP",
+      "ampicilina",
+      "Ampicillin",
+      "ampicillin",
+      "ampicillin acid",
+      "ampicillin anhydrous",
+      "ampicilline",
+      "ampicillinum",
+      "Anhydrous ampicillin",
+      "AP",
+      "D-(-)-6-(alpha-aminophenylacetamido)penicillanic acid",
+      "D-(-)-ampicillin"
+    ],
+    "definition": "A penicillin in which the substituent at position 6 of the penam ring is a 2-amino-2-phenylacetamido group."
+  },
+  "ceftriaxone": {
+    "chebi_id": "CHEBI:29007",
+    "name": "ceftriaxone",
+    "synonyms": [
+      "(6R,7R)-7-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3-{[(2-methyl-5,6-dioxo-1,2,5,6-tetrahydro-1,2,4-triazin-3-yl)sulfanyl]methyl}-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid",
+      "7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3-{[(2-methyl-5,6-dioxo-1,2,5,6-tetrahydro-1,2,4-triazin-3-yl)sulfanyl]methyl}-3,4-didehydrocepham-4-carboxylic acid",
+      "7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3-{[(2-methyl-5,6-dioxo-1,2,5,6-tetrahydro-1,2,4-triazin-3-yl)sulfanyl]methyl}-3,4-didehydrocepham-4-carboxylic acid",
+      "ceftriaxona",
+      "ceftriaxone",
+      "ceftriaxonum",
+      "rocephin"
+    ],
+    "definition": "A third-generation cephalosporin compound having 2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetylamino and"
+  },
+  "ceftazidime": {
+    "chebi_id": "CHEBI:3508",
+    "name": "ceftazidime",
+    "synonyms": [
+      "(6R,7R)-7-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-8-oxo-3-(pyridinium-1-ylmethyl)-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylate",
+      "7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-3-(pyridinium-1-ylmethyl)-3,4-didehydrocepham-4-carboxylate",
+      "7beta-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetyl]amino}-3-(pyridinium-1-ylmethyl)-3,4-didehydrocepham-4-carboxylate",
+      "CAZ",
+      "ceftazidima",
+      "ceftazidime",
+      "Ceftazidime anhydrous",
+      "ceftazidimum"
+    ],
+    "definition": "A third-generation cephalosporin antibiotic bearing pyridinium-1-ylmethyl and {[(2<i>Z</i>)-2-(2-amino-1,3-thiazol-4-yl)-2-{[(2-carboxypropan-2-yl)oxy]imino}acetamido groups at positions 3 and 7, respectively, of the cephem skeleton."
+  },
+  "sulfonamide": {
+    "chebi_id": "CHEBI:35358",
+    "name": "sulfonamide",
+    "synonyms": [
+      "sulfonamides",
+      "sulfonamides",
+      "sulfonamides"
+    ],
+    "definition": "An amide of a sulfonic acid RS(=O)<small><sub>2</sub></small>NR'<small><sub>2</sub></small>."
+  },
+  "sulfonamides": {
+    "chebi_id": "CHEBI:35358",
+    "name": "sulfonamide",
+    "synonyms": [
+      "sulfonamides",
+      "sulfonamides",
+      "sulfonamides"
+    ],
+    "definition": "An amide of a sulfonic acid RS(=O)<small><sub>2</sub></small>NR'<small><sub>2</sub></small>."
+  },
+  "beta-lactam": {
+    "chebi_id": "CHEBI:35627",
+    "name": "beta-lactam",
+    "synonyms": [
+      "a beta-lactam",
+      "beta-Lactam",
+      "beta-lactams"
+    ],
+    "definition": "A lactam in which the amide bond is contained within a four-membered ring, which includes the amide nitrogen and the carbonyl carbon."
+  },
+  "beta-lactams": {
+    "chebi_id": "CHEBI:35627",
+    "name": "beta-lactam",
+    "synonyms": [
+      "a beta-lactam",
+      "beta-Lactam",
+      "beta-lactams"
+    ],
+    "definition": "A lactam in which the amide bond is contained within a four-membered ring, which includes the amide nitrogen and the carbonyl carbon."
+  },
+  "clarithromycin": {
+    "chebi_id": "CHEBI:3732",
+    "name": "clarithromycin",
+    "synonyms": [
+      "6-O-methylerythromycin",
+      "6-O-methylerythromycin A",
+      "CLA",
+      "CLARITHROMYCIN",
+      "Clarithromycin",
+      "clarithromycin",
+      "clarithromycina",
+      "clarithromycine",
+      "clarithromycinum",
+      "O(6)-methylerythromycin",
+      "O(6)-methylerythromycin"
+    ],
+    "definition": "The 6-<em>O</em>-methyl ether of erythromycin A, clarithromycin is a macrolide antibiotic used in the treatment of respiratory-tract, skin and soft-tissue infections. It is also used to eradicate <em>Helicobacter pylori</em> in the treatment of peptic ulcer disease. It prevents bacteria from growing by interfering with their protein synthesis."
+  },
+  "co-trimoxazole": {
+    "chebi_id": "CHEBI:3770",
+    "name": "co-trimoxazole",
+    "synonyms": [
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide - 5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine (1:1)",
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide - 5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine (1:1)",
+      "Bactrim",
+      "Cotrimoxazol",
+      "Cotrimoxazole",
+      "Septra",
+      "sulfamethoxazol/trimetoprim",
+      "Sulfamethoxazole - trimethoprim mixture",
+      "Sulfamethoxazole / trimethoprim",
+      "Sulfamethoxazole and trimethoprim",
+      "Sulfamethoxazole mixture with trimethoprim",
+      "Sulfamethoxazole trimethoprim",
+      "Sulfamethoxazole-trimethoprim",
+      "Trimethoprim and sulfamethoxazole",
+      "Trimethoprim and sulphamethoxazole",
+      "Trimethoprim-sulfamethoxazole",
+      "Trimethoprim-sulfamethoxazole combination",
+      "Trimethoprim/sulfamethoxazole"
+    ],
+    "definition": "A two-component mixture comprising trimethoprim and sulfamethoxazole."
+  },
+  "cotrimoxazole": {
+    "chebi_id": "CHEBI:3770",
+    "name": "co-trimoxazole",
+    "synonyms": [
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide - 5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine (1:1)",
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide - 5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine (1:1)",
+      "Bactrim",
+      "Cotrimoxazol",
+      "Cotrimoxazole",
+      "Septra",
+      "sulfamethoxazol/trimetoprim",
+      "Sulfamethoxazole - trimethoprim mixture",
+      "Sulfamethoxazole / trimethoprim",
+      "Sulfamethoxazole and trimethoprim",
+      "Sulfamethoxazole mixture with trimethoprim",
+      "Sulfamethoxazole trimethoprim",
+      "Sulfamethoxazole-trimethoprim",
+      "Trimethoprim and sulfamethoxazole",
+      "Trimethoprim and sulphamethoxazole",
+      "Trimethoprim-sulfamethoxazole",
+      "Trimethoprim-sulfamethoxazole combination",
+      "Trimethoprim/sulfamethoxazole"
+    ],
+    "definition": "A two-component mixture comprising trimethoprim and sulfamethoxazole."
+  },
+  "colistin": {
+    "chebi_id": "CHEBI:37943",
+    "name": "colistin",
+    "synonyms": [
+      "Colistin",
+      "colistina",
+      "colistine",
+      "colistinum",
+      "polymyxin E"
+    ],
+    "definition": "A multi-component mixture comprising mostly of colistin A (R = Me) and B (R = H), with small amounts of colistin C and other polymyxins, produced by certain strains of <em>Bacillus polymyxa</em> var. <em>colistinus</em>. An antibiotic, it is used as its sulfate salt (for oral or topical use) or as the sodium salt of the <em>N</em>-methylsulfonic acid derivative (the injectable form) in the treatment of severe Gram-negative infections, partiularly those due to <em>Pseudomonas aeruginosa</em>."
+  },
+  "polymyxin e": {
+    "chebi_id": "CHEBI:37943",
+    "name": "colistin",
+    "synonyms": [
+      "Colistin",
+      "colistina",
+      "colistine",
+      "colistinum",
+      "polymyxin E"
+    ],
+    "definition": "A multi-component mixture comprising mostly of colistin A (R = Me) and B (R = H), with small amounts of colistin C and other polymyxins, produced by certain strains of <em>Bacillus polymyxa</em> var. <em>colistinus</em>. An antibiotic, it is used as its sulfate salt (for oral or topical use) or as the sodium salt of the <em>N</em>-methylsulfonic acid derivative (the injectable form) in the treatment of severe Gram-negative infections, partiularly those due to <em>Pseudomonas aeruginosa</em>."
+  },
+  "ertapenem": {
+    "chebi_id": "CHEBI:404903",
+    "name": "ertapenem",
+    "synonyms": [
+      "(1R,5S,6S,8R,2'S,4'S)-2-(2-(3-carboxyphenylcarbamoyl)pyrrolidin-4-ylthio)-6-(1-hydroxyethyl)-1-methylcarbapenem-3-carboxylic acid",
+      "(4R,5S,6S)-3-((3S,5S)-5-((3-carboxyphenyl)carbamoyl)pyrrolidin-3-ylthio)-6-((R)-1-hydroxyethyl)-4-methyl-7-oxo-1-aza-bicyclo[3.2.0]hept-2-ene-2-carboxylic acid",
+      "(4R,5S,6S)-3-({(3S,5S)-5-[(3-carboxyphenyl)carbamoyl]pyrrolidin-3-yl}sulfanyl)-6-[(1R)-1-hydroxyethyl]-4-methyl-7-oxo-1-azabicyclo[3.2.0]hept-2-ene-2-carboxylic acid",
+      "(4R,5S,6S)-3-({(3S,5S)-5-[(3-carboxyphenyl)carbamoyl]pyrrolidin-3-yl}sulfanyl)-6-[(1R)-1-hydroxyethyl]-4-methyl-7-oxo-1-azabicyclo[3.2.0]hept-2-ene-2-carboxylic acid",
+      "ERTAPENEM",
+      "ertapenem"
+    ],
+    "definition": "Meropenem in which the one of the two methyl groups attached to the amide nitrogen is replaced by hydrogen while the other is replaced by a 3-carboxyphenyl group. The sodium salt is used for the treatment of moderate to severe susceptible infections including intra-abdominal  and acute gynaecological infections, pneumonia, and infections of the skin and of the urinary tract."
+  },
+  "erythromycin": {
+    "chebi_id": "CHEBI:42355",
+    "name": "erythromycin A",
+    "synonyms": [
+      "(3R,4S,5S,6R,7R,9R,11R,12R,13S,14R)-4-(2,6-dideoxy-3-C-methyl-3-O-methyl-alpha-L-ribo-hexopyranosyloxy)-14-ethyl-7,12,13-trihydroxy-6-[3,4,6-trideoxy-3-(dimethylamino)-beta-D-xylo-hexopyranosyloxy]-3,5,7,9,11,13-hexamethyloxacyclotetradecane-2,10-dione",
+      "(3R,4S,5S,6R,7R,9R,11R,12R,13S,14R)-4-(2,6-dideoxy-3-C-methyl-3-O-methyl-alpha-L-ribo-hexopyranosyloxy)-14-ethyl-7,12,13-trihydroxy-6-[3,4,6-trideoxy-3-(dimethylamino)-beta-D-xylo-hexopyranosyloxy]-3,5,7,9,11,13-hexamethyloxacyclotetradecane-2,10-dione",
+      "(3R,4S,5S,6R,7R,9R,11R,12R,13S,14R)-6-{[(2S,3R,4S,6R)-4-(dimethylamino)-3-hydroxy-6-methyltetrahydro-2H-pyran-2-yl]oxy}-14-ethyl-7,12,13-trihydroxy-4-{[(2R,4R,5S,6S)-5-hydroxy-4-methoxy-4,6-dimethyltetrahydro-2H-pyran-2-yl]oxy}-3,5,7,9,11,13-hexamethyloxacyclotetradecane-2,10-dione",
+      "3''-O-demethylerythromycin",
+      "Abomacetin",
+      "eritromicina",
+      "erthromycin",
+      "ERYTHROMYCIN",
+      "ERYTHROMYCIN",
+      "Erythromycin",
+      "Erythromycin",
+      "Erythromycin",
+      "Erythromycin",
+      "erythromycin",
+      "erythromycin",
+      "erythromycin",
+      "ERYTHROMYCIN A",
+      "Erythromycin A",
+      "Erythromycin A",
+      "Erythromycin C",
+      "erythromycine",
+      "erythromycinum"
+    ],
+    "definition": "An erythromycin that consists of erythronolide A having 2,6-dideoxy-3-<em>C</em>-methyl-3-<em>O</em>-methyl-\u03b1-<small>L</small>-<i>ribo</i>-hexopyranosyl and 3,4,6-trideoxy-3-(dimethylamino)-\u03b2-<small>D</small>-<i>xylo</i>-hexopyranosyl residues attahced at positions 4 and 6 respectively."
+  },
+  "meropenem": {
+    "chebi_id": "CHEBI:43968",
+    "name": "meropenem",
+    "synonyms": [
+      "(1R,5S,6S)-2-[(3S,5S)-5-DIMETHYLAMINOCARBONYLPYRROLIDIN-3-YLTHIO]-6-[(R)-1-HYDROXYETHYL]-1-METHYLCARBAPEN-2-EM-3-CARBOXYLIC ACID",
+      "(4R,5S,6S)-3-{[(3S,5S)-5-(dimethylcarbamoyl)pyrrolidin-3-yl]thio}-6-[(1R)-1-hydroxyethyl]-4-methyl-7-oxo-1-azabicyclo[3.2.0]hept-2-ene-2-carboxylic acid",
+      "(6S)-2-{[(3S,5S)-5-(dimethylcarbamoyl)pyrrolidin-3-yl]sulfanyl}-6-[(1R)-1-hydroxyethyl]-1beta-methyl-2,3-didehydro-1-carbapenam-3-carboxylic acid",
+      "(6S)-2-{[(3S,5S)-5-(dimethylcarbamoyl)pyrrolidin-3-yl]sulfanyl}-6-[(1R)-1-hydroxyethyl]-1beta-methyl-2,3-didehydro-1-carbapenam-3-carboxylic acid",
+      "Antibiotic SM 7338",
+      "MEPM",
+      "Meropenem",
+      "meropenem",
+      "meropenem anhydrous",
+      "meropenemum"
+    ],
+    "definition": "A carbapenemcarboxylic acid in which the azetidine and pyrroline rings carry 1-hydroxymethyl and in which the azetidine and pyrroline rings carry 1-hydroxymethyl and 5-(dimethylcarbamoyl)pyrrolidin-3-ylthio substituents respectively."
+  },
+  "trimethoprim": {
+    "chebi_id": "CHEBI:45924",
+    "name": "trimethoprim",
+    "synonyms": [
+      "2,4-diamino-5-(3,4,5-trimethoxybenzyl)pyrimidine",
+      "5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine",
+      "5-(3,4,5-trimethoxybenzyl)pyrimidine-2,4-diamine",
+      "5-[(3,4,5-trimethoxyphenyl)methyl]-2,4-pyrimidinediamine",
+      "Proloprim",
+      "TRIMETHOPRIM",
+      "Trimethoprim",
+      "Trimpex"
+    ],
+    "definition": "An aminopyrimidine antibiotic whose structure consists of pyrimidine 2,4-diamine and 1,2,3-trimethoxybenzene moieties linked by a methylene bridge."
+  },
+  "carbapenems": {
+    "chebi_id": "CHEBI:46633",
+    "name": "carbapenems",
+    "synonyms": [],
+    "definition": "The class of \u03b2-lactam antibiotics that whose members have a carbapenem skeleton which is variously substituted at positions 3, 4, and 6."
+  },
+  "carbapenem": {
+    "chebi_id": "CHEBI:46765",
+    "name": "carbapenem",
+    "synonyms": [
+      "(5R)-1-azabicyclo[3.2.0]hept-2-en-7-one",
+      "2,3-didehydro-1-carbapenam",
+      "2,3-didehydro-1-carbapenam"
+    ],
+    "definition": "An organic heterobicyclic compound that consists of (5<i>R</i>)-1-azabicyclo[3.2.0]hept-2-ene bearing a 7-keto substituent. The parent of the class of carbapenems."
+  },
+  "aminoglycoside": {
+    "chebi_id": "CHEBI:47779",
+    "name": "aminoglycoside",
+    "synonyms": [
+      "aminoglycosides"
+    ],
+    "definition": null
+  },
+  "aminoglycosides": {
+    "chebi_id": "CHEBI:47779",
+    "name": "aminoglycoside",
+    "synonyms": [
+      "aminoglycosides"
+    ],
+    "definition": null
+  },
+  "cefepime": {
+    "chebi_id": "CHEBI:478164",
+    "name": "cefepime",
+    "synonyms": [
+      "(6R,7R)-7-{[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetyl]amino}-3-[(1-methylpyrrolidinium-1-yl)methyl]-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylate",
+      "7beta-[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetamido]-3-[(1-methylpyrrolidinium-1-yl)methyl]-3,4-didehydrocepham-4-carboxylate",
+      "7beta-[(2Z)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetamido]-3-[(1-methylpyrrolidinium-1-yl)methyl]-3,4-didehydrocepham-4-carboxylate",
+      "cefepima",
+      "Cefepime",
+      "cefepime",
+      "cefepime",
+      "cefepimum",
+      "CFPM"
+    ],
+    "definition": "A cephalosporin bearing (1-methylpyrrolidinium-1-yl)methyl and (2<i>Z</i>)-2-(2-amino-1,3-thiazol-4-yl)-2-(methoxyimino)acetamido groups at positions 3 and 7, respectively, of the cephem skeleton."
+  },
+  "minocycline": {
+    "chebi_id": "CHEBI:50694",
+    "name": "minocycline",
+    "synonyms": [
+      "(4S,4AS,5AR,12AS)-4,7-BIS(DIMETHYLAMINO)-3,10,12,12A-TETRAHYDROXY-1,11-DIOXO-1,4,4A,5,5A,6,11,12A-OCTAHYDROTETRACENE-2-CARBOXAMIDE",
+      "(4S,4AS,5AR,12AS)-4,7-BIS(DIMETHYLAMINO)-3,10,12,12A-TETRAHYDROXY-1,11-DIOXO-1,4,4A,5,5A,6,11,12A-OCTAHYDROTETRACENE-2-CARBOXAMIDE",
+      "(4S,4aS,5aR,12aS)-4,7-bis(dimethylamino)-3,10,12,12a-tetrahydroxy-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "(4S,4aS,5aR,12aS)-4,7-bis(dimethylamino)-3,10,12,12a-tetrahydroxy-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "7-Dimethylamino-6-demethyl-6-deoxytetracycline",
+      "minociclina",
+      "minociclinum",
+      "Minocycline",
+      "minocycline",
+      "minomycin"
+    ],
+    "definition": "A tetracycline analogue having a dimethylamino group at position 7 and lacking the methyl and hydroxy groups at position 5."
+  },
+  "doxycycline": {
+    "chebi_id": "CHEBI:50845",
+    "name": "doxycycline",
+    "synonyms": [
+      "(4S,4AR,5S,5AR,6R,12AS)-4-(DIMETHYLAMINO)-3,5,10,12,12A-PENTAHYDROXY-6-METHYL-1,11-DIOXO-1,4,4A,5,5A,6,11,12A-OCTAHYDROTETRACENE-2-CARBOXAMIDE",
+      "(4S,4AR,5S,5AR,6R,12AS)-4-(DIMETHYLAMINO)-3,5,10,12,12A-PENTAHYDROXY-6-METHYL-1,11-DIOXO-1,4,4A,5,5A,6,11,12A-OCTAHYDROTETRACENE-2-CARBOXAMIDE",
+      "(4S,4aR,5S,5aR,6R,12aS)-4-(dimethylamino)-3,5,10,12,12a-pentahydroxy-6-methyl-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "(4S,4aR,5S,5aR,6R,12aS)-4-(dimethylamino)-3,5,10,12,12a-pentahydroxy-6-methyl-1,11-dioxo-1,4,4a,5,5a,6,11,12a-octahydrotetracene-2-carboxamide",
+      "5-hydroxy-alpha-6-deoxytetracycline",
+      "6alpha-deoxy-5-oxytetracycline",
+      "doxiciclina",
+      "Doxycyclin",
+      "Doxycycline",
+      "doxycycline",
+      "doxycycline (anhydrous)",
+      "doxycyclinum",
+      "Jenacyclin",
+      "Supracyclin",
+      "Vibramycin"
+    ],
+    "definition": "Tetracycline in which the 5\u03b2-hydrogen is replaced by a hydroxy group, while the 6\u03b1-hydroxy group is replaced by hydrogen. A semi-synthetic tetracycline antibiotic, it is used to inhibit bacterial protein synthesis and treat non-gonococcal urethritis and cervicitis, exacerbations of bronchitis in patients with chronic obstructive pulmonary disease (COPD), and adult periodontitis."
+  },
+  "polymyxin": {
+    "chebi_id": "CHEBI:59062",
+    "name": "polymyxin",
+    "synonyms": [
+      "polymixin",
+      "polymycin",
+      "polymyxins"
+    ],
+    "definition": "Polymyxins are antibiotics with a general structure consisting of a cyclic peptide with a long hydrophobic tail. They disrupt the structure of the bacterial cell membrane by interacting with its phospholipids. Polymyxins are produced by the Gram-positive bacterium <em>Bacillus polymyxa</em> and are selectively toxic for Gram-negative bacteria."
+  },
+  "polymyxins": {
+    "chebi_id": "CHEBI:59062",
+    "name": "polymyxin",
+    "synonyms": [
+      "polymixin",
+      "polymycin",
+      "polymyxins"
+    ],
+    "definition": "Polymyxins are antibiotics with a general structure consisting of a cyclic peptide with a long hydrophobic tail. They disrupt the structure of the bacterial cell membrane by interacting with its phospholipids. Polymyxins are produced by the Gram-positive bacterium <em>Bacillus polymyxa</em> and are selectively toxic for Gram-negative bacteria."
+  },
+  "daptomycin": {
+    "chebi_id": "CHEBI:600103",
+    "name": "daptomycin",
+    "synonyms": [
+      "Cidecin",
+      "Cubicin",
+      "daptomicina",
+      "Daptomycin",
+      "daptomycin",
+      "daptomycin",
+      "daptomycine",
+      "daptomycinum",
+      "LY 146032",
+      "N-decanoyl-L-tryptophyl-L-asparaginyl-L-aspartyl-L-threonylglycyl-L-ornithyl-L-aspartyl-D-alanyl-L-aspartylglycyl-D-seryl-threo-3-methyl-L-glutamyl-3-anthraniloyl-L-alanine 1.13-3.4-lactone",
+      "N-decanoyl-L-tryptophyl-L-asparaginyl-L-aspartyl-L-threonylglycyl-L-ornithyl-L-aspartyl-D-alanyl-L-aspartylglycyl-D-seryl-threo-3-methyl-L-glutamyl-3-anthraniloyl-L-alanine epsilon(1)-lactone",
+      "N-decanoyl-L-tryptophyl-L-asparaginyl-N-[(3S,6S,9R,15S,18R,21S,24S,30S,31R)-3-[2-(2-aminophenyl)-2-oxoethyl]-24-(3-aminopropyl)-15,21-bis(carboxymethyl)-6-[(2R)-1-carboxypropan-2-yl]-9-(hydroxymethyl)-18,31-dimethyl-2,5,8,11,14,17,20,23,26,29-decaoxo-1-oxa-4,7,10,13,16,19,22,25,28-nonaazacyclohentriacontan-30-yl]-L-alpha-asparagine",
+      "N-decanoyl-L-tryptophyl-L-asparaginyl-N-[(3S,6S,9R,15S,18R,21S,24S,30S,31R)-3-[2-(2-aminophenyl)-2-oxoethyl]-24-(3-aminopropyl)-15,21-bis(carboxymethyl)-6-[(2R)-1-carboxypropan-2-yl]-9-(hydroxymethyl)-18,31-dimethyl-2,5,8,11,14,17,20,23,26,29-decaoxo-1-oxa-4,7,10,13,16,19,22,25,28-nonaazacyclohentriacontan-30-yl]-L-alpha-asparagine"
+    ],
+    "definition": "A polypeptide comprising <em>N</em>-decanoyltryptophan, asparagine, aspartic acid, threonine, glycine, ornithine, aspartic acid, <small>D</small>-alanine, aspartic acid, glycine, <small>D</small>-serine, <em>threo</em>-3-methylglutamic acid and 3-anthraniloylalanine (also known as kynurinine) coupled in sequence and lactonised by condensation of the carboxylic acid group of the 3-anthraniloylalanine  with the alcohol group of the threonine residue."
+  },
+  "isoniazid": {
+    "chebi_id": "CHEBI:6030",
+    "name": "isoniazide",
+    "synonyms": [
+      "4-pyridinecarbohydrazide",
+      "Isoniazid",
+      "isoniazid",
+      "isonicotinic acid hydrazide",
+      "isonicotinic hydrazide",
+      "isonicotinohydrazide",
+      "isonicotinoylhydrazide",
+      "Isonicotinsaeurehydrazid",
+      "pyridine-4-carbohydrazide",
+      "pyridine-4-carbohydrazide",
+      "pyridine-4-carboxylic acid hydrazide"
+    ],
+    "definition": "A carbohydrazide obtained by formal condensation between pyridine-4-carboxylic acid and hydrazine."
+  },
+  "levofloxacin": {
+    "chebi_id": "CHEBI:63598",
+    "name": "levofloxacin",
+    "synonyms": [
+      "(-)-Ofloxacin",
+      "(-)-ofloxacin",
+      "(3S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzoxazine-6-carboxylic acid",
+      "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "(S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzooxazine-6-carboxylic acid",
+      "(S)-9-Fluoro-2,3-dihydro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-7H-pyrido(1,2,3-de)-1,4-benzoxazine-6-carboxylic acid",
+      "(S)-ofloxacin",
+      "DR 3355",
+      "DR-3355",
+      "L-ofloxacin",
+      "levofloxacin",
+      "levofloxacine",
+      "levofloxacino",
+      "levofloxacinum",
+      "Ofloxacin S-(-)-form",
+      "S-(-)-ofloxacin"
+    ],
+    "definition": "An optically active form of ofloxacin having (<i>S</i>)-configuration; an inhibitor of bacterial topoisomerase IV and DNA gyrase."
+  },
+  "linezolid": {
+    "chebi_id": "CHEBI:63607",
+    "name": "linezolid",
+    "synonyms": [
+      "Linezolid",
+      "linezolid",
+      "N-(((S)-3-(3-Fluoro-4-morpholinophenyl)-2-oxo-5-oxazolidinyl)methyl)acetamide",
+      "N-({(5S)-3-[3-fluoro-4-(morpholin-4-yl)phenyl]-2-oxo-1,3-oxazolidin-5-yl}methyl)acetamide",
+      "N-({(5S)-3-[3-fluoro-4-(morpholin-4-yl)phenyl]-2-oxo-1,3-oxazolidin-5-yl}methyl)acetamide"
+    ],
+    "definition": "An organofluorine compound that consists of 1,3-oxazolidin-2-one bearing an <em>N</em>-3-fluoro-4-(morpholin-4-yl)phenyl group as well as an acetamidomethyl group at position 5. A synthetic antibacterial agent that inhibits bacterial protein synthesis by binding to a site on 23S ribosomal RNA of the 50S subunit and prevents further formation of a functional 70S initiation complex."
+  },
+  "moxifloxacin": {
+    "chebi_id": "CHEBI:63611",
+    "name": "moxifloxacin",
+    "synonyms": [
+      "1-Cyclopropyl-6-fluoro-1,4-dihydro-8-methoxy-7-((4aS,7aS)-octahydro-6H-pyrrolo(3,4-b)pyridin-6-yl)-4-oxo-3-quinolinecarboxylic acid",
+      "1-cyclopropyl-6-fluoro-8-methoxy-7-[(4aS,7aS)-octahydro-6H-pyrrolo[3,4-b]pyridin-6-yl]-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+      "1-cyclopropyl-6-fluoro-8-methoxy-7-[(4aS,7aS)-octahydro-6H-pyrrolo[3,4-b]pyridin-6-yl]-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+      "Moxifloxacin",
+      "moxifloxacin"
+    ],
+    "definition": "A quinolone that consists of 4-oxo-1,4-dihydroquinoline-3-carboxylic acid bearing a cyclopropyl substituent at position 1, a fluoro substitiuent at position 6, a (4a<i>S</i>,7a<i>S</i>)-octahydro-6<em>H</em>-pyrrolo[3,4-<em>b</em>]pyridin-6-yl group at position 7 and a methoxy substituent at position 8. A member of the fluoroquinolone class of antibacterial agents."
+  },
+  "methicillin": {
+    "chebi_id": "CHEBI:6827",
+    "name": "methicillin",
+    "synonyms": [
+      "(2S,5R,6R)-6-[(2,6-dimethoxybenzoyl)amino]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "6beta-(2,6-dimethoxybenzamido)-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-(2,6-dimethoxybenzamido)-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-(2,6-dimethoxybenzamido)penicillanic acid",
+      "Methicillin",
+      "meticilina",
+      "meticillin",
+      "meticilline",
+      "meticillinum"
+    ],
+    "definition": "A penicillin that is 6-aminopenicillanic acid in which one of the amino hydrogens is replaced by a 2,6-dimethoxybenzoyl group."
+  },
+  "ceftaroline": {
+    "chebi_id": "CHEBI:70729",
+    "name": "ceftaroline",
+    "synonyms": [
+      "(6R,7R)-7-{[(2Z)-2-(5-amino-1,2,4-thiadiazol-3-yl)-2-(ethoxyimino)acetyl]amino}-3-{[4-(1-methylpyridinium-4-yl)-1,3-thiazol-2-yl]sulfanyl}-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylate",
+      "(6R,7R)-7-{[(2Z)-2-(5-amino-1,2,4-thiadiazol-3-yl)-2-(ethoxyimino)acetyl]amino}-3-{[4-(1-methylpyridinium-4-yl)-1,3-thiazol-2-yl]sulfanyl}-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylate",
+      "PPI 0903M",
+      "T 91825",
+      "T-91825"
+    ],
+    "definition": "A cephalosporin that is the active metabolite of the prodrug ceftaroline fosamil.  Used for the treatment of adults with acute bacterial skin and skin structure infections."
+  },
+  "nitrofurantoin": {
+    "chebi_id": "CHEBI:71415",
+    "name": "nitrofurantoin",
+    "synonyms": [
+      "1-((5-Nitrofurfurylidene)amino)hydantoin",
+      "1-(5-Nitro-2-furfurylidenamino)hydantoin",
+      "1-(5-Nitro-2-furfurylideneamino)hydantoin",
+      "1-[(5-Nitrofurfurylidene)amino]hydantoin",
+      "1-{[(5-nitro-2-furyl)methylene]amino}imidazolidine-2,4-dione",
+      "1-{[(5-nitro-2-furyl)methylene]amino}imidazolidine-2,4-dione",
+      "5-Nitrofurantoin",
+      "N-(5-Nitrofurfurylidene)-1-aminohydantoin",
+      "nitrofurantoin",
+      "nitrofurantoina",
+      "nitrofurantoine",
+      "nitrofurantoinum"
+    ],
+    "definition": "An imidazolidine-2,4-dione that is hydantoin substituted at position 1 by a"
+  },
+  "oxacillin": {
+    "chebi_id": "CHEBI:7809",
+    "name": "oxacillin",
+    "synonyms": [
+      "(2S,5R,6R)-3,3-dimethyl-6-{[(5-methyl-3-phenylisoxazol-4-yl)carbonyl]amino}-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "(5-methyl-3-phenyl-4-isoxazolyl)penicillin",
+      "2,2-dimethyl-6beta-(5-methyl-3-phenyl-1,2-oxazole-4-carboxamido)penam-3alpha-carboxylic acid",
+      "2,2-dimethyl-6beta-(5-methyl-3-phenyl-1,2-oxazole-4-carboxamido)penam-3alpha-carboxylic acid",
+      "5-methyl-3-phenyl-4-isoxazolyl-penicillin",
+      "6beta-(5-methyl-3-phenylisoxazol-4-yl)penicillanic acid",
+      "Oxacillin",
+      "oxazocillin"
+    ],
+    "definition": "A penicillin antibiotic carrying a 5-methyl-3-phenylisoxazole-4-carboxamide group at position 6\u03b2."
+  },
+  "piperacillin": {
+    "chebi_id": "CHEBI:8232",
+    "name": "piperacillin",
+    "synonyms": [
+      "(2S,5R,6R)-6-{[(2R)-2-{[(4-ethyl-2,3-dioxopiperazin-1-yl)carbonyl]amino}-2-phenylacetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "6beta-{(2R)-2-[(4-ethyl-2,3-dioxopiperazin-1-yl)carboxamido]-2-phenylacetamido}-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-{(2R)-2-[(4-ethyl-2,3-dioxopiperazin-1-yl)carboxamido]-2-phenylacetamido}-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "Piperacillin",
+      "piperacillin",
+      "Piperacillin anhydrous"
+    ],
+    "definition": "A penicillin in which the substituent at position 6 of the penam ring is a 2-[(4-ethyl-2,3-dioxopiperazin-1-yl)carboxamido]-2-phenylacetamido group."
+  },
+  "avibactam": {
+    "chebi_id": "CHEBI:85984",
+    "name": "avibactam",
+    "synonyms": [
+      "(2S,5R)-7-oxo-6-(sulfooxy)-1,6-diazabicyclo[3.2.1]octane-2-carboxamide",
+      "(2S,5R)-7-oxo-6-(sulfooxy)-1,6-diazabicyclo[3.2.1]octane-2-carboxamide",
+      "NXL 104",
+      "NXL104"
+    ],
+    "definition": "A member of the class of azabicycloalkanes that is (2<i>S</i>,5<i>R</i>)-7-oxo-1,6-diazabicyclo[3.2.1]octane-2-carboxamide in which the amino hydrogen at position 6 is replaced by a sulfooxy group. Used (in the form of its sodium salt) in combination with ceftazidime pentahydrate for the treatment of complicated urinary tract infections including pyelonephritis."
+  },
+  "sulfamethoxazole": {
+    "chebi_id": "CHEBI:9332",
+    "name": "sulfamethoxazole",
+    "synonyms": [
+      "3-(p-Aminophenylsulfonamido)-5-methylisoxazole",
+      "3-Sulfanilamido-5-methylisoxazole",
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide",
+      "4-amino-N-(5-methyl-1,2-oxazol-3-yl)benzenesulfonamide",
+      "4-Amino-N-(5-methyl-3-isoxazolyl)benzenesulfonamide",
+      "Gantanol (TN)",
+      "SMX",
+      "Sulfamethoxazole",
+      "sulphamethoxazole"
+    ],
+    "definition": "An isoxazole (1,2-oxazole) compound having a methyl substituent at the 5-position and a 4-aminobenzenesulfonamido group at the 3-position."
+  },
+  "ticarcillin": {
+    "chebi_id": "CHEBI:9587",
+    "name": "ticarcillin",
+    "synonyms": [
+      "(2S,5R,6R)-6-{[(2R)-2-carboxy-2-thiophen-3-ylacetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "6beta-{[(2R)-2-carboxy-2-thiophen-3-ylacetyl]amino}-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "6beta-{[(2R)-2-carboxy-2-thiophen-3-ylacetyl]amino}-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "alpha-carboxy-3-thienylmethylpenicillin",
+      "ticarcilina",
+      "ticarcillin",
+      "ticarcilline",
+      "ticarcillinum"
+    ],
+    "definition": "A penicillin compound having a 6\u03b2-[(2<i>R</i>)-2-carboxy-2-thiophen-3-ylacetyl]amino side-group."
+  }
+}

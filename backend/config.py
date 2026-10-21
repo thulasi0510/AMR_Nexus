@@ -3,16 +3,14 @@ import os
 
 OLLAMA_URL = os.getenv("AMR_OLLAMA_URL", "http://localhost:11434/api/generate")
 OLLAMA_MODEL = os.getenv("AMR_OLLAMA_MODEL", "llama3.2:latest")
-OLLAMA_QUERY_TIMEOUT = int(os.getenv("AMR_OLLAMA_QUERY_TIMEOUT", "3"))
+OLLAMA_QUERY_TIMEOUT = int(os.getenv("AMR_OLLAMA_QUERY_TIMEOUT", "25"))
 # A structured, multi-section, claim-cited answer takes longer to generate
-# than a short intent-classification call, especially on CPU. This was 90s;
-# combined with the much smaller, pre-digested prompt now built in
-# response_synthesis.py (evidence snippets/tiers instead of raw JSON dumps
-# of full abstracts), 150s gives the real synthesis path a fair chance to
-# finish instead of silently falling back to the thin fallback answer.
-OLLAMA_RESPONSE_TIMEOUT = int(os.getenv("AMR_OLLAMA_RESPONSE_TIMEOUT", "4"))
-AMR_LATENCY_BUDGET_SECONDS = float(os.getenv("AMR_LATENCY_BUDGET_SECONDS", "7"))
-AMR_LLM_QUERY_ENABLED = os.getenv("AMR_LLM_QUERY_ENABLED", "0") == "1"
+# than a short intent-classification call, especially on CPU. 60-90s gives
+# the synthesis engine adequate time to generate publication-grade summaries.
+OLLAMA_RESPONSE_TIMEOUT = int(os.getenv("AMR_OLLAMA_RESPONSE_TIMEOUT", "60"))
+AMR_LATENCY_BUDGET_SECONDS = float(os.getenv("AMR_LATENCY_BUDGET_SECONDS", "90"))
+AMR_LLM_QUERY_ENABLED = os.getenv("AMR_LLM_QUERY_ENABLED", "1") == "1"
+AMR_LLM_SYNTHESIS_ENABLED = os.getenv("AMR_LLM_SYNTHESIS_ENABLED", "1") == "1"
 AMR_PMC_ENRICHMENT_ENABLED = os.getenv("AMR_PMC_ENRICHMENT_ENABLED", "0") == "1"
 
 PUBMED_EUTILS_URL = os.getenv(

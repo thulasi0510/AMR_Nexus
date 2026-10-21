@@ -20,6 +20,7 @@ to turn into claim-by-claim citations.
 """
 import html
 import re
+import sys
 import requests
 
 from agents.entity_aliases import canonical_drug, canonical_organism, dedupe_by_key, drug_hits
@@ -30,6 +31,8 @@ from config import (
     OLLAMA_URL,
     OLLAMA_MODEL,
     OLLAMA_RESPONSE_TIMEOUT,
+    AMR_LLM_SYNTHESIS_ENABLED,
+    AMR_DEBUG,
     SYNTHESIS_MAX_PAPERS,
     SYNTHESIS_MAX_SNIPPET_CHARS,
 )
@@ -250,9 +253,13 @@ def _format_papers(references, evidence, max_papers=SYNTHESIS_MAX_PAPERS):
     if not references:
         return "No PubMed records were retrieved for this query."
 
+    # Ensure all references have an assigned reference_number
+    if any(not isinstance(r, dict) or "reference_number" not in r for r in references):
+        references = _numbered_references(references)
+
     shown = references[:max_papers]
     lines = []
-    for ref in shown:
+    for idx, ref in enumerate(shown):
         identity = _paper_identity(ref)
         annotated = annotated_index.get(identity, {})
         tier, specificity = _tier_for(annotated)
@@ -270,8 +277,9 @@ def _format_papers(references, evidence, max_papers=SYNTHESIS_MAX_PAPERS):
         elif specificity == "family":
             specificity_note = " -- gene-family-level match, not the exact named allele/variant"
         url = ref.get("pubmed_url") or ref.get("doi_url") or ""
+        ref_num = ref.get("reference_number") or (idx + 1)
         lines.append(
-            f"[{ref['reference_number']}] {ref.get('title')} "
+            f"[{ref_num}] {ref.get('title')} "
             f"({ref.get('journal') or 'journal not recorded'}, {ref.get('year') or 'year not recorded'}) "
             f"PMID: {ref.get('pmid') or 'N/A'} | URL: {url}\n"
             f"    Evidence tier: {tier} ({specificity} match){specificity_note} | Article type: {kind}\n"
@@ -1224,6 +1232,51 @@ def _extract_auditable_passages(evidence, references, max_papers=SYNTHESIS_MAX_P
     return passages, refs
 
 
+def _llm_mechanistic_overview(query, genes, mechanisms, organisms, drugs):
+    """Use local Ollama model to generate an in-depth mechanistic overview for novel determinants."""
+    if not AMR_LLM_SYNTHESIS_ENABLED:
+        return None
+    try:
+        gene_names = ", ".join(genes) or "the queried determinant"
+        drug_names = ", ".join(drugs) or "antimicrobial agents"
+        org_names = ", ".join(organisms) or "bacterial pathogens"
+
+        prompt = f"""You are an expert AMR molecular biologist.
+Provide an in-depth scientific explanation of the biochemical and genetic resistance mechanisms for the query below.
+
+USER QUERY: {query}
+GENES/DETERMINANTS: {gene_names}
+DRUGS: {drug_names}
+ORGANISMS: {org_names}
+
+INSTRUCTIONS:
+1. Explain the molecular mode of action: drug target binding, catalytic modification, efflux kinetics, or membrane alterations.
+2. Write 2 structured paragraphs using precise biochemical language. Do NOT include headings or references.
+"""
+        resp = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.1,
+                    "num_predict": 350,
+                },
+            },
+            timeout=OLLAMA_RESPONSE_TIMEOUT,
+        )
+        resp.raise_for_status()
+        res_json = resp.json()
+        overview = (res_json.get("response") or "").strip()
+        if overview and len(overview) >= 60:
+            return overview
+    except Exception as exc:
+        if AMR_DEBUG:
+            print(f"[response_synthesis] LLM mechanistic overview call failed: {exc}", file=sys.stderr)
+    return None
+
+
 def _synthesize_mechanistic_overview(genes, mechanisms, organisms, drugs, scientific_concepts, query):
     """Generate a cohesive, scientific narrative describing the biochemical and genetic mechanisms."""
     q_low = (query or "").lower()
@@ -1312,12 +1365,16 @@ def _synthesize_mechanistic_overview(genes, mechanisms, organisms, drugs, scient
 
     # Default fallback for other mechanisms or genes
     else:
-        det_str = f"**{', '.join(genes or mechanisms or ['the queried determinant'])}**"
-        lines.append(
-            f"Resistance mediated by {det_str}{org_str}{drug_str} operates through specific biochemical and genetic determinants. "
-            "Antimicrobial resistance mechanisms typically encompass enzymatic drug modification/inactivation, target structure alteration, "
-            "membrane permeability restriction, or active extrusion."
-        )
+        llm_mech = _llm_mechanistic_overview(query, genes, mechanisms, organisms, drugs)
+        if llm_mech:
+            lines.append(llm_mech)
+        else:
+            det_str = f"**{', '.join(genes or mechanisms or ['the queried determinant'])}**"
+            lines.append(
+                f"Resistance mediated by {det_str}{org_str}{drug_str} operates through specific biochemical and genetic determinants. "
+                "Antimicrobial resistance mechanisms typically encompass enzymatic drug modification/inactivation, target structure alteration, "
+                "membrane permeability restriction, or active extrusion."
+            )
 
     return "\n\n".join(lines)
 
@@ -2063,6 +2120,63 @@ def _extract_all_mutation_profiles(passages, evidence, genes, query):
     return profiles
 
 
+def _llm_executive_summary(query, genes, organisms, drugs, mechanisms, candidate_genes, ref_evidence, mutation_profiles, passages):
+    """Use local Ollama model to generate an evidence-grounded executive summary."""
+    if not AMR_LLM_SYNTHESIS_ENABLED:
+        return None
+    try:
+        ev_items = []
+        for p in (passages or [])[:6]:
+            n = p.get("ref_num")
+            cite = f" [{n}]" if n else ""
+            ev_items.append(f"{cite} {p.get('text', '')}")
+        ev_text = "\n".join(ev_items) if ev_items else "No direct literature excerpts extracted; synthesize from established biochemical and genetic principles."
+
+        gene_names = ", ".join(genes) or "the queried determinant"
+        drug_names = ", ".join(drugs) or "antimicrobial agents"
+        org_names = ", ".join(organisms) or "pathogens"
+
+        prompt = f"""You are an expert Antimicrobial Resistance (AMR) scientific research assistant.
+Provide an authoritative, publication-grade 2-3 paragraph Executive Scientific Summary answering the research question below.
+
+USER QUERY: {query}
+GENES/DETERMINANTS: {gene_names}
+DRUGS: {drug_names}
+ORGANISMS: {org_names}
+
+CURATED LITERATURE FINDINGS:
+{ev_text}
+
+INSTRUCTIONS:
+1. Synthesize a coherent, high-level scientific explanation of the molecular mechanism, functional phenotype, and resistance determinants in 2-3 clear paragraphs.
+2. Weave inline bracket citations [1], [2] right after specific claims supported by the evidence above. Never cite a number not provided above.
+3. Maintain rigorous scientific terminology (e.g. active-site remodeling, steric hindrance, minimum inhibitory concentration).
+4. Do NOT include a references section (it is rendered separately).
+"""
+        resp = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.1,
+                    "num_predict": 450,
+                },
+            },
+            timeout=OLLAMA_RESPONSE_TIMEOUT,
+        )
+        resp.raise_for_status()
+        res_json = resp.json()
+        summary = (res_json.get("response") or "").strip()
+        if summary and len(summary) >= 60:
+            return summary
+    except Exception as exc:
+        if AMR_DEBUG:
+            print(f"[response_synthesis] LLM executive summary call failed: {exc}", file=sys.stderr)
+    return None
+
+
 def _synthesize_comprehensive_executive_summary(query, genes, organisms, drugs, mechanisms, candidate_genes, ref_evidence, mutation_profiles, passages):
     """Generate an authoritative, multi-paragraph biological summary answering the research question."""
     q_low = (query or "").lower()
@@ -2072,6 +2186,11 @@ def _synthesize_comprehensive_executive_summary(query, genes, organisms, drugs, 
     drug_str = f" against **{drug_names}**" if drugs else ""
 
     lines = []
+
+    llm_summary = _llm_executive_summary(query, genes, organisms, drugs, mechanisms, candidate_genes, ref_evidence, mutation_profiles, passages)
+    if llm_summary:
+        lines.append(llm_summary)
+        return "\n\n".join(lines)
 
     # Case A: TEM beta-lactamase
     if any("tem" in g.lower() for g in genes) or "tem" in q_low:
@@ -2140,25 +2259,29 @@ def _synthesize_comprehensive_executive_summary(query, genes, organisms, drugs, 
 
     # General / Other determinants
     else:
-        card_desc = ""
-        aro_id = ""
-        if ref_evidence:
-            r0 = ref_evidence[0]
-            card_desc = r0.get("description") or ""
-            aro_id = r0.get("aro_id") or ""
-        lines.append(
-            f"Antimicrobial resistance involving **{gene_names}**{org_str}{drug_str} operates through specialized biochemical and genetic determinants. "
-            f"{('According to curated reference catalogues (' + aro_id + '): ' + card_desc) if card_desc else 'Resistance is mediated by target modification, enzymatic drug inactivation, active extrusion, or outer membrane permeability alterations.'}"
-        )
-        if mutation_profiles:
-            mut_list = ", ".join(list(mutation_profiles.keys())[:8])
+        llm_summary = _llm_executive_summary(query, genes, organisms, drugs, mechanisms, candidate_genes, ref_evidence, mutation_profiles, passages)
+        if llm_summary:
+            lines.append(llm_summary)
+        else:
+            card_desc = ""
+            aro_id = ""
+            if ref_evidence:
+                r0 = ref_evidence[0]
+                card_desc = r0.get("description") or ""
+                aro_id = r0.get("aro_id") or ""
             lines.append(
-                f"Published research and functional analyses identify key variants and substitutions—including **{mut_list}**—that alter catalytic properties, "
-                f"modulate binding affinity, or provide compensatory stability to sustain resistance in clinical isolates."
+                f"Antimicrobial resistance involving **{gene_names}**{org_str}{drug_str} operates through specialized biochemical and genetic determinants. "
+                f"{('According to curated reference catalogues (' + aro_id + '): ' + card_desc) if card_desc else 'Resistance is mediated by target modification, enzymatic drug inactivation, active extrusion, or outer membrane permeability alterations.'}"
             )
-        lines.append(
-            f"Mechanisms compromising susceptibility to {drug_names} require careful diagnostic surveillance and tailored antimicrobial stewardship to prevent clinical treatment failure."
-        )
+            if mutation_profiles:
+                mut_list = ", ".join(list(mutation_profiles.keys())[:8])
+                lines.append(
+                    f"Published research and functional analyses identify key variants and substitutions—including **{mut_list}**—that alter catalytic properties, "
+                    f"modulate binding affinity, or provide compensatory stability to sustain resistance in clinical isolates."
+                )
+            lines.append(
+                f"Mechanisms compromising susceptibility to {drug_names} require careful diagnostic surveillance and tailored antimicrobial stewardship to prevent clinical treatment failure."
+            )
 
     return "\n\n".join(lines)
 

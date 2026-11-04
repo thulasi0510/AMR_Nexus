@@ -11,6 +11,7 @@ from agents.mutation_reference import retrieve_mutations
 from agents.mutation_matching import records_for_matching
 from agents.pmc_evidence import enrich_with_pmc
 from agents.literature_research_agent import LiteratureResearchRequest, research as run_literature_research
+from agents.structural_analysis import run_structural_analysis
 from agents.evidence_analysis import analyze_literature
 from agents.response_synthesis import synthesize_response
 from agents.report_generator import generate_report
@@ -24,6 +25,7 @@ class ResearchState(TypedDict, total=False):
     literature_results: list[dict[str, Any]]
     evidence: dict[str, Any]
     mutation_reference: dict[str, Any]
+    structural_analysis: dict[str, Any]
     answer: str
     report: dict[str, Any]
     execution_trace: list[dict[str, Any]]
@@ -80,6 +82,26 @@ def mutation_reference_node(state):
             state,
             "Mutation Reference Agent",
             {"status": result.get("status"), "records": len(result.get("mutations", []))},
+        ),
+    }
+
+
+def structural_analysis_node(state):
+    result = run_structural_analysis(
+        state["understanding"],
+        mutation_reference=state.get("mutation_reference"),
+        query=state.get("query"),
+    )
+    return {
+        "structural_analysis": result,
+        "execution_trace": _trace(
+            state,
+            "Sequence & Structural Analysis Agent",
+            {
+                "genes_modeled": len(result.get("gene_structures", {})),
+                "mutations_modeled": len(result.get("mutation_consequences", [])),
+                "hypotheses_generated": len([h for h in result.get("hypotheses", []) if h.get("is_hypothesis")]),
+            },
         ),
     }
 
@@ -148,6 +170,7 @@ def evidence_node(state):
         mutation_reference=state.get("mutation_reference"),
     )
     e["mutation_reference"] = state.get("mutation_reference", {})
+    e["structural_analysis"] = state.get("structural_analysis", {})
     e["entity_normalization"] = {
         "organisms": state["understanding"].get("organism_resolutions", []),
         "antibiotics": state["understanding"].get("antibiotic_resolutions", []),
@@ -200,6 +223,7 @@ workflow.add_node("query_understanding", query_understanding_node)
 workflow.add_node("entity_normalization", entity_normalization_node)
 workflow.add_node("planner", planner_node)
 workflow.add_node("mutation_reference", mutation_reference_node)
+workflow.add_node("structural_analysis", structural_analysis_node)
 workflow.add_node("literature", literature_node)
 workflow.add_node("pmc", pmc_node)
 workflow.add_node("evidence", evidence_node)
@@ -217,15 +241,18 @@ workflow.add_conditional_edges(
         "pending": "pending",
         "out_of_scope": "out_of_scope",
         "mutation_reference": "mutation_reference",
-        "literature": "literature",
+        "literature": "structural_analysis",
     },
 )
-workflow.add_edge("mutation_reference", "literature")
+workflow.add_edge("mutation_reference", "structural_analysis")
+workflow.add_edge("structural_analysis", "literature")
 workflow.add_edge("literature", "pmc")
 workflow.add_edge("pmc", "evidence")
 workflow.add_edge("evidence", "response")
 workflow.add_edge("response", "report")
 workflow.add_edge("pending", END)
+workflow.add_edge("report", END)
+workflow.add_edge("out_of_scope", END)
 workflow.add_edge("report", END)
 research_graph = workflow.compile()
 

@@ -918,8 +918,49 @@ def _mutation_focused_response(query, understanding, evidence, references):
                 } and _phenotype_matches(r, phenotype)
             )
 
+    # First check for invalid coordinates (e.g. katG G944C exceeding length)
+    requested_variants = list(dict.fromkeys([*(extract_query_variants(query or "")), *(entities.get("mutations") or []), *(entities.get("variants") or [])]))
+    issues = [mutation_position_issue(v, genes, organisms) for v in requested_variants]
+    issues = [issue for issue in issues if issue]
+    if issues:
+        return (
+            f"The requested notation cannot be validated as a protein substitution for "
+            f"{gene_label or 'the queried determinant'}"
+            f"{(' in ' + organism_label) if organism_label else ''}: {issues[0]}. "
+            "Any nucleotide or assay-specific coordinate requires reference-sequence validation before it can be interpreted as an amino-acid resistance mutation."
+        )
+
     retrieval = _retrieval_summary(evidence)
     parts = []
+
+    passages, refs_auditable = _extract_auditable_passages(evidence, references)
+    mutation_profiles = _extract_all_mutation_profiles(passages, evidence, genes, query)
+    ref_evidence = evidence.get("reference_evidence", []) or []
+
+    is_structural_or_consequence_query = any(k in query.lower() for k in [
+        "consequence", "consequences", "structural", "structure", "biophysical", "impact",
+        "hypothesis", "hypotheses", "poorly characterized", "uncharacterized", "novel",
+        "in silico", "predict", "model", "active site", "binding pocket", "cavity", "steric", "biochemical"
+    ])
+    needs_deep_synthesis = is_structural_or_consequence_query or (not table and bool(requested_variants))
+
+    # 1. Executive Scientific Summary (for consequence/structural queries or novel uncatalogued variants)
+    if needs_deep_synthesis:
+        exec_summary = _synthesize_comprehensive_executive_summary(
+            query, genes, organisms, drugs, [], [], ref_evidence, mutation_profiles, passages
+        )
+        if exec_summary:
+            parts.append("### Executive Scientific Summary\n" + exec_summary)
+
+    # 2. Determinant & Mutation Landscape Matrix (5-Facet Characterization for Objective 2)
+    if needs_deep_synthesis:
+        facet_matrix = _synthesize_5_facet_matrix(evidence, genes, organisms, drugs)
+        if facet_matrix:
+            parts.append(facet_matrix)
+        elif mutation_profiles:
+            parts.append(_synthesize_mutation_determinant_matrix(mutation_profiles, ref_evidence, [], genes, [], drugs, organisms))
+
+    # 3. Database-Supported Curated Classifications (Objective 4)
     if table:
         if reference_rows:
             source_names = list(dict.fromkeys(str(r.get("source") or "specialized mutation reference") for r in reference_rows))
@@ -927,58 +968,51 @@ def _mutation_focused_response(query, understanding, evidence, references):
             parts.append(
                 f"{source_label} classifications for {gene_label or 'the queried determinant'}"
                 f"{(' in ' + organism_label) if organism_label else ''}"
-                f"{(' against ' + drug_label) if drug_label else ''}:"
+                f"{(' against ' + drug_label) if drug_label else ''}:\n{table}"
             )
         else:
             parts.append(
                 f"Mutation-level literature evidence matching {gene_label or 'the queried determinant'}"
                 f"{(' in ' + organism_label) if organism_label else ''}"
                 f"{(' and ' + drug_label) if drug_label else ''}"
-                f" for {phenotype_label} is listed below."
+                f" for {phenotype_label} is listed below.\n{table}"
             )
-        parts.append(table)
     else:
-        requested_variants = [*(extract_query_variants(query or "")), *(entities.get("mutations") or []), *(entities.get("variants") or [])]
-        issues = [mutation_position_issue(v, genes, organisms) for v in requested_variants]
-        issues = [issue for issue in issues if issue]
-        if issues:
+        if requested_variants:
             parts.append(
-                f"The requested notation cannot be validated as a protein substitution for "
-                f"{gene_label or 'the queried determinant'}"
-                f"{(' in ' + organism_label) if organism_label else ''}: {issues[0]}. "
-                "Any nucleotide or assay-specific coordinate requires reference-sequence validation before it can be interpreted as an amino-acid resistance mutation."
-            )
-        elif requested_variants:
-            parts.append(
-                f"No qualifying mutation-level evidence was identified for {gene_label or 'the queried determinant'}"
-                f"{(' in ' + organism_label) if organism_label else ''}"
-                f"{(' with ' + drug_label) if drug_label else ''} under the requested phenotype."
+                f"### Database-Supported Information\n"
+                f"Curated reference catalogue entries (such as WHO TB Mutation Catalogue or CARD curated alleles) "
+                f"were not identified for variant **{', '.join(requested_variants)}** in {gene_label or 'the queried determinant'}"
+                f"{(' in ' + organism_label) if organism_label else ''}. Its status is currently uncatalogued in primary diagnostic catalogues."
             )
         else:
             acquired_context = _acquired_operon_explanation(genes, organisms, drugs, query, evidence)
             if acquired_context:
                 parts.append(acquired_context)
             else:
-                retrieval_status = (retrieval or {}).get("status")
-                if retrieval_status in {"failed", "partial_failure"}:
-                    parts.append(
-                        f"The evidence check for {gene_label or 'the queried determinant'} was incomplete because "
-                        "one or more literature sources failed; this result should not be interpreted as evidence of absence."
-                    )
-                else:
-                    passages, _ = _extract_auditable_passages(evidence, references)
-                    if passages:
-                        parts.append(
-                            f"Curated reference catalogue entries were not identified for {gene_label or 'the queried determinant'}"
-                            f"{(' in ' + organism_label) if organism_label else ''}"
-                            f"{(' with ' + drug_label) if drug_label else ''}, but published experimental literature describes the following alterations and phenotypic associations:"
-                        )
-                    else:
-                        parts.append(
-                            f"No qualifying mutation-level evidence was identified for {gene_label or 'the queried determinant'}"
-                            f"{(' in ' + organism_label) if organism_label else ''}"
-                            f"{(' with ' + drug_label) if drug_label else ''} under the requested phenotype."
-                        )
+                parts.append(
+                    f"### Database-Supported Information\n"
+                    f"Curated reference catalogue entries were not identified for {gene_label or 'the queried determinant'}"
+                    f"{(' in ' + organism_label) if organism_label else ''} under the requested phenotype."
+                )
+
+    # 4. Computational Evidence & 3D Macromolecular Architecture (Objective 3 & 4)
+    if needs_deep_synthesis:
+        comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
+        if comp_struct:
+            parts.append(comp_struct)
+
+        # In-Depth Biochemical & Mechanistic Architecture (if relevant targets)
+        mech_deep_dive = _synthesize_in_depth_mechanistic_architecture(
+            genes, [], organisms, drugs, mutation_profiles, passages
+        )
+        if mech_deep_dive and any(k in " ".join(genes).lower() for k in ["tem", "rpob", "katg", "gyra"]):
+            parts.append(mech_deep_dive)
+
+        # 5. Evidence-Supported Hypotheses & Clinical Deductions (Objective 3 & 4)
+        hypo_section = _synthesize_hypotheses_section(evidence, genes, organisms, drugs)
+        if hypo_section:
+            parts.append(hypo_section)
 
     if retrieval and retrieval.get("status") in {"failed", "partial_failure"}:
         parts.append(
@@ -1135,6 +1169,16 @@ def _mutation_focused_response(query, understanding, evidence, references):
                 parts.append("No traceable mutation-specific supporting sentence was available for the literature findings. Treat literature-only candidates as unverified until their source text can be checked.")
             if pmc_note:
                 parts.append(pmc_note)
+
+    # 7. Evidence Gaps & Verification Priorities (Objective 4)
+    if needs_deep_synthesis:
+        gaps_sec = _synthesize_evidence_gaps_section(evidence)
+        if gaps_sec and gaps_sec not in parts:
+            ref_idx = next((i for i, p in enumerate(parts) if p.startswith("### References")), -1)
+            if ref_idx >= 0:
+                parts.insert(ref_idx, gaps_sec)
+            else:
+                parts.append(gaps_sec)
 
     return "\n\n".join(parts)
 
@@ -1630,6 +1674,12 @@ def _mechanism_focused_response(query, understanding, evidence, references):
         f"promoter strength, expression levels, and co-occurring resistance determinants."
     )
 
+    # 4. Computational Evidence & Evidence Gaps (Objectives 3 & 4)
+    comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
+    if comp_struct:
+        parts.append(comp_struct)
+    parts.append(_synthesize_evidence_gaps_section(evidence))
+
     # 5. References
     if cited_nums:
         cited_refs = [r for r in refs if r.get("reference_number") in cited_nums]
@@ -1823,6 +1873,12 @@ def _comparison_focused_response(query, understanding, evidence, references):
                 cited_nums.add(n)
             lit_lines.append(f"- “{p['text']}”{cite_str}")
         parts.append("\n".join(lit_lines))
+
+    # Computational Evidence & Evidence Gaps (Objectives 3 & 4)
+    comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
+    if comp_struct:
+        parts.append(comp_struct)
+    parts.append(_synthesize_evidence_gaps_section(evidence))
 
     # References
     if cited_nums:
@@ -2034,6 +2090,9 @@ def _extract_all_mutation_profiles(passages, evidence, genes, query):
 
     # 2. Literature mutations
     for lm in evidence.get("literature_mutations") or []:
+        mpheno = str(lm.get("phenotype") or "").lower()
+        if "not explicit" in mpheno:
+            continue
         m = str(lm.get("mutation") or "").strip()
         if m and m not in seen_subs:
             seen_subs.add(m)
@@ -2234,8 +2293,9 @@ def _synthesize_comprehensive_executive_summary(query, genes, organisms, drugs, 
 
     # Case C: katG / Isoniazid / M. tuberculosis
     elif any("katg" in g.lower() for g in genes) or "katg" in q_low:
+        org_display = f" in *{', '.join(organisms)}*" if organisms else " in *Mycobacterium tuberculosis*"
         lines.append(
-            f"**katG** encodes a multifunctional catalase-peroxidase enzyme essential for the activation of the prodrug isoniazid (INH) in *Mycobacterium tuberculosis*{org_str}. "
+            f"**katG** encodes a multifunctional catalase-peroxidase enzyme essential for the activation of the prodrug isoniazid (INH){org_display}. "
             f"Native KatG oxidizes isoniazid into an isonicotinoyl radical, which couples covalently with NAD+ to form an INH-NAD adduct that inhibits the enoyl-ACP reductase InhA, "
             f"blocking mycolic acid biosynthesis."
         )
@@ -2445,6 +2505,115 @@ def _categorize_literature_evidence(passages, cited_nums):
     return "\n".join(lines)
 
 
+def _synthesize_5_facet_matrix(evidence, genes, organisms, drugs):
+    """Build a comprehensive 5-facet characterization table fulfilling Objective 2."""
+    sa = evidence.get("structural_analysis") or {}
+    facets = sa.get("characterizations_5_facets") or []
+    if not facets:
+        return ""
+    table_lines = [
+        "### Determinant & Mutation Landscape Matrix (5-Facet Characterization)",
+        "| Variant / Allele | Genetic Context | Sequence Characteristics & Biophysical Delta | Functional & Structural Impact | Resistance Profile & Clinical Occurrence |",
+        "|:---|:---|:---|:---|:---|",
+    ]
+    for f in facets:
+        m = f"**{f['mutation']}**"
+        ctx = f["genetic_context"]
+        seq = f["sequence_characteristics"]
+        func = f["functional_effects"]
+        res = f"{f['resistance_associations']} · *{f['reported_occurrence']}*"
+        table_lines.append(f"| {m} | {ctx} | {seq} | {func} | {res} |")
+    return "\n".join(table_lines)
+
+
+def _synthesize_structural_computational_section(evidence, genes, organisms, drugs):
+    """Build Computational Evidence & 3D Macromolecular Architecture section fulfilling Objective 3 & 4."""
+    sa = evidence.get("structural_analysis") or {}
+    gene_structs = sa.get("gene_structures") or {}
+    mut_consequences = sa.get("mutation_consequences") or []
+
+    lines = ["### Computational Evidence & 3D Macromolecular Architecture"]
+
+    # 1. PDB & AlphaFold Mapped Structures
+    pdb_entries = []
+    for g_name, prof in gene_structs.items():
+        pdbs = prof.get("pdb_structures") or []
+        af = prof.get("alphafold_id")
+        uniprot = prof.get("uniprot_id")
+        length = prof.get("canonical_length")
+        for p in pdbs[:2]:
+            pdb_entries.append(
+                f"- **PDB {p['pdb_id']}** ({p.get('resolution', 'N/A')}, {p.get('method', 'X-ray')}): {p.get('description', '')} (UniProt: `{uniprot}`, AlphaFold: `{af}`, Length: {length} aa)"
+            )
+        if not pdbs and af:
+            pdb_entries.append(
+                f"- **AlphaFold Model {af}** (UniProt: `{uniprot}`, Length: {length} aa): High-confidence predicted 3D coordinate model."
+            )
+
+    if pdb_entries:
+        lines.append("#### 1. Mapped High-Resolution Macromolecular Structures\n" + "\n".join(pdb_entries))
+
+    # 2. In Silico Sequence & Active-Site Biophysics
+    if mut_consequences:
+        conseq_lines = ["#### 2. Sequence Shifts & In Silico Active-Site Biophysics"]
+        for mc in mut_consequences:
+            m = mc.get("mutation")
+            d = mc.get("domain")
+            deltas = mc.get("physicochemical") or {}
+            impact = mc.get("molecular_impact_summary")
+            conseq_lines.append(
+                f"- **Variant {m} in {mc.get('canonical_gene')} ({d}):**\n"
+                f"  - *Biophysical Delta:* {deltas.get('summary', 'Iso-steric substitution')}\n"
+                f"  - *Steric Effect:* {deltas.get('steric_effect', 'Neutral')}\n"
+                f"  - *Molecular Mechanism:* {impact}"
+            )
+        lines.append("\n".join(conseq_lines))
+
+    return "\n\n".join(lines) if (pdb_entries or mut_consequences) else ""
+
+
+def _synthesize_hypotheses_section(evidence, genes, organisms, drugs):
+    """Build Evidence-Supported Hypotheses section fulfilling Objective 3 & 4."""
+    sa = evidence.get("structural_analysis") or {}
+    hypotheses = sa.get("hypotheses") or []
+    if not hypotheses:
+        return ""
+
+    has_comp_hypo = any(h.get("is_hypothesis") for h in hypotheses)
+    lines = ["### Evidence-Supported Hypotheses & Clinical Deductions"]
+
+    if has_comp_hypo:
+        lines.append(
+            "> [!NOTE]\n"
+            "> **Computational Inference Notice:** The following evidence-supported hypotheses are derived from "
+            "macromolecular 3D structural topology and quantitative physicochemical sequence modeling where direct "
+            "primary literature or curated catalogue entries are absent."
+        )
+
+    for h in hypotheses:
+        lines.append(h["hypothesis"])
+
+    return "\n\n".join(lines)
+
+
+def _synthesize_evidence_gaps_section(evidence):
+    """Build Evidence Gaps & Verification Priorities section fulfilling Objective 4."""
+    sa = evidence.get("structural_analysis") or {}
+    gaps = sa.get("evidence_gaps") or []
+
+    lines = ["### Evidence Gaps & Verification Priorities"]
+    if gaps:
+        for g in gaps:
+            lines.append(f"- **Unresolved Hypothesis:** {g}")
+    else:
+        lines.append(
+            "- **Structural Resolution:** High-resolution co-crystal structures of emergent clinical alleles complexed with next-generation inhibitors remain prioritized.\n"
+            "- **Phenotypic MIC Quantification:** Broad microdilution surveillance is recommended to verify epidemiological cut-off values (ECOFFs) and subtle synergy dynamics.\n"
+            "- **In Vivo Fitness Landscapes:** Compensatory evolutionary trajectories warrant continuous whole-genome sequencing surveillance."
+        )
+    return "\n".join(lines)
+
+
 def _general_amr_response(query, understanding, evidence, references):
     """Generate a structured, publication-grade scientific report for AMR queries."""
     entities = understanding.get("entities", {}) or {}
@@ -2522,7 +2691,21 @@ def _general_amr_response(query, understanding, evidence, references):
     if lit_evidence:
         parts.append(lit_evidence)
 
-    # 9. Unified References Section
+    # 9. 5-Facet Landscape Matrix & 3D Macromolecular Architecture (Objective 2 & 3)
+    facet_table = _synthesize_5_facet_matrix(evidence, genes, organisms, drugs)
+    if facet_table:
+        parts.append(facet_table)
+    comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
+    if comp_struct:
+        parts.append(comp_struct)
+    hypo_section = _synthesize_hypotheses_section(evidence, genes, organisms, drugs)
+    if hypo_section:
+        parts.append(hypo_section)
+
+    # 10. Evidence Gaps & Verification Priorities (Objective 4)
+    parts.append(_synthesize_evidence_gaps_section(evidence))
+
+    # 11. Unified References Section
     if cited_nums:
         cited_refs = [r for r in refs if r.get("reference_number") in cited_nums]
         if cited_refs:

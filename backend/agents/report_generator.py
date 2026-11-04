@@ -277,6 +277,7 @@ def generate_report(query, understanding, plan, literature_results=None, evidenc
         "reference_evidence": evidence.get("reference_evidence", []),
         "evidence_policy": evidence.get("evidence_policy", {}),
         "mutation_reference": evidence.get("mutation_reference", {}),
+        "structural_analysis": evidence.get("structural_analysis", {}),
         "entity_normalization": evidence.get("entity_normalization", {}),
         "references": cited_refs,
         "all_retrieved_references": all_refs,

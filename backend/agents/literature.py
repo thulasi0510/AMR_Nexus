@@ -77,6 +77,7 @@ def _get(url, params, attempts=PUBMED_RETRIES):
                 time.sleep(1.5 * (attempt + 1))
                 continue
             raise
+    # pyrefly: ignore[bad-raise]
     raise last  # pragma: no cover
 
 

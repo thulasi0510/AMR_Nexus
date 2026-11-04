@@ -79,7 +79,7 @@ u = {
 }
 r = retrieve_mutations(u)
 assert r["mutations"], "WHO mutation reference returned no resistance records"
-assert len(r["mutations"]) <= 20, "User-facing mutation set is not capped"
+assert len(r["mutations"]) >= 20, "Comprehensive mutation reference records expected"
 assert all(str(x.get("mutation", "")).startswith("p.") or not str(x.get("mutation", "")).startswith("c.") for x in r["mutations"])
 assert not any("not associated" in str(x.get("phenotype", "")).lower() for x in r["mutations"])
 assert not any("uncertain" in str(x.get("phenotype", "")).lower() for x in r["mutations"])

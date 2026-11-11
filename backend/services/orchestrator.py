@@ -182,6 +182,10 @@ def response_node(state):
     refs = []
     for item in state.get("literature_results", []):
         refs.extend(item.get("literature", {}).get("references", []))
+    sa = state.get("structural_analysis") or {}
+    for pfr in sa.get("protein_function_references", []) or []:
+        if not any(r.get("pmid") == pfr.get("pmid") for r in refs if r.get("pmid")):
+            refs.append(pfr)
     answer = synthesize_response(state["query"], state["understanding"], state.get("evidence", {}), refs)
     return {"answer": answer, "execution_trace": _trace(state, "Response Synthesis Agent", {"grounded": True})}
 

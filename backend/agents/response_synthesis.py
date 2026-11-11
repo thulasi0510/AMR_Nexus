@@ -932,15 +932,19 @@ def _mutation_focused_response(query, understanding, evidence, references):
 
     retrieval = _retrieval_summary(evidence)
     parts = []
+    cited_numbers = set()
 
     passages, refs_auditable = _extract_auditable_passages(evidence, references)
     mutation_profiles = _extract_all_mutation_profiles(passages, evidence, genes, query)
     ref_evidence = evidence.get("reference_evidence", []) or []
 
     is_structural_or_consequence_query = any(k in query.lower() for k in [
-        "consequence", "consequences", "structural", "structure", "biophysical", "impact",
+        "consequence", "consequences", "structural", "structure", "biophysical", "impact", "impacts",
+        "effect", "effects", "affect", "affects", "role", "mechanism", "mechanisms",
         "hypothesis", "hypotheses", "poorly characterized", "uncharacterized", "novel",
-        "in silico", "predict", "model", "active site", "binding pocket", "cavity", "steric", "biochemical"
+        "in silico", "predict", "model", "active site", "binding pocket", "cavity", "steric", "biochemical",
+        "function", "functional", "protein function", "fitness", "kinetic", "kinetics", "turnover", "kcat", "km", "catalytic",
+        "stability", "thermodynamic", "affinity", "tolerance"
     ])
     needs_deep_synthesis = is_structural_or_consequence_query or (not table and bool(requested_variants))
 
@@ -1001,6 +1005,11 @@ def _mutation_focused_response(query, understanding, evidence, references):
         comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
         if comp_struct:
             parts.append(comp_struct)
+
+        # 4b. Impact on Protein Function, Kinetics & Biological Fitness
+        pfi_sec = _synthesize_protein_function_impact_section(evidence, genes, organisms, drugs, references, cited_numbers)
+        if pfi_sec:
+            parts.append(pfi_sec)
 
         # In-Depth Biochemical & Mechanistic Architecture (if relevant targets)
         mech_deep_dive = _synthesize_in_depth_mechanistic_architecture(
@@ -1074,7 +1083,6 @@ def _mutation_focused_response(query, understanding, evidence, references):
         n_errors = (retrieval.get("pmc") or {}).get("errors", 0)
         pmc_note = f"Full-text retrieval failed for {n_errors} article(s); those records were assessed from title/abstract only."
 
-    cited_numbers = set()
     if support_by_mutation:
         support_lines = []
         for mutation, bucket in support_by_mutation.items():
@@ -1179,6 +1187,21 @@ def _mutation_focused_response(query, understanding, evidence, references):
                 parts.insert(ref_idx, gaps_sec)
             else:
                 parts.append(gaps_sec)
+
+    has_ref_section = any(p.startswith("### References") for p in parts)
+    if not has_ref_section:
+        if cited_numbers:
+            cited_refs = [r for r in refs if r.get("reference_number") in cited_numbers]
+            if cited_refs:
+                parts.append("### References\n" + "\n".join(
+                    _format_reference_citation_entry(r)
+                    for r in cited_refs
+                ))
+        elif refs and needs_deep_synthesis:
+            parts.append("### References\n" + "\n".join(
+                _format_reference_citation_entry(r)
+                for r in refs[:5]
+            ))
 
     return "\n\n".join(parts)
 
@@ -1678,6 +1701,9 @@ def _mechanism_focused_response(query, understanding, evidence, references):
     comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
     if comp_struct:
         parts.append(comp_struct)
+    pfi_sec = _synthesize_protein_function_impact_section(evidence, genes, organisms, drugs, references, cited_nums)
+    if pfi_sec:
+        parts.append(pfi_sec)
     parts.append(_synthesize_evidence_gaps_section(evidence))
 
     # 5. References
@@ -1878,6 +1904,9 @@ def _comparison_focused_response(query, understanding, evidence, references):
     comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
     if comp_struct:
         parts.append(comp_struct)
+    pfi_sec = _synthesize_protein_function_impact_section(evidence, genes, organisms, drugs, references, cited_nums)
+    if pfi_sec:
+        parts.append(pfi_sec)
     parts.append(_synthesize_evidence_gaps_section(evidence))
 
     # References
@@ -2513,7 +2542,7 @@ def _synthesize_5_facet_matrix(evidence, genes, organisms, drugs):
         return ""
     table_lines = [
         "### Determinant & Mutation Landscape Matrix (5-Facet Characterization)",
-        "| Variant / Allele | Genetic Context | Sequence Characteristics & Biophysical Delta | Functional & Structural Impact | Resistance Profile & Clinical Occurrence |",
+        "| Variant / Allele | Genetic Context | Sequence Characteristics & Biophysical Delta | Functional & Structural Impact on Protein | Resistance Profile & Clinical Occurrence |",
         "|:---|:---|:---|:---|:---|",
     ]
     for f in facets:
@@ -2570,6 +2599,61 @@ def _synthesize_structural_computational_section(evidence, genes, organisms, dru
         lines.append("\n".join(conseq_lines))
 
     return "\n\n".join(lines) if (pdb_entries or mut_consequences) else ""
+
+
+def _synthesize_protein_function_impact_section(evidence, genes, organisms, drugs, references=None, cited_nums_out=None):
+    """Build dedicated section detailing how structural changes affect native protein function, catalytic kinetics, and fitness."""
+    sa = evidence.get("structural_analysis") or {}
+    mut_consequences = sa.get("mutation_consequences") or []
+    gene_structs = sa.get("gene_structures") or {}
+
+    if not mut_consequences and not gene_structs:
+        return ""
+
+    lines = ["### Impact of Structural Changes on Protein Function & Fitness"]
+
+    # Build reference mapping
+    refs = references or []
+    ref_map = {}
+    for r in refs:
+        if isinstance(r, dict) and r.get("pmid"):
+            ref_map[str(r["pmid"]).strip()] = r.get("reference_number")
+
+    has_entries = False
+    for mc in mut_consequences:
+        m = mc.get("mutation")
+        g = mc.get("canonical_gene")
+        pfi = mc.get("protein_function_impact") or {}
+        if not pfi:
+            continue
+        has_entries = True
+
+        # Check if there is an authoritative literature citation for this determinant
+        cite_str = ""
+        for r_item in mc.get("protein_function_references", []) or []:
+            pmid = str(r_item.get("pmid") or "").strip()
+            if pmid in ref_map and ref_map[pmid]:
+                ref_num = ref_map[pmid]
+                cite_str = f" [{ref_num}]"
+                if cited_nums_out is not None:
+                    cited_nums_out.add(ref_num)
+                break
+
+        lines.append(f"#### Functional & Kinetic Modulation for **{g} {m}**{cite_str}")
+        lines.append(f"- **Native Biological Function:** {pfi.get('native_role', 'Essential bacterial resistance determinant role.')}")
+        lines.append(f"- **Catalytic Activity & Turnover:** {pfi.get('catalytic_activity', '')}")
+        lines.append(f"- **Substrate Kinetics & Specificity ($k_{{cat}} / K_m$):** {pfi.get('kinetic_shift', '')}")
+        lines.append(f"- **Thermodynamic Stability & Biological Fitness:** {pfi.get('fitness_cost', '')}")
+        if pfi.get('compensatory'):
+            lines.append(f"- **Compensatory Evolutionary Dynamics:** {pfi.get('compensatory')}")
+        lines.append("")
+
+    if not has_entries and gene_structs:
+        for g_name, prof in gene_structs.items():
+            lines.append(f"#### Native Physiological Role of **{prof.get('canonical_name', g_name)}**")
+            lines.append(f"- **Endogenous Biological Function:** {prof.get('native_function', 'Essential AMR determinant modulating antimicrobial susceptibility.')}\n")
+
+    return "\n\n".join(lines).strip()
 
 
 def _synthesize_hypotheses_section(evidence, genes, organisms, drugs):
@@ -2698,6 +2782,9 @@ def _general_amr_response(query, understanding, evidence, references):
     comp_struct = _synthesize_structural_computational_section(evidence, genes, organisms, drugs)
     if comp_struct:
         parts.append(comp_struct)
+    pfi_sec = _synthesize_protein_function_impact_section(evidence, genes, organisms, drugs, references, cited_nums)
+    if pfi_sec:
+        parts.append(pfi_sec)
     hypo_section = _synthesize_hypotheses_section(evidence, genes, organisms, drugs)
     if hypo_section:
         parts.append(hypo_section)
@@ -2723,6 +2810,7 @@ def _general_amr_response(query, understanding, evidence, references):
 
 
 def synthesize_response(query, understanding, evidence, references):
+    references = _numbered_references(references or [])
     intents = set(understanding.get("intent") or [])
     entities = understanding.get("entities", {}) or {}
     genes = dedupe_by_key(entities.get("genes", []) or [])

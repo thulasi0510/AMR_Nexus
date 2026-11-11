@@ -250,6 +250,10 @@ def generate_report(query, understanding, plan, literature_results=None, evidenc
     trace = trace or []
 
     all_refs = _all_references(literature_results)
+    sa_refs = (evidence or {}).get("structural_analysis", {}).get("protein_function_references", []) or []
+    for sr in sa_refs:
+        if not any(r.get("pmid") == sr.get("pmid") for r in all_refs if r.get("pmid")):
+            all_refs.append(sr)
     reconciled_answer, cited_refs = reconcile_citations(answer, all_refs)
     if cited_refs:
         reconciled_answer = _ensure_references_section(reconciled_answer, cited_refs)

@@ -262,6 +262,8 @@ def retrieve_mutations(understanding):
             for record in records:
                 native = parse_substitution(record.get("mutation") or record.get("reported_mutation"))
                 for sub in requested_subs:
+                    if not sub or len(sub) < 3:
+                        continue
                     canon, numbering = notation_index.lookup(sub)
                     if canon and native == parse_substitution(canon) and sub != native:
                         record["query_notation"] = f"{sub[0]}{sub[1]}{sub[2]}"
@@ -293,7 +295,11 @@ def retrieve_mutations(understanding):
         duplicates_merged += 1
         kept = merged[key]
         if rec.get("phenotype") != kept.get("phenotype"):
-            kept.setdefault("other_classifications", []).append(
+            other_cls = kept.get("other_classifications")
+            if not isinstance(other_cls, list):
+                other_cls = []
+                kept["other_classifications"] = other_cls
+            other_cls.append(
                 {"phenotype": rec.get("phenotype"), "confidence": rec.get("confidence")}
             )
     unique = list(merged.values())

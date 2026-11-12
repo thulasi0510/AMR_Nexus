@@ -7,13 +7,11 @@ Fulfills:
 - Objective 4: Computational evidence generation and evidence gap identification.
 """
 from functools import lru_cache
-import os
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 import requests
 
-from agents.mutation_matching import AA3, parse_substitution
-from agents.entity_aliases import canonical_organism, canonical_drug
+from agents.mutation_matching import parse_substitution
 
 # ==============================================================================
 # 1. AMINO ACID PHYSICOCHEMICAL KNOWLEDGE BASE
@@ -44,8 +42,8 @@ AA_PROPERTIES = {
 
 def calculate_physicochemical_delta(wt_aa: str, mut_aa: str) -> Dict[str, Any]:
     """Calculate quantitative physicochemical deltas between wildtype and mutant residues."""
-    wt = str(wt_aa).upper().strip()
-    mut = str(mut_aa).upper().strip()
+    wt = (wt_aa or "").upper().strip()
+    mut = (mut_aa or "").upper().strip()
     p_wt = AA_PROPERTIES.get(wt, {})
     p_mut = AA_PROPERTIES.get(mut, {})
 
@@ -488,7 +486,7 @@ STRUCTURAL_REGISTRY: Dict[str, Dict[str, Any]] = {
 # ==============================================================================
 def normalize_gene_key(gene_symbol: str) -> str:
     """Normalize gene strings to canonical keys in the structural registry."""
-    s = re.sub(r"[^a-z0-9]+", "", str(gene_symbol or "").lower())
+    s = re.sub(r"[^a-z0-9]+", "", (gene_symbol or "").lower())
     if s.startswith("bla"):
         s = s[3:]
     for prefix in ["tem", "kpc", "shv", "ctxm", "ndm", "oxa48", "oxa", "katg", "rpob", "gyra", "gyrb", "mcr1", "mcr", "vana", "vanb", "acrb", "ompk35", "ompk36"]:
@@ -631,6 +629,12 @@ def analyze_mutation_structural_consequences(
         mechanisms.append(f"Cavity-creating destabilization: loss of {deltas['wt_name']} sidechain ({d_vol} A^3) creates an internal void, destabilizing local tertiary packing.")
     elif d_vol < -15.0:
         mechanisms.append(f"Steric reduction: loss of {deltas['wt_name']} sidechain ({d_vol} A^3) creates local pocket laxity.")
+
+    if abs(d_hydro) >= 2.0:
+        if d_hydro > 0:
+            mechanisms.append(f"Hydrophobic patch expansion: increases local nonpolar character (+{d_hydro:.1f} hydropathy), altering solvent-accessible surface properties.")
+        else:
+            mechanisms.append(f"Polarization/solvation shift: decreases hydropathy ({d_hydro:.1f}), favoring polar solvent interactions.")
 
     if abs(d_charge) >= 1.0:
         if d_charge > 0:
@@ -990,7 +994,7 @@ def generate_evidence_supported_hypothesis(
         "domain": domain,
         "hypothesis": hypothesis_text,
         "is_hypothesis": (status == "computational_hypothesis"),
-        "confidence": "Curated / Peer-reviewed" if status == "established_finding" else "In silico Hypothesis (Direct Evidence Absent)",
+        "confidence": "Curated / Peer-reviewed" if status == "established_finding" else confidence,
         "pdb_references": [s["pdb_id"] for s in structural_consequence.get("pdb_structures", [])],
         "alphafold_id": structural_consequence.get("alphafold_id"),
     }

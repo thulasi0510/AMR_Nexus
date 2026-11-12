@@ -16,6 +16,8 @@ import re
 
 import sys
 
+import socket
+
 import requests
 
 from agents.card_reference import lookup_card, normalize_name, search_card_candidates, load_card_reference
@@ -285,7 +287,6 @@ _OLLAMA_PROBE = {"checked": False, "alive": False}
 def _check_ollama():
     if _OLLAMA_PROBE["checked"]:
         return _OLLAMA_PROBE["alive"]
-    import socket
     try:
         s = socket.create_connection(("127.0.0.1", 11434), timeout=0.05)
         s.close()
@@ -436,6 +437,8 @@ def _ncbi_gene_name_keys():
     except (FileNotFoundError, OSError, ValueError):
         return exact_map
     for record in ncbi.get("records", []):
+        if not isinstance(record, dict):
+            continue
         for field in ("allele", "gene_family"):
             value = record.get(field, "")
             key = normalize_name(value)
@@ -502,9 +505,10 @@ def _reference_grounded_gene_mentions(query):
             result = search_card_candidates(phrase, include_related=False)
         except (FileNotFoundError, OSError, ValueError):
             result = {}
-        if result.get("candidates") and key not in found_keys:
-            top_rec = result["candidates"][0]
-            if top_rec.get("category") == "mechanism":
+        cands = result.get("candidates") if isinstance(result, dict) else None
+        if isinstance(cands, list) and cands and key not in found_keys:
+            top_rec = cands[0]
+            if isinstance(top_rec, dict) and top_rec.get("category") == "mechanism":
                 continue
             found.append(phrase)
             found_keys.add(key)
@@ -520,9 +524,26 @@ def _reference_grounded_gene_mentions(query):
             continue
         try:
             card_res = search_card_candidates(phrase, include_related=True)
-            top_score = max((c.get("match_score", 0) for c in card_res.get("candidates", [])), default=0)
+            cands = card_res.get("candidates") if isinstance(card_res, dict) else []
+            cands = cands if isinstance(cands, list) else []
+            scores = []
+            for c in cands:
+                if isinstance(c, dict):
+                    try:
+                        scores.append(float(str(c.get("match_score", "0"))))
+                    except (TypeError, ValueError):
+                        scores.append(0.0)
+            top_score = max(scores, default=0.0)
             if top_score >= 80:
-                top_cand = next((c for c in card_res.get("candidates", []) if c.get("match_score", 0) >= 80), None)
+                top_cand = None
+                for c in cands:
+                    if isinstance(c, dict):
+                        try:
+                            if float(str(c.get("match_score", "0"))) >= 80:
+                                top_cand = c
+                                break
+                        except (TypeError, ValueError):
+                            continue
                 if top_cand and top_cand.get("category") == "mechanism":
                     continue
                 found.append(phrase)
@@ -591,17 +612,21 @@ def _reference_amr_entities(query):
 
             for mapping in lookup_maps:
 
+                if not isinstance(mapping, dict):
+
+                    continue
+
                 match = mapping.get(key)
 
                 if not match:
 
                     continue
 
-                if match.get("status") == "collision":
+                if isinstance(match, dict) and match.get("status") == "collision":
 
                     records.extend(match.get("records", []))
 
-                else:
+                elif isinstance(match, dict):
 
                     records.append(match.get("record"))
 
@@ -1300,11 +1325,19 @@ def understand_query(query, selected_candidate=None):
 
 
     candidate_names = []
-    for grp in verification.get("gene_candidate_groups", []):
-        for c in grp.get("candidates", []):
-            c_name = c.get("canonical_name")
-            if c_name and c_name not in candidate_names and c.get("match_score", 0) >= 80:
-                candidate_names.append(c_name)
+    groups = verification.get("gene_candidate_groups") if isinstance(verification, dict) else []
+    if isinstance(groups, list):
+        for grp in groups:
+            if not isinstance(grp, dict):
+                continue
+            grp_cands = grp.get("candidates")
+            if isinstance(grp_cands, list):
+                for c in grp_cands:
+                    if not isinstance(c, dict):
+                        continue
+                    c_name = c.get("canonical_name")
+                    if c_name and c_name not in candidate_names and float(c.get("match_score") or 0) >= 80:
+                        candidate_names.append(c_name)
 
     return {
         "original_query": query,

@@ -974,6 +974,13 @@ def search_literature(plan, top_n=TOP_N):
         except (requests.RequestException, ET.ParseError, ValueError) as exc:
             return query, None, [], f"{type(exc).__name__}: {exc}"
 
+    supplemental_papers = []
+    supplemental_meta = {
+        "enabled": False,
+        "providers": [],
+        "provider_status": {},
+        "errors": [],
+    }
     # Independent formulations share no state; parallel retrieval of PubMed and
     # supplemental providers prevents a slow query from serially consuming the latency budget.
     with ThreadPoolExecutor(max_workers=min(8, len(queries) + 1)) as pool:

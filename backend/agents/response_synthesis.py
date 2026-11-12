@@ -533,6 +533,8 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
         for v in [*(extract_query_variants(query or "")), *(entities.get("mutations") or []), *(entities.get("variants") or [])]
     }
     requested_subs.discard(None)
+    index = None
+    matched_canon = set()
     if requested_subs:
         # A named-variant question must not receive the whole gene catalogue.
         # MutationIndex also handles known alternate residue numbering, such as
@@ -545,6 +547,8 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
         index = MutationIndex(ref_variants, gene_names, organism_names)
         matched_canon = set()
         for sub in requested_subs:
+            if not sub or len(sub) < 3:
+                continue
             canon, _numbering = index.lookup(sub)
             if canon:
                 matched_canon.add(str(canon).upper())
@@ -618,7 +622,7 @@ def _mutation_table(evidence, max_rows=None, query=None, entities=None):
             if requested_subs:
                 sub = parse_substitution(r.get("mutation") or r.get("as_written"))
                 if sub not in requested_subs:
-                    canon, _numbering = index.lookup(sub) if sub else (None, None)
+                    canon, _numbering = index.lookup(sub) if (index and sub) else (None, None)
                     if not canon or str(canon).upper() not in matched_canon:
                         continue
             key = str(r.get("mutation") or "").upper()
@@ -865,7 +869,7 @@ def _acquired_operon_explanation(genes, organisms, drugs, query, evidence):
     # General acquired resistance determinants via CARD
     card_info = lookup_card(gene_str) if gene_str else {}
     if card_info and card_info.get("status") == "validated":
-        desc = (card_info.get("description") or "").strip('"')
+        desc = str(card_info.get("description") or "").strip('"')
         aro = card_info.get("aro_id") or "CARD"
         return (
             f"In *{org_str}*, resistance to **{drug_str}** associated with **{gene_str}** is typically mediated by the **acquisition and functional expression of the intact determinant** rather than single point mutations within its structural sequence.\n\n"
@@ -1079,8 +1083,9 @@ def _mutation_focused_response(query, understanding, evidence, references):
 
     retrieval = _retrieval_summary(evidence)
     pmc_note = ""
-    if retrieval and (retrieval.get("pmc") or {}).get("errors", 0):
-        n_errors = (retrieval.get("pmc") or {}).get("errors", 0)
+    pmc_info = retrieval.get("pmc") if isinstance(retrieval, dict) else {}
+    if isinstance(pmc_info, dict) and pmc_info.get("errors", 0):
+        n_errors = pmc_info.get("errors", 0)
         pmc_note = f"Full-text retrieval failed for {n_errors} article(s); those records were assessed from title/abstract only."
 
     if support_by_mutation:
@@ -1123,8 +1128,8 @@ def _mutation_focused_response(query, understanding, evidence, references):
         passages, auditable_refs = _extract_auditable_passages(evidence, references)
 
         variant_clarifications = []
+        v_target = requested_variants[0] if requested_variants else ""
         if requested_variants:
-            v_target = requested_variants[0]
             v_pat = re.compile(r"(?<![A-Za-z0-9])" + re.escape(v_target) + r"(?![A-Za-z0-9])", re.I)
             for r in refs:
                 t = (r.get("title") or "") + " " + (r.get("abstract") or "")
@@ -1493,7 +1498,7 @@ def _mechanism_focused_response(query, understanding, evidence, references):
         ]
         for c_gene in candidate_genes:
             cand_card = lookup_card(c_gene) if c_gene else {}
-            desc = (cand_card.get("description") or "").strip('"') or "Antimicrobial resistance determinant"
+            desc = str(cand_card.get("description") or "").strip('"') or "Antimicrobial resistance determinant"
             aro = cand_card.get("aro_id") or "Reference"
             cand_lines.append(f"- **{c_gene}** ({aro}): {desc}")
         parts.append("\n".join(cand_lines))
@@ -1545,8 +1550,9 @@ def _mechanism_focused_response(query, understanding, evidence, references):
             general_passages = []
             for p in passages:
                 assigned = False
+                p_text_lower = (str(p.get("text") or "") + " " + str(p.get("paper_title") or "")).lower()
                 for cg in candidate_genes:
-                    if cg.lower() in p["text"].lower() or cg.lower() in p.get("paper_title", "").lower():
+                    if cg.lower() in p_text_lower:
                         grouped_passages[cg].append(p)
                         assigned = True
                         break
@@ -1578,7 +1584,7 @@ def _mechanism_focused_response(query, understanding, evidence, references):
             synergy_passages = []
 
             for p in passages:
-                text_lower = (p["text"] + " " + p.get("paper_title", "")).lower()
+                text_lower = (str(p.get("text") or "") + " " + str(p.get("paper_title") or "")).lower()
                 has_p = any(k in text_lower for k in ("porin", "ompk", "ompf", "ompc", "oprd", "permeability"))
                 has_e = any(k in text_lower for k in ("efflux", "acrab", "acrr", "ramr", "mar", "sox", "oqx", "pump"))
                 if has_p and has_e:
@@ -1627,7 +1633,7 @@ def _mechanism_focused_response(query, understanding, evidence, references):
                 other_passages = []
                 for p in passages:
                     assigned = False
-                    p_text_lower = (p["text"] + " " + p.get("paper_title", "")).lower()
+                    p_text_lower = (str(p.get("text") or "") + " " + str(p.get("paper_title") or "")).lower()
                     for c in distinct_concepts:
                         if c.lower() in p_text_lower:
                             concept_passages[c].append(p)
@@ -1727,25 +1733,29 @@ def _extract_comparative_entity_profile(item, ref_evidence=None, organisms=None,
     """Extract curated functional family, host pathogen, substrates, and architecture from CARD/NCBI."""
     c_index = None
     try:
-        from agents.card_reference import load_card_reference, lookup_card
+        from agents.card_reference import load_card_reference
         c_index = load_card_reference()
     except Exception:
         pass
 
     rec = None
-    if c_index:
+    if isinstance(c_index, dict):
         try:
             card_res = lookup_card(item)
-            if card_res and card_res.get("aro_id"):
-                rec = c_index.get("records_by_aro", {}).get(card_res["aro_id"])
+            if isinstance(card_res, dict) and card_res.get("aro_id"):
+                rec_map = c_index.get("records_by_aro")
+                if isinstance(rec_map, dict):
+                    rec = rec_map.get(str(card_res.get("aro_id", "")))
         except Exception:
             pass
 
-    if not rec and ref_evidence:
-        rec = next((r for r in ref_evidence if normalize_name(r.get("canonical_name", "")) == normalize_name(item)), {})
+    if not isinstance(rec, dict) and ref_evidence:
+        rec = next((r for r in ref_evidence if isinstance(r, dict) and normalize_name(r.get("canonical_name", "")) == normalize_name(item)), {})
+    if not isinstance(rec, dict):
+        rec = {}
 
-    canonical_name = (rec.get("canonical_name") if rec else None) or item
-    desc = (rec.get("description") if rec else "") or ""
+    canonical_name = rec.get("canonical_name") or item
+    desc = rec.get("description") or ""
     desc_clean = re.sub(r"\[PMID:[^\]]+\]", "", desc).strip().strip('"')
 
     # 1. Functional Family
@@ -2187,8 +2197,9 @@ def _extract_all_mutation_profiles(passages, evidence, genes, query):
                     "sample_sentence": text,
                 }
             else:
-                if cite_str and cite_str not in profiles[canon_m]["citations"]:
-                    profiles[canon_m]["citations"].append(cite_str)
+                c_list = profiles[canon_m].get("citations")
+                if isinstance(c_list, list) and cite_str and cite_str not in c_list:
+                    c_list.append(cite_str)
 
     # 4. If query targeted a known gene (e.g. TEM), ensure canonical mutations are visible even if literature was sparse
     gene_upper = " ".join(genes).upper()
@@ -2749,7 +2760,7 @@ def _general_amr_response(query, understanding, evidence, references):
         ]
         for c_gene in candidate_genes:
             cand_card = lookup_card(c_gene) if c_gene else {}
-            desc = (cand_card.get("description") or "").strip('"') or "Antimicrobial resistance determinant"
+            desc = str(cand_card.get("description") or "").strip('"') or "Antimicrobial resistance determinant"
             aro = cand_card.get("aro_id") or "Reference"
             cand_lines.append(f"- **{c_gene}** ({aro}): {desc}")
         parts.append("\n".join(cand_lines))

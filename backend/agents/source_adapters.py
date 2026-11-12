@@ -9,7 +9,6 @@ import os
 import re
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from agents.entity_aliases import drug_hits, gene_hit, organism_assessment
 from config import API_TIMEOUT
 
 SUPPLEMENTAL_TIMEOUT = float(os.getenv("AMR_SUPPLEMENTAL_TIMEOUT", "3.5"))
@@ -345,7 +344,11 @@ def _arxiv(plan, limit=25):
         title = title_el.text.strip() if title_el is not None and title_el.text else "Untitled"
         summary_el = entry.find(f"{ns}summary")
         abstract = summary_el.text.strip() if summary_el is not None and summary_el.text else ""
-        authors = [a.find(f"{ns}name").text for a in entry.findall(f"{ns}author") if a.find(f"{ns}name") is not None]
+        authors = []
+        for a in entry.findall(f"{ns}author"):
+            name_el = a.find(f"{ns}name")
+            if name_el is not None and name_el.text:
+                authors.append(name_el.text.strip())
         pub_el = entry.find(f"{ns}published")
         year = pub_el.text[:4] if pub_el is not None and pub_el.text else None
         doi_el = entry.find("{http://arxiv.org/schemas/atom}doi")

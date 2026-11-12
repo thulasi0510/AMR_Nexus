@@ -12,6 +12,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from agents.entity_aliases import drug_hits, gene_hit, organism_assessment
 from config import API_TIMEOUT
 
+SUPPLEMENTAL_TIMEOUT = float(os.getenv("AMR_SUPPLEMENTAL_TIMEOUT", "3.5"))
+
 EUROPEPMC_URL = os.getenv("AMR_EUROPEPMC_URL", "https://www.ebi.ac.uk/europepmc/webservices/rest/search")
 OPENALEX_URL = os.getenv("AMR_OPENALEX_URL", "https://api.openalex.org/works")
 CROSSREF_URL = os.getenv("AMR_CROSSREF_URL", "https://api.crossref.org/works")
@@ -67,13 +69,13 @@ DOAJ_URL = os.getenv("AMR_DOAJ_URL", "https://doaj.org/api/search/articles")
 ARXIV_URL = os.getenv("AMR_ARXIV_URL", "http://export.arxiv.org/api/query")
 
 
-def _get(url, params, headers=None):
+def _get(url, params, headers=None, timeout=SUPPLEMENTAL_TIMEOUT):
     try:
-        response = requests.get(url, params=params, headers=headers or {}, timeout=API_TIMEOUT)
+        response = requests.get(url, params=params, headers=headers or {}, timeout=timeout)
     except requests.exceptions.SSLError:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        response = requests.get(url, params=params, headers=headers or {}, timeout=API_TIMEOUT, verify=False)
+        response = requests.get(url, params=params, headers=headers or {}, timeout=timeout, verify=False)
     response.raise_for_status()
     return response.json()
 
@@ -329,7 +331,7 @@ def _arxiv(plan, limit=25):
     import urllib.parse
     q = urllib.parse.quote(_query_text(plan))
     url = f"{ARXIV_URL}?search_query=all:{q}&start=0&max_results={min(limit, 30)}"
-    resp = requests.get(url, timeout=API_TIMEOUT)
+    resp = requests.get(url, timeout=SUPPLEMENTAL_TIMEOUT)
     if getattr(resp, "status_code", 0) != 200 or not getattr(resp, "text", None):
         return []
     try:

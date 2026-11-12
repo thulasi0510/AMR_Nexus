@@ -2640,12 +2640,17 @@ def _synthesize_protein_function_impact_section(evidence, genes, organisms, drug
                 break
 
         lines.append(f"#### Functional & Kinetic Modulation for **{g} {m}**{cite_str}")
+        if pfi.get('validation_tier'):
+            conf = f" (Confidence: {pfi.get('confidence_score'):.2f})" if pfi.get('confidence_score') else ""
+            lines.append(f"- **Validation Status & Evidence Tier:** {pfi.get('validation_tier')}{conf}")
         lines.append(f"- **Native Biological Function:** {pfi.get('native_role', 'Essential bacterial resistance determinant role.')}")
         lines.append(f"- **Catalytic Activity & Turnover:** {pfi.get('catalytic_activity', '')}")
         lines.append(f"- **Substrate Kinetics & Specificity ($k_{{cat}} / K_m$):** {pfi.get('kinetic_shift', '')}")
         lines.append(f"- **Thermodynamic Stability & Biological Fitness:** {pfi.get('fitness_cost', '')}")
         if pfi.get('compensatory'):
             lines.append(f"- **Compensatory Evolutionary Dynamics:** {pfi.get('compensatory')}")
+        if pfi.get('experimental_validation_methods'):
+            lines.append(f"- **Confirmatory Wet-Lab Experimental Protocol:** {pfi.get('experimental_validation_methods')}")
         lines.append("")
 
     if not has_entries and gene_structs:

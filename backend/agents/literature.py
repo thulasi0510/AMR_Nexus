@@ -170,14 +170,8 @@ def _parse_pubmed_xml(xml_text):
     return papers
 
 
-def fetch_papers(search_query, limit=None, sort="relevance"):
-    """Retrieve PubMed papers in batches.
-
-    When ``limit`` is None, the complete PubMed result set is traversed using
-    ESearch history + paginated EFetch.  ``PUBMED_MAX_RECORDS=0`` means no local
-    cap. A positive cap is available as an operational safeguard for very large
-    searches.
-    """
+def fetch_papers_and_count(search_query, limit=None, sort="relevance"):
+    """Retrieve PubMed papers in batches, returning both the parsed papers and total match count."""
     batch_size = max(1, int(PUBMED_BATCH_SIZE))
     max_records = int(PUBMED_MAX_RECORDS)
     requested_limit = None if limit is None else max(0, int(limit))
@@ -199,7 +193,7 @@ def fetch_papers(search_query, limit=None, sort="relevance"):
     query_key = result.get("querykey")
 
     if not count:
-        return []
+        return [], 0
     if not webenv or not query_key:
         raise ValueError("PubMed reported matches but returned no history key")
 
@@ -225,6 +219,18 @@ def fetch_papers(search_query, limit=None, sort="relevance"):
         )
         papers.extend(_parse_pubmed_xml(fetch_response.text))
 
+    return papers, count
+
+
+def fetch_papers(search_query, limit=None, sort="relevance"):
+    """Retrieve PubMed papers in batches.
+
+    When ``limit`` is None, the complete PubMed result set is traversed using
+    ESearch history + paginated EFetch.  ``PUBMED_MAX_RECORDS=0`` means no local
+    cap. A positive cap is available as an operational safeguard for very large
+    searches.
+    """
+    papers, _ = fetch_papers_and_count(search_query, limit=limit, sort=sort)
     return papers
 
 
@@ -968,11 +974,13 @@ def search_literature(plan, top_n=TOP_N):
         except (requests.RequestException, ET.ParseError, ValueError) as exc:
             return query, None, [], f"{type(exc).__name__}: {exc}"
 
-    # Independent formulations share no state; parallel retrieval prevents a
-    # slow query from serially consuming the entire latency budget.
-    with ThreadPoolExecutor(max_workers=min(4, max(1, len(queries)))) as pool:
-        futures = [pool.submit(retrieve_one, query) for query in queries]
-        for future in as_completed(futures):
+    # Independent formulations share no state; parallel retrieval of PubMed and
+    # supplemental providers prevents a slow query from serially consuming the latency budget.
+    with ThreadPoolExecutor(max_workers=min(8, len(queries) + 1)) as pool:
+        pubmed_futures = [pool.submit(retrieve_one, query) for query in queries]
+        supp_future = pool.submit(retrieve_supplemental, plan)
+
+        for future in as_completed(pubmed_futures):
             query, count, papers, failure = future.result()
             query_counts.append({"query": query, "count": count})
             if failure:
@@ -982,11 +990,15 @@ def search_literature(plan, top_n=TOP_N):
                 paper.setdefault("source", "PubMed")
                 paper.setdefault("source_provenance", ["PubMed"])
                 _ingest_paper(paper)
-    query_counts.sort(key=lambda item: queries.index(item["query"]) if item["query"] in queries else 999)
 
-    supplemental_papers, supplemental_meta = retrieve_supplemental(plan)
-    for paper in supplemental_papers:
-        _ingest_paper(paper)
+        try:
+            supplemental_papers, supplemental_meta = supp_future.result()
+            for paper in supplemental_papers:
+                _ingest_paper(paper)
+        except Exception as supp_exc:
+            errors.append(f"Supplemental retrieval error: {supp_exc}")
+
+    query_counts.sort(key=lambda item: queries.index(item["query"]) if item["query"] in queries else 999)
 
     retrieved_pool = all_papers_list
     network_finished_at = time.perf_counter()
@@ -1034,7 +1046,7 @@ def search_literature(plan, top_n=TOP_N):
     }
 
     total_count = (query_counts[0].get("count") or 0) if query_counts else 0
-    return {
+    res = {
         "title": "Multi-source Literature Evidence",
         "search_query": queries[0] if queries else "",
         "search_queries": queries,
@@ -1071,3 +1083,4 @@ def search_literature(plan, top_n=TOP_N):
             f"candidates were passed to evidence analysis and synthesis."
         ),
     }
+    return res

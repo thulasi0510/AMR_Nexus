@@ -163,7 +163,12 @@ def retrieve_mutations(understanding):
         })
 
     # WHO is a specialist catalogue for Mycobacterium tuberculosis resistance queries.
-    is_tb = "mycobacterium tuberculosis" in org_text or "tb" in org_text or "mtb" in org_text
+    is_tb = (
+        "mycobacterium tuberculosis" in org_text
+        or "tb" in org_text
+        or "mtb" in org_text
+        or (not org_text and any(g in ("katg", "rpob", "pnca", "embb", "inha") for g in gene_text))
+    )
     if is_tb:
         target_tb_drugs = [canonical_drug(d).lower() for d in drug_text] if drug_text else []
         for row in _who_rows():

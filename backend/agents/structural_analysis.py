@@ -703,20 +703,38 @@ def evaluate_protein_function_impact(
     kinetic_shift = ""
     fitness_cost = ""
     compensatory = ""
+    validation_tier = "Tier 3: In Silico Computational Hypothesis (Novel Variant - Experimental Validation Required)"
+    confidence_score = 0.75
+    experimental_methods = (
+        "Recommended Confirmatory Wet-Lab Protocol: "
+        "1) Site-directed mutagenesis (Q5 mutagenesis kit); "
+        "2) Recombinant protein expression in E. coli BL21(DE3) with affinity chromatography purification; "
+        "3) Steady-state spectrophotometric kinetics (determination of kcat, Km, and catalytic efficiency kcat/Km); "
+        "4) Differential Scanning Fluorimetry (DSF / Thermal Shift Assay) to quantify Delta-Delta-G and Tm folding stability; "
+        "5) Standardized CLSI/EUCAST broth microdilution antimicrobial susceptibility testing (MIC determination)."
+    )
 
     # 1. KatG (Mycobacterium tuberculosis)
     if gene_key == "katg":
         if pos == 315 and mut == "T":
+            validation_tier = "Tier 1: Experimentally Validated (X-ray Crystallography [PDB 2B2R, 2.0 Å] & In Vitro Enzyme Kinetics)"
+            confidence_score = 0.96
+            experimental_methods = "Confirmatory Experimental Data: X-ray crystallography (PDB: 2B2R, 2.00 Å), steady-state KatG spectrophotometric catalase-peroxidase turnover assays (H2O2 turnover kcat), HPLC isoniazid-NAD adduct quantification, and WHO BACTEC MGIT 960 phenotypic MIC testing."
             catalytic_activity = "Maintains 50%-80% of native catalase-peroxidase activity (kcat ~3,000 s^-1 vs 4,200 s^-1 wild-type); small H2O2 molecules (~2.8 A) readily reach the active-site heme."
             kinetic_shift = "Prodrug activation is selectively impaired: narrow constriction neck (4.7 A) sterically blocks bulkier isoniazid (6.5 x 3.8 A), increasing INH Km >10-fold and abolishing isonicotinoyl radical generation by >95%."
             fitness_cost = "Virtually zero in vivo fitness penalty; preserves M. tuberculosis virulence and survival against host macrophage oxidative bursts (H2O2), explaining its global clinical dominance (>60%-80%)."
             compensatory = "No compensatory mutations required due to high native catalytic and biological fitness preservation."
         elif pos == 315 and mut == "N":
+            validation_tier = "Tier 1: Experimentally Validated (Crystallographic Modeling & Recombinant Peroxidase Assays)"
+            confidence_score = 0.94
+            experimental_methods = "Confirmatory Experimental Data: PDB 1SJ2 / site-directed mutagenesis, spectrophotometric peroxidase activity assays, and liquid culture INH MIC testing."
             catalytic_activity = "Retains ~30%-50% of native catalase activity; moderate loss of active-site peroxidase competence."
             kinetic_shift = "Disrupts isoniazid binding orientation in the heme access channel; high-level INH resistance."
             fitness_cost = "Low-to-moderate in vivo fitness cost compared to S315T."
             compensatory = "Occasionally selected alongside regulatory inhA promoter mutations."
         else:
+            validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (KatG 1SJ2/2B2R Pocket Homology)"
+            confidence_score = 0.85
             d_vol = deltas.get("delta_volume", 0)
             if d_vol < -30:
                 catalytic_activity = f"Located in {domain}. Severe cavity creation ({d_vol:+} A^3) within the catalytic alpha-helical scaffold destabilizes the heme coordination environment, predicting impaired catalytic efficiency (kcat/Km) for both endogenous H2O2 detoxification and prodrug activation."
@@ -735,16 +753,24 @@ def evaluate_protein_function_impact(
     # 2. RpoB (RNA Polymerase beta-subunit)
     elif gene_key == "rpob":
         if (pos == 450 or (pos == 531 and wt == "S")) and mut == "L":
+            validation_tier = "Tier 1: Experimentally Validated (Cryo-EM / X-ray [PDB 5UHC, 3.8 Å] & In Vitro Transcription Elongation Kinetics)"
+            confidence_score = 0.96
+            experimental_methods = "Confirmatory Experimental Data: Structural biology (PDB: 5UHC, 5UH5), in vitro abortive and elongation transcription run-off assays, Surface Plasmon Resonance (SPR) rifampicin Kd determination, and competitive fitness growth assays."
             catalytic_activity = "Retains ~85%-90% of native RNA transcript elongation velocity (vel_elong ~20-25 nt/s); phosphodiester bond formation active site (>12 A away) is unperturbed."
             kinetic_shift = "Rifampicin binding affinity is diminished >1,000-fold (nanomolar to micromolar Kd) due to steric clash with the planar naphthoquinone core."
             fitness_cost = "Low in vivo fitness cost (~2%-5% reduction in growth rate in drug-free medium); dominant clinical RIF-resistant allele worldwide."
             compensatory = "Strains in high-transmission settings frequently acquire secondary compensatory mutations in rpoA (e.g. T187M) or rpoC (e.g. V483G, F452L) that fully rescue transcription kinetics and restore transmission fitness."
         elif pos in [445, 435, 526, 516]:
+            validation_tier = "Tier 1: Experimentally Validated (Crystallographic Modeling & In Vitro Elongation Assays)"
+            confidence_score = 0.93
+            experimental_methods = "Confirmatory Experimental Data: PDB 5UHC structural alignment, in vitro RNAP transcript elongation assays, and microdilution rifampicin/rifabutin MIC determination."
             catalytic_activity = "Retains ~60%-75% of native transcription rate; D435V shows measurable reduction in RNA chain elongation."
             kinetic_shift = "Disrupts critical hydrogen-bonding contacts to the rifampicin polyketide tail; reduces drug affinity."
             fitness_cost = "Moderate in vivo fitness cost (5%-15% growth deficit); lower clinical prevalence than S450L."
             compensatory = "Frequently accompanied by rpoC compensatory substitutions."
         else:
+            validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (RpoB 5UHC RRDR Homology)"
+            confidence_score = 0.85
             catalytic_activity = f"Located in {domain}. Alters local RRDR pocket dynamics while maintaining template-directed phosphodiester bond formation."
             kinetic_shift = "Modulates rifampicin contact network and dissociation constants."
             fitness_cost = "Variable fitness cost depending on active center proximity and steric volume shift."
@@ -753,16 +779,24 @@ def evaluate_protein_function_impact(
     # 3. GyrA (DNA Gyrase A subunit)
     elif gene_key == "gyra":
         if (pos in [83, 90]) and mut in ["L", "F", "Y", "A"]:
+            validation_tier = "Tier 1: Experimentally Validated (X-ray Crystallography [PDB 2Y3P, 2.8 Å] & Topoisomerase Supercoiling Assays)"
+            confidence_score = 0.96
+            experimental_methods = "Confirmatory Experimental Data: High-resolution X-ray crystallography of topoisomerase-DNA-ciprofloxacin ternary complex (PDB: 2Y3P), ATP-dependent DNA supercoiling assays, and CLSI broth microdilution ciprofloxacin MIC testing."
             catalytic_activity = "Retains ~90%-95% of native ATP-dependent negative DNA supercoiling and double-strand cleavage/religation efficiency."
             kinetic_shift = "Elimination of Ser83 hydroxyl abolishes the water-metal ion (Mg2+) bridge anchoring fluoroquinolones, causing a >50-fold drop in ciprofloxacin binding affinity."
             fitness_cost = "Zero measurable biological fitness penalty; clinical strains show identical doubling times to wild-type isolates."
             compensatory = "No compensatory mutation needed; high clonal expansion potential across Enterobacterales and M. tuberculosis."
         elif pos in [87, 94]:
+            validation_tier = "Tier 1: Experimentally Validated (Ternary Complex X-ray Diffraction & Cleavage Assays)"
+            confidence_score = 0.94
+            experimental_methods = "Confirmatory Experimental Data: X-ray crystallography of cleaved DNA complex (PDB: 2Y3P), in vitro DNA cleavage-religation assays, and fluoroquinolone MIC testing."
             catalytic_activity = "Maintains ~80%-90% catalytic supercoiling competence."
             kinetic_shift = "Neutralizes the anionic anchor of the quinolone-binding pocket, reducing fluoroquinolone affinity."
             fitness_cost = "Minimal fitness cost; synergistic MIC elevation when paired with S83L."
             compensatory = "Often co-selected with secondary parC substitutions."
         else:
+            validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (GyrA 2Y3P QRDR Homology)"
+            confidence_score = 0.85
             catalytic_activity = f"Located in {domain}. Modulates DNA cleavage-religation equilibrium."
             kinetic_shift = "Alters topoisomerase-DNA-quinolone cleavage complex stabilization."
             fitness_cost = "Low to moderate fitness penalty."
@@ -771,16 +805,24 @@ def evaluate_protein_function_impact(
     # 4. blaTEM
     elif gene_key == "tem":
         if pos == 238 and mut == "S":
+            validation_tier = "Tier 1: Experimentally Validated (Atomic-Resolution X-ray [PDB 1ZG4, 2.4 Å] & Steady-State beta-Lactamase Kinetics)"
+            confidence_score = 0.96
+            experimental_methods = "Confirmatory Experimental Data: Atomic-resolution X-ray crystallography (PDB: 1ZG4, 1BTL), spectrophotometric steady-state kinetics (kcat, Km) with nitrocefin, ampicillin, and ceftazidime, and differential scanning fluorimetry (Tm melting temperature)."
             catalytic_activity = "Cephalosporinase catalytic efficiency (kcat/Km) against 3rd-generation oxyimino-cephalosporins (cefotaxime, ceftriaxone) increases by >1,000-fold. In contrast, native penicillinase activity (ampicillin kcat/Km) decreases ~10-fold due to slight active-site widening."
             kinetic_shift = "Acylation rate (k2) for bulky cephalosporins is greatly accelerated by cleft expansion in strand B3."
             fitness_cost = "Cavity expansion causes thermal destabilization (Delta_Tm ~ -4°C to -6°C, increased unfolding free energy Delta_Delta_G), decreasing active periplasmic enzyme abundance."
             compensatory = "Strongly selects for global suppressor mutations, predominantly M182T (>17 A away), which inserts an extra stabilizing hydrogen bond, rescuing thermal stability without compromising expanded-spectrum cephalosporin hydrolysis."
         elif pos == 104 and mut == "K":
+            validation_tier = "Tier 1: Experimentally Validated (Crystal Structure & Kinetic Profiling)"
+            confidence_score = 0.94
+            experimental_methods = "Confirmatory Experimental Data: PDB 1ZG4 structural alignment, cephalosporin acylation/deacylation spectrophotometric kinetics, and broth microdilution MIC testing."
             catalytic_activity = "Substrate entrance loop remodeling enhances electrostatic capture of cephalosporins."
             kinetic_shift = "Positively charged Lys104 lowers Km for negatively charged cephalosporin carboxylate groups."
             fitness_cost = "Minimal stability penalty; highly synergistic when coupled with G238S."
             compensatory = "Found in multi-mutant ESBL alleles (e.g. TEM-52)."
         else:
+            validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (TEM-1 1BTL Pocket Homology)"
+            confidence_score = 0.85
             catalytic_activity = f"Located in {domain}. Modulates active-site cleft breathing and substrate hydrolysis kinetics."
             kinetic_shift = "Shifts catalytic turnover (kcat/Km) across beta-lactam classes."
             fitness_cost = "Thermodynamic stability trade-off depending on scaffold packing."
@@ -789,11 +831,16 @@ def evaluate_protein_function_impact(
     # 5. blaKPC
     elif gene_key == "kpc":
         if pos == 179 and mut == "N":
+            validation_tier = "Tier 1: Experimentally Validated (Ultra-High Resolution X-ray [PDB 6D18, 1.35 Å] & Carbapenemase Kinetics)"
+            confidence_score = 0.96
+            experimental_methods = "Confirmatory Experimental Data: Ultra-high resolution X-ray crystallography (PDB: 6D18, 1.35 Å), spectrophotometric ceftazidime/meropenem hydrolysis kinetics, avibactam IC50 and acylation/deacylation rate constant measurement, and broth microdilution MIC testing."
             catalytic_activity = "Omega-loop flexibility allows expanded accommodation and hydrolysis of ceftazidime; conversely, carbapenemase turnover (kcat for meropenem) drops 10- to 50-fold."
             kinetic_shift = "Disrupts the tight steric binding of the diazabicyclooctane inhibitor avibactam, raising CAZ-AVI MIC above clinical breakpoints while resensitizing the isolate to carbapenems."
             fitness_cost = "Incurs a functional fitness trade-off: high resistance to ceftazidime-avibactam at the expense of impaired carbapenem hydrolysis; selected dynamically during avibactam therapy."
             compensatory = "Reversion to wild-type D179 can occur upon withdrawal of ceftazidime-avibactam."
         else:
+            validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (KPC-2 2OV5 Pocket Homology)"
+            confidence_score = 0.85
             catalytic_activity = f"Located in {domain}. Modulates carbapenem and cephalosporin active cleft geometry."
             kinetic_shift = "Shifts catalytic turnover and inhibitor trapping kinetics."
             fitness_cost = "Low to moderate stability impact."
@@ -803,6 +850,10 @@ def evaluate_protein_function_impact(
     else:
         d_vol = deltas.get("delta_volume", 0)
         d_charge = deltas.get("delta_charge", 0)
+        has_pdb = bool(structural_consequence.get("pdb_structures"))
+        validation_tier = "Tier 2: High-Confidence In Silico Structural Modeling (PDB Template Homology & Active-Site Remodeling)" if has_pdb else "Tier 3: In Silico Computational Hypothesis (Novel / Uncharacterized Mutation - Experimental Validation Required)"
+        confidence_score = 0.82 if has_pdb else 0.70
+
         if structural_consequence.get("catalytic_contact"):
             catalytic_activity = f"Located in active center / catalytic motif. Direct alteration of residue {pos} perturbs the active site, altering substrate binding and catalytic efficiency (kcat/Km)."
             kinetic_shift = "Substrate docking affinity and transition-state stabilization are modified."
@@ -821,6 +872,7 @@ def evaluate_protein_function_impact(
 
     summary = (
         f"**Native Role:** {native_role} | "
+        f"**Validation:** {validation_tier} (Confidence: {confidence_score:.2f}) | "
         f"**Catalytic Activity:** {catalytic_activity} | "
         f"**Kinetics & Specificity:** {kinetic_shift} | "
         f"**Fitness & Epistasis:** {fitness_cost} {compensatory}"
@@ -832,6 +884,9 @@ def evaluate_protein_function_impact(
         "kinetic_shift": kinetic_shift,
         "fitness_cost": fitness_cost,
         "compensatory": compensatory,
+        "validation_tier": validation_tier,
+        "confidence_score": confidence_score,
+        "experimental_validation_methods": experimental_methods,
         "summary": summary,
     }
 

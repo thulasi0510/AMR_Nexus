@@ -280,9 +280,25 @@ USER QUERY:
 '''
 
 
+_OLLAMA_PROBE = {"checked": False, "alive": False}
+
+def _check_ollama():
+    if _OLLAMA_PROBE["checked"]:
+        return _OLLAMA_PROBE["alive"]
+    import socket
+    try:
+        s = socket.create_connection(("127.0.0.1", 11434), timeout=0.05)
+        s.close()
+        _OLLAMA_PROBE["alive"] = True
+    except Exception:
+        _OLLAMA_PROBE["alive"] = False
+    _OLLAMA_PROBE["checked"] = True
+    return _OLLAMA_PROBE["alive"]
+
+
 def _llm_understand(query):
 
-    if not AMR_LLM_QUERY_ENABLED:
+    if not AMR_LLM_QUERY_ENABLED or not _check_ollama():
 
         return {}
 
@@ -428,6 +444,7 @@ def _ncbi_gene_name_keys():
     return exact_map
 
 
+@lru_cache(maxsize=1024)
 def _reference_grounded_gene_mentions(query):
     """Discover explicit gene/determinant mentions using CARD/NCBI vocabulary.
 

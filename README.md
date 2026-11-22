@@ -1,13 +1,13 @@
-# AMR Nexus: An Agentic AI Multi-Agent System for Retrieval and Structural Interpretation of Antimicrobial Resistance Variants
+# AMR Nexus: Agentic AI for Antimicrobial Resistance Evidence Retrieval
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![FastAPI/Flask](https://img.shields.io/badge/Backend-Flask%20%7C%20LangGraph-green.svg)](https://github.com/langchain-ai/langgraph)
-[![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-cyan.svg)](https://vitejs.dev/)
+[![Backend](https://img.shields.io/badge/Backend-Flask%20%7C%20LangGraph-green.svg)](https://flask.palletsprojects.com/)
+[![Frontend](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-cyan.svg)](https://react.dev/)
 [![Local LLM](https://img.shields.io/badge/Local%20LLM-Ollama%20LLaMA%203.2-purple.svg)](https://ollama.com/)
 [![Academic](https://img.shields.io/badge/Project-SASTRA%20SCBT%20BIN599-navy.svg)](https://www.sastra.edu/)
 [![Status](https://img.shields.io/badge/Review-Final%20Review%20Delivered-success.svg)]()
 
-**AMR Nexus** is an open-source, reproducible **Agentic AI Multi-Agent Platform** designed for the autonomous retrieval, evidence-graded stratification, and structural interpretation of antimicrobial resistance (AMR) mutations and determinants. Orchestrated as a stateful **Multi-Agent Directed Acyclic Graph (DAG)** via **LangGraph**, the system bridges the critical diagnostic divide between binary genomic gene detection and actionable variant-level clinical interpretation. It couples **federated literature retrieval across 13 scholarly and scientific endpoints** with a **deterministic biophysical profiling engine (PDB, AlphaFold DB, UniProt)** to deliver auditable, evidence-backed clinical reports without commercial cloud lock-in.
+**AMR Nexus** is an open-source, reproducible **Agentic AI Multi-Agent Platform** designed for the autonomous retrieval and evidence-graded stratification of antimicrobial resistance (AMR) mutations and clinical determinants. Built with a **React 18 frontend** and a **Flask backend** orchestrated as a stateful Directed Acyclic Graph (DAG) via **LangGraph**, the system bridges the gap between binary genomic gene detection and actionable clinical interpretation. It federates literature retrieval across 13 scientific endpoints and reference catalogues (WHO TB, CARD, AMRFinderPlus), with auxiliary sequence-level residue property modeling, delivering auditable, evidence-backed clinical reports without commercial cloud lock-in.
 
 > **Academic Defense & Review:** Developed for **BIN599 – Mini Project - Final Review** under the Department of Bioinformatics, School of Chemical & Biotechnology (SCBT), SASTRA Deemed to be University, under the guidance of **Dr. Vigneshwar Ramakrishnan, Ph.D.** and **Dr. Suma Mohan, Ph.D.**
 
@@ -19,24 +19,25 @@
 - [Aim and Objectives](#aim-and-objectives)
 - [Studies that Informed the Design](#studies-that-informed-the-design)
 - [Agentic System Architecture (LangGraph Multi-Agent Workflow)](#agentic-system-architecture-langgraph-multi-agent-workflow)
+- [Technology Stack (React & Flask)](#technology-stack-react--flask)
 - [The 10 Specialized Autonomous Agents](#the-10-specialized-autonomous-agents)
 - [The Three Core Scientific Methodologies](#the-three-core-scientific-methodologies)
   - [Methodology 1: Input Harmonization, Ontology Grounding & Federated Retrieval](#methodology-1-input-harmonization-ontology-grounding--federated-retrieval)
   - [Methodology 2: Evidence Extraction, Attribution Guardrails & Synthesis](#methodology-2-evidence-extraction-attribution-guardrails--synthesis)
-  - [Methodology 3: Biophysical Profiling, Structural Scaffolds & Universal Fallback](#methodology-3-biophysical-profiling-structural-scaffolds--universal-fallback)
+  - [Methodology 3: Sequence Context & Residue-Property Modeling](#methodology-3-sequence-context--residue-property-modeling)
 - [Federated Literature & Database Infrastructure (13 Endpoints)](#federated-literature--database-infrastructure-13-endpoints)
 - [Empirical Results Across 7 Query Categories](#empirical-results-across-7-query-categories)
   - [Category 1: Full Clinical Benchmark Query (`rpoB S450L`)](#category-1-full-clinical-benchmark-query-rpob-s450l)
   - [Category 2: Minimalist / Shorthand & Candidate Expansion (`ompK`)](#category-2-minimalist--shorthand--candidate-expansion-ompk)
   - [Category 3: Mechanistic & Pathway Query (`blaKPC-2` Mechanism)](#category-3-mechanistic--pathway-query-blakpc-2-mechanism)
   - [Category 4: Head-to-Head Comparative AMR Query (`MexAB-OprM` vs `AdeABC`)](#category-4-head-to-head-comparative-amr-query-mexab-oprm-vs-adeabc)
-  - [Category 5: Structural & Suppressor Mutation Query (`TEM-1` Suppressors)](#category-5-structural--suppressor-mutation-query-tem-1-suppressors)
+  - [Category 5: Suppressor vs. Active-Site Mutation Query (`TEM-1` Suppressors)](#category-5-suppressor-vs-active-site-mutation-query-tem-1-suppressors)
   - [Category 6: Target Alteration / QRDR Mutation (`gyrA S83L in E-coli`)](#category-6-target-alteration--qrdr-mutation-gyra-s83l-in-e-coli)
   - [Category 7: Domain Guardrail & Out-of-Scope Rejection (`Explain quantum gravity`)](#category-7-domain-guardrail--out-of-scope-rejection-explain-quantum-gravity)
 - [Key Research Findings & Competitive Evaluation](#key-research-findings--competitive-evaluation)
   - [1. Commercial LLM Refusal Bypass (ChatGPT & Claude Censorship)](#1-commercial-llm-refusal-bypass-chatgpt--claude-censorship)
   - [2. Syntactic Clause-Boundary Attribution Guardrail](#2-syntactic-clause-boundary-attribution-guardrail)
-  - [3. Historical Numbering Harmonization (*E. coli* $\leftrightarrow$ *M. tb* $-81$ Offset)](#3-historical-numbering-harmonization-e-coli-leftrightarrow-m-tb--81-offset)
+  - [3. Historical Numbering Harmonization (*E. coli* $\leftrightarrow$ *M. tb* $-81$ Offset)](#3-historical-numbering-harmonization-e-coli-\leftrightarrow-m-tb--81-offset)
   - [4. Multi-Source Citation Discrepancy Audit](#4-multi-source-citation-discrepancy-audit)
   - [5. Software Verification & Regression Test Suite](#5-software-verification--regression-test-suite)
 - [Implementation Status & Deliverables Matrix](#implementation-status--deliverables-matrix)
@@ -52,9 +53,9 @@
 
 * **The Global AMR Crisis:** Bacterial antimicrobial resistance was associated with **4.71 million deaths globally in 2021** (1.14 million directly attributable; *Lancet / GBD 2021*).
 * **Five Biological Routes to Resistance:** AMR develops through (1) drug-inactivating enzymes, (2) altered targets, (3) active efflux, (4) reduced membrane permeability, and (5) genetic variation / horizontal gene transfer (HGT) (*Blair et al., 2015*).
-* **Why Variant-Level Evidence Matters:** Detecting an AMR gene or determinant alone is insufficient. A specific point mutation requires coordinate validation, sequence context, structural context, phenotype evidence, and provenance across sources.
+* **Why Variant-Level Evidence Matters:** Detecting an AMR gene or determinant alone is insufficient. A specific point mutation requires coordinate validation, sequence context, phenotype evidence, and provenance across sources.
 * **Finding a Gene $\ne$ Having Evidence for a Variant:** Identifying an AMR determinant does not reveal what a particular amino acid substitution does. AMR Nexus retrieves and grades the evidence—it does not hallucinate effects.
-* **Evidence Classification by Strength:** Findings must be stratified transparently into:
+* **Evidence Classification by Strength:** Findings are stratified transparently into:
   $$\text{Established} \;\big|\; \text{Database-Supported} \;\big|\; \text{Computational Hypothesis} \;\big|\; \text{Insufficient}$$
 
 ---
@@ -62,38 +63,36 @@
 ## Aim and Objectives
 
 ### AIM
-To develop an **Agentic AI-based evidence retrieval and interpretation framework** for comprehensive, traceable, and evidence-aware analysis of mutations and variants in antimicrobial resistance (AMR) genes by integrating information from multiple scientific and biological resources.
+To develop an **Agentic AI-based evidence retrieval and interpretation framework** for comprehensive, traceable, and evidence-aware analysis of mutations and variants in antimicrobial resistance (AMR) genes by integrating information from multiple scientific literature sources and biological databases.
 
 ### OBJECTIVES
 1. **Multi-Source Retrieval:** To retrieve comprehensive information on AMR gene mutations and variants from multiple authoritative scientific literature sources and biological databases in response to user-defined queries.
 2. **Evidence Integration:** To identify, characterize, and integrate available evidence for AMR mutations and variants, including their reported occurrence, genetic context, sequence characteristics, functional effects, and resistance associations.
-3. **Biophysical & Structural Scaffolding:** To incorporate sequence and structural information to investigate possible molecular consequences of identified or poorly characterized AMR mutations and variants and generate evidence-supported hypotheses where direct evidence is unavailable.
-4. **Agentic Orchestration & Traceable Reporting:** To develop an agentic workflow that dynamically coordinates relevant retrieval and analytical tasks and generates a traceable evidence-based report distinguishing established findings, database-supported information, computational evidence, hypotheses, and evidence gaps.
+3. **Sequence & Context Annotation:** To incorporate sequence context and residue-property information to assist in characterizing AMR mutations and variants where direct evidence is sparse.
+4. **Agentic Orchestration & Traceable Reporting:** To develop an agentic workflow that dynamically coordinates relevant retrieval and analytical tasks and generates a traceable evidence-based report distinguishing established findings, database-supported information, hypotheses, and evidence gaps.
 
-> *Scope:* Objective 3 is addressed through sequence-level mutation mapping, residue physicochemical delta metrics ($\Delta V, \Delta q, \Delta H$), and a curated structural registry of 12 major AMR families; full atomic-coordinate docking remains an external future extension.
+> *Scope Note:* Residue property changes and sequence domain annotations serve as auxiliary biological context to complement literature evidence; the system does not perform all-atom molecular dynamics or crystal structure simulations.
 
 ---
 
 ## Studies that Informed the Design
 
-AMR Nexus builds upon and synthesizes foundations across clinical genomics, structural bioinformatics, and agentic literature review frameworks:
+AMR Nexus builds upon foundations across clinical genomics, bioinformatics, and agentic review frameworks:
 
 | Study | Focus | Approach | Relevance to this Work |
 | :--- | :--- | :--- | :--- |
 | **De Oliveira et al. (2020)** | AMR mechanisms in ESKAPE pathogens | Molecular and genomic review | Mechanistic classification of enzymatic and target-site resistance |
-| **Tunstall et al. (2020)** | Genomic and structural interpretation | Sequence, genomic and structural methods | Foundation for coupling sequence variation with structural context |
-| **Yee et al. (2021)** | Genotype–phenotype discordance | Troubleshooting framework | Emphasizes evidence tiering when sequencing and MIC assays disagree |
-| **Priyamvada et al. (2022)** | Computational approaches to AMR | Review of structural and systems tools | Framework for integrating computational biophysics with clinical targets |
+| **Tunstall et al. (2020)** | Genomic and sequence interpretation | Sequence and genomic methods | Foundation for coupling sequence variation with resistance context |
+| **Yee et al. (2021)** | Genotype–phenotype discordance | Troubleshooting framework | Emphasizes evidence tiering when sequencing and phenotypic assays disagree |
+| **Priyamvada et al. (2022)** | Computational approaches to AMR | Review of structural and systems tools | Framework for integrating computational tools with clinical surveillance |
 | **Florensa et al. (2022)** | Resistance genes & point mutations | ResFinder and PointFinder | Gold-standard baseline for identifying known chromosomal mutations |
 | **Calvet-Seral et al. (2023)** | Mutation–resistance links | Engineered mutations + phenotype testing | Establishes criteria for what constitutes validated empirical evidence |
 | **Rose et al. (2023)** | Genotype–phenotype concordance | WGS vs. phenotypic susceptibility testing | Defines limits of purely genotype-based prediction pipelines |
 | **Yagimoto et al. (2024)** | Resistance mechanism prediction | Protein language models (pLM) | Highlights value of sequence-based residue modeling without hallucinations |
 | **Sherry et al. (2025)** | AMR genomics and surveillance | Translational review | Identifies bottlenecks in turning raw sequencing reads into clinical insights |
 | **Zhang et al. (2025)** | Biomedical evidence retrieval | Large-scale knowledge graph (NLP) | Scalable evidence extraction and multi-source relationship mapping |
-| **Green et al. (2025)** | Structural context of mutations | Experimental & AlphaFold structures (ML) | Confirms structural context aids interpretation when literature is thin |
+| **Green et al. (2025)** | Sequence & structural context | Protein mutation context with ML (preprint) | Demonstrates that sequence context aids interpretation when literature is thin |
 | **Lee et al. (2025)** | Agentic AI literature synthesis | **A4SLR Framework** with sub-agents | **Primary architectural foundation for autonomous agentic task decomposition** |
-
-*Key Gap Addressed:* None of the surveyed systems provides an Agentic AI multi-agent architecture that autonomously unifies curated database lookups, multi-source literature retrieval, and biophysical structural interpretation into a traceable, evidence-graded report.
 
 ---
 
@@ -102,52 +101,64 @@ AMR Nexus builds upon and synthesizes foundations across clinical genomics, stru
 AMR Nexus models the scientific analysis process as a **stateful multi-agent directed graph** compiled via **LangGraph**:
 
 ```
-                       [ User Query Intake ]
-                                 │
-                                 ▼
-                 [ 1. Query Understanding Agent ] ◄── Cognitive LLaMA-3.2 + Regex
-                                 │
-                                 ▼
-                 [ 2. Entity Normalization Agent ] ◄── CARD ARO & NCBI Taxonomy
-                                 │
-                                 ▼
-                 [ 3. AMR Retrieval Planner Agent ] ◄── Dynamic Sub-task Decomposition
-                                 │
-                                 ▼
-                 [ Routing & Guardrail Gate ]
-                    ├── Out of Scope ──────────────────► [ Immediate Guardrail Exit ]
-                    ├── No Variant / Mechanism Alone ─► [ Route Direct to Structural Agent ]
-                    └── Mutation Variant Present ─────► [ Route to Reference Agent ]
-                                 │
-          ┌──────────────────────┴──────────────────────┐
-          ▼                                             ▼
-[ 4. Mutation Reference Agent ]             [ 5. Structural Analysis Agent ]
-  WHO TB (48k) & AMRFinderPlus                12 Scaffolds + Dynamic UniProt Fallback
-          │                                             │
-          └──────────────────────┬──────────────────────┘
-                                 │
-                                 ▼
-                 [ 6. Literature Research Agent ] ◄── Federated 13 Scholarly Endpoints
-                                 │
-                                 ▼
-                 [ 7. PMC Evidence Enrichment Agent ] ◄ Full-Text Section Parsing
-                                 │
-                                 ▼
-                 [ 8. Evidence Analysis Agent ] ◄──── Clause Bounds & 4-Tier Scoring
-                                 │
-                                 ▼
-                 [ 9. Response Synthesis Agent ] ◄── Evidence-Conditioned LLaMA-3.2
-                                 │
-                                 ▼
-                 [ 10. Report Generation Agent ] ◄── Citation Reconciliation & Traces
-                                 │
-                                 ▼
-                 [ Interactive UI / Auditable Report ]
+                       [ User Query Intake (React UI) ]
+                                     │
+                                     ▼
+                     [ 1. Query Understanding Agent ] ◄── Cognitive LLaMA-3.2 + Regex
+                                     │
+                                     ▼
+                     [ 2. Entity Normalization Agent ] ◄── CARD ARO & NCBI Taxonomy
+                                     │
+                                     ▼
+                     [ 3. AMR Retrieval Planner Agent ] ◄── Dynamic Sub-task Decomposition
+                                     │
+                                     ▼
+                     [ Routing & Guardrail Gate ]
+                        ├── Out of Scope ──────────────────► [ Immediate Guardrail Exit ]
+                        ├── No Variant / Mechanism Alone ─► [ Route Direct to Domain Agent ]
+                        └── Mutation Variant Present ─────► [ Route to Reference Agent ]
+                                     │
+              ┌──────────────────────┴──────────────────────┐
+              ▼                                             ▼
+    [ 4. Mutation Reference Agent ]             [ 5. Sequence Context Agent ]
+      WHO TB (48k) & AMRFinderPlus                Residue Deltas + UniProt Fallback
+              │                                             │
+              └──────────────────────┬──────────────────────┘
+                                     │
+                                     ▼
+                     [ 6. Literature Research Agent ] ◄── Federated 13 Scholarly Endpoints
+                                     │
+                                     ▼
+                     [ 7. PMC Evidence Enrichment Agent ] ◄ Full-Text Section Parsing
+                                     │
+                                     ▼
+                     [ 8. Evidence Analysis Agent ] ◄──── Clause Bounds & 4-Tier Scoring
+                                     │
+                                     ▼
+                     [ 9. Response Synthesis Agent ] ◄── Evidence-Conditioned LLaMA-3.2
+                                     │
+                                     ▼
+                     [ 10. Report Generation Agent ] ◄── Citation Reconciliation & Traces
+                                     │
+                                     ▼
+                     [ Interactive React UI / Auditable Report ]
 ```
 
-### Architectural Principles:
-* **The Agentic Cognitive Principle:** Local LLaMA-3.2 serves strictly as a *cognitive reasoning engine* for query understanding and narrative synthesis. All database lookups, coordinate translations, biophysical math, and citation validations are executed by *deterministic tool agents*.
-* **Deterministic Guardrails:** Strict grammatical clause-boundary attribution prevents cross-gene mutation hallucination.
+---
+
+## Technology Stack (React & Flask)
+
+The platform is engineered using modern, decoupled web and artificial intelligence technologies:
+
+* **Frontend:**
+  * **Framework:** **React 18** bootstrapped with **Vite** for rapid hot-module reloading and responsive client rendering.
+  * **UI Components:** Interactive query submission interface, real-time agent execution trace visualizer, dynamic multi-tier evidence tables, and clickable citation chips.
+  * **State Management:** Reactive component state with asynchronous fetch handling.
+* **Backend:**
+  * **Web Framework:** **Flask** providing a lightweight, robust REST API server with configurable CORS handling.
+  * **Multi-Agent Orchestration:** **LangGraph** (`StateGraph`) defining strongly-typed agent state transitions, conditional edges, and execution trace logging.
+  * **Local Inference:** **Ollama** running quantized local open-weight models (**LLaMA 3.2** / LLaMA 3 8B), ensuring 100% offline privacy and zero per-token API charges.
+  * **Data & Science Libraries:** BioPython, Requests, Regular Expressions, SQLite local indexes, and Math utilities.
 
 ---
 
@@ -159,7 +170,7 @@ AMR Nexus models the scientific analysis process as a **stateful multi-agent dir
 | **Agent 2** | **Entity Normalization Agent** | Ontology grounding: maps synonyms to CARD ARO IDs and NCBI Taxonomy | Canonical entity resolutions and permanent ARO accession numbers |
 | **Agent 3** | **AMR Retrieval Planner Agent** | Dynamic task decomposition: creates targeted multi-source search plans | Structured execution plan, query formulations, and provider dispatch routing |
 | **Agent 4** | **Mutation Reference Agent** | Authoritative clinical lookups across WHO TB (48k records) and AMRFinderPlus (10k) | Clinical resistance confidence tiers, odds ratios, and catalogue citations |
-| **Agent 5** | **Structural Analysis Agent** | First-principles residue deltas ($\Delta V, \Delta q, \Delta H$) & 12-family catalytic pocket mapping | Physicochemical profile, functional domain mapping, and PDB/AlphaFold links |
+| **Agent 5** | **Sequence Context Agent** | Residue property delta calculation (Chothia volume, hydropathy, charge) & domain lookup | Physicochemical deltas, functional domain context, and UniProt accessions |
 | **Agent 6** | **Literature Research Agent** | Parallel asynchronous federated querying across live scholarly literature APIs | Deduplicated literature pool with PMIDs, PMCIDs, DOIs, and abstracts |
 | **Agent 7** | **PMC Evidence Enrichment Agent**| Full-text open-access PMC XML retrieval; extracts methods/results sections | Enriched experimental full-text passages (MIC tables, enzyme kinetics) |
 | **Agent 8** | **Evidence Analysis Agent** | Sentence-level proximity scoring, clause-boundary gating, and 4-tier grading | Scored evidence excerpts classified into Direct, Family, Related, or Weak |
@@ -179,7 +190,7 @@ Methodology (Part 1): Input Harmonization & Federated Retrieval
 Methodology (Part 2): Evidence Extraction & Attribution Guardrails
        │
        ▼
-Methodology (Part 3): Biophysical Profiling & Universal Structural Fallback
+Methodology (Part 3): Sequence Context & Residue-Property Modeling
 ```
 
 ### Methodology 1: Input Harmonization, Ontology Grounding & Federated Retrieval
@@ -198,15 +209,15 @@ Methodology (Part 3): Biophysical Profiling & Universal Structural Fallback
 * **Syntactic Clause-Boundary Attribution Guardrail:** Segments multi-gene clinical sentences at grammatical clause boundaries, completely preventing co-occurring mutations from leaking across adjacent genes.
 * **Evidence-Conditioned Synthesis:** LLaMA-3.2 is constrained to synthesize scientific claims strictly using retrieved, evidence-scored passages with bidirectional citation reconciliation.
 
-### Methodology 3: Biophysical Profiling, Structural Scaffolds & Universal Fallback
-* **Universal Residue-Property Model:** Evaluates any point mutation across any bacterial protein from sequence data alone:
-  * **Volume Perturbation ($\Delta V$):** Chothia van der Waals volumes ($\Delta V = V_{\text{mut}} - V_{\text{wt}}$); detects steric clash ($\Delta V > +30\text{ \AA}^3$), crowding ($+12\text{ to }+30$), or cavity creation ($< -30\text{ \AA}^3$).
-  * **Electrostatic Delta ($\Delta q$):** Computes net charge transitions across physiological pH (Arg/Lys $+1$, Asp/Glu $-1$, His $+0.1$, neutral $0$).
-  * **Hydropathy Shift ($\Delta H$):** Kyte-Doolittle hydropathy scale delta evaluating hydrophobic core disruption or active-site desolvation.
-* **Dual-Track Structural Architecture:**
-  * **Track A (Curated Benchmark Scaffolds):** 12 high-priority surveillance families (*rpoB, blaKPC, blaTEM, gyrA, etc.*) mapped to verified crystallographic structures (PDB 6D18 at 1.35 Å, 5UHC) and catalytic pocket boundaries.
-  * **Track B (Dynamic UniProt REST API Fallback):** For uncurated, novel, or comparative genes, queries `rest.uniprot.org` in real time to fetch canonical sequence length, domain annotations, and AlphaFold accessions (`AF-{acc}-F1`).
-* **Universal Numbering Harmonization:** Harmonizes cross-species numbering offsets (*E. coli* $\leftrightarrow$ *M. tuberculosis* $-81$) and enforces sequence length bounds (*rejects mutations exceeding coding capacity*).
+### Methodology 3: Sequence Context & Residue-Property Modeling
+* **Residue-Property Deltas:** Evaluates amino acid property alterations from sequence data alone:
+  * **Volume Perturbation ($\Delta V$):** Chothia van der Waals side-chain volume difference ($\Delta V = V_{\text{mut}} - V_{\text{wt}}$); screens for bulky side-chain insertion ($> +30\text{ \AA}^3$) or volume loss.
+  * **Electrostatic Delta ($\Delta q$):** Net charge transitions across physiological pH (Arg/Lys $+1$, Asp/Glu $-1$, His $+0.1$, neutral $0$).
+  * **Hydropathy Shift ($\Delta H$):** Kyte-Doolittle hydropathy index delta calculating polar vs. hydrophobic shifts.
+* **Reference Domain Mapping & UniProt Fallback:**
+  * Maps coordinates against pre-indexed catalytic domains for core surveillance families (*rpoB, blaKPC, blaTEM, gyrA*).
+  * For uncurated or comparative genes, queries `rest.uniprot.org` in real time to fetch canonical sequence length and domain boundaries.
+* **Coordinate Harmonization & Sanity Checks:** Harmonizes cross-species numbering offsets (*E. coli* $\leftrightarrow$ *M. tuberculosis* $-81$) and rejects coordinates exceeding verified sequence coding length.
 
 ---
 
@@ -225,16 +236,16 @@ AMR Nexus federates retrieval across **10 scholarly literature/preprint provider
 | **7** | **DOAJ** | Directory of Open Access Journals API | Peer-reviewed open-access antimicrobial research coverage |
 | **8** | **bioRxiv** | Cold Spring Harbor Laboratory Preprint API | Early-warning detection of newly reported emerging AMR variants |
 | **9** | **medRxiv** | Health Sciences Preprint API | Emerging clinical outbreak reports and hospital resistance studies |
-| **10** | **arXiv (q-bio)** | Cornell arXiv API | Quantitative biology & computational structural modeling preprints |
+| **10** | **arXiv (q-bio)** | Cornell arXiv API | Quantitative biology & computational sequence analysis preprints |
 | **11** | **CARD** | Local ARO JSON Inverted Index | Canonical ontology grounding (9,027 resistance determinants) |
 | **12** | **NCBI AMRFinder & WHO**| Curated Reference Binary Index | 10,163 AMRFinderPlus records + 48,152 WHO TB clinical variant tiers |
-| **13** | **UniProt & AlphaFold DB** | UniProt REST API (`rest.uniprot.org`) | Real-time sequence length, domain boundaries & 3D structure accessions |
+| **13** | **UniProt KB** | UniProt REST API (`rest.uniprot.org`) | Real-time sequence length, domain annotations & accession fallback |
 
 ---
 
 ## Empirical Results Across 7 Query Categories
 
-AMR Nexus was evaluated across diverse query archetypes, proving that its agentic architecture generalizes across the entire spectrum of surveillance inquiries:
+AMR Nexus was evaluated across diverse query archetypes, demonstrating generalizability across surveillance inquiries:
 
 ### Category 1: Full Clinical Benchmark Query (`rpoB S450L`)
 * **Query:** `"Which mutations in rpoB are associated with rifampicin resistance in Mycobacterium tuberculosis?"`
@@ -246,15 +257,15 @@ AMR Nexus was evaluated across diverse query archetypes, proving that its agenti
 
 ### Category 3: Mechanistic & Pathway Query (`blaKPC-2` Mechanism)
 * **Query:** `"What is the mechanism of resistance of KPC-2 in Klebsiella pneumoniae?"`
-* **Output:** LangGraph planner detects `resistance_mechanism` intent and bypasses mutation matcher; classifies as Ambler Class A serine carbapenemase using active-site Ser70 nucleophilic attack; details carbapenem hydrolysis kinetics alongside avibactam inhibition constants ($K_i$); links to ultra-high-resolution crystal structure (PDB **6D18**, 1.35 Å).
+* **Output:** LangGraph planner detects `resistance_mechanism` intent and bypasses mutation matcher; classifies as Ambler Class A serine carbapenemase using active-site Ser70 nucleophilic attack; details carbapenem hydrolysis kinetics alongside avibactam inhibition constants ($K_i$).
 
 ### Category 4: Head-to-Head Comparative AMR Query (`MexAB-OprM` vs `AdeABC`)
 * **Query:** `"Compare MexAB-OprM and AdeABC efflux pumps in Pseudomonas and Acinetobacter"`
 * **Output:** Planner decomposes query into parallel retrieval tracks; dispatches simultaneous queries for both pump systems; synthesizes a structured comparative table contrasting Transporter Family (RND), Energy Source (Proton-motive force $\text{H}^+$ antiport), and Resistance Spectrum (intrinsic vs. acquired high-level tigecycline resistance).
 
-### Category 5: Structural & Suppressor Mutation Query (`TEM-1` Suppressors)
+### Category 5: Suppressor vs. Active-Site Mutation Query (`TEM-1` Suppressors)
 * **Query:** `"TEM1 mutations"`
-* **Output:** Differentiates primary active-site ESBL mutations (R164S in the $\Omega$-loop) from secondary global suppressors (**M182T**); identifies that M182T is located $\approx 17\text{ \AA}$ distant from the catalytic pocket and restores thermodynamic folding stability ($\Delta\Delta G$) without altering substrate chemistry.
+* **Output:** Differentiates primary active-site ESBL mutations (R164S in the $\Omega$-loop) from secondary global suppressors (**M182T**); identifies that M182T is located $\approx 17\text{ \AA}$ distant from the catalytic pocket and restores thermodynamic folding stability without altering substrate chemistry.
 
 ### Category 6: Target Alteration / QRDR Mutation (`gyrA S83L in E-coli`)
 * **Query:** `"gyrA S83L in E-coli"`
@@ -305,10 +316,10 @@ The architecture is verified by a 100-test automated test harness:
 | **Ontology & Reference Database Agents** | **Fully Implemented** | Autonomous lookups across 9,027 CARD terms, 10,163 AMRFinderPlus, and 48,152 WHO TB records |
 | **Federated Literature Research Agent** | **Fully Implemented** | Parallel querying across 8 live scholarly APIs; hierarchical deduplication (PMID, PMCID, DOI, Title) |
 | **Evidence Scoring & Attribution Agent** | **Fully Implemented** | Clause-boundary isolation prevents cross-gene leakage; 4-tier evidence stratification |
-| **Biophysical & Structural Analysis Agent** | **Fully Implemented** | Kyte-Doolittle hydropathy, charge, mass deltas, and 12-family catalytic pocket mapping |
-| **Enzyme Kinetics & Catalytic Scaffolds** | **Curated & Operational** | Curated kinetic profiles and verified crystal structure accessions (e.g., PDB 6D18, 5UHC) |
+| **Sequence Context & Residue Deltas** | **Fully Implemented** | Kyte-Doolittle hydropathy, charge, mass deltas, and reference catalytic domain mapping |
+| **Reference Enzyme Scaffolds** | **Curated & Operational** | Curated reference profiles and catalytic pocket accessions for core surveillance families |
 | **Citation Reconciliation & Audit Agent** | **Fully Implemented** | Reconciles text citations with verified PMIDs; generates audit logs and clickable links |
-| **Dynamic 3D Coordinate Parsing & Docking** | **Future Scope** | Identified as external research extension; sequence and domain mapping fully operational |
+| **Full 3D Molecular Dynamics / Docking** | **Future Scope** | Identified as external computational extension; sequence and domain mapping fully operational |
 
 ---
 
@@ -321,11 +332,10 @@ The architecture is verified by a 100-test automated test harness:
 4. **Latency:** End-to-end multi-provider literature retrieval and quantized local LLM inference take 42–96 s on consumer hardware, exceeding instant interactive targets.
 
 ### Future Scope & Research Directions
-* **Automated AlphaFold DB Parsing:** Integrating BioPython to dynamically download PDB/AlphaFold coordinates and compute 3D atomic Euclidean distances to active-site ligands.
 * **Automated CrossRef Metadata Cross-Verification:** Bidirectional automated CrossRef/PubMed metadata reconciliation to eliminate DOI mismatches.
 * **Large-Scale Clinical Cohort Benchmarking:** Benchmarking against expanded multi-gene clinical phenotype cohorts and quantitative broth microdilution MIC datasets.
 * **Asynchronous Query Streaming & Local Caching:** Implementing SQLite literature caching and token streaming to reduce response latency under 15 seconds.
-* **Non-Protein Determinants:** Expanding the structural analysis engine to handle 16S / 23S ribosomal RNA mutations and non-coding promoter mutations.
+* **Non-Protein Determinants:** Expanding the analysis engine to handle 16S / 23S ribosomal RNA mutations and non-coding promoter mutations.
 
 ---
 
@@ -339,7 +349,7 @@ The architecture is verified by a 100-test automated test harness:
   ollama pull llama3.2
   ```
 
-### Backend Setup
+### Backend Setup (Flask API)
 1. Clone the repository and navigate to `backend/`:
    ```bash
    git clone https://github.com/thulasi0510/AMR_Nexus.git
@@ -367,7 +377,7 @@ The architecture is verified by a 100-test automated test harness:
    AMR_PUBMED_TIMEOUT=5
    OLLAMA_BASE_URL=http://localhost:11434
    ```
-5. Launch the backend API:
+5. Launch the backend Flask API:
    ```bash
    python -m flask --app app run --host 0.0.0.0 --port 5000
    ```
@@ -376,7 +386,7 @@ The architecture is verified by a 100-test automated test harness:
    curl http://localhost:5000/health
    ```
 
-### Frontend Setup
+### Frontend Setup (React 18 + Vite)
 1. In a separate terminal, navigate to `frontend/`:
    ```bash
    cd AMR_Nexus/frontend
@@ -425,16 +435,6 @@ The architecture is verified by a 100-test automated test harness:
         "confidence": "Tier 1: High Confidence (WHO 2023)"
       }
     ]
-  },
-  "structural_analysis": {
-    "pdb_id": "5UHC",
-    "alphafold_id": "AF-P9WGY9-F1",
-    "domain": "Rifampicin Resistance-Determining Region (RRDR)",
-    "physicochemical_deltas": {
-      "delta_volume_angstrom3": 46.8,
-      "delta_hydropathy": 4.4,
-      "delta_charge": 0
-    }
   },
   "sources_searched": ["PubMed", "Europe PMC", "OpenAlex", "CrossRef", "Semantic Scholar", "CARD", "AMRFinderPlus"],
   "citations": [

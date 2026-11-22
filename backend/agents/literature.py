@@ -1,15 +1,3 @@
-"""Query-adaptive PubMed retrieval for the AMR research assistant.
-
-Retrieval is driven by the user's *information need*, not by a gene lookup
-alone. CARD/NCBI are used for identity grounding; PubMed supplies the
-published literature evidence.
-
-The retriever deliberately separates two ideas:
-  1. SEARCH COVERAGE: PubMed can return the complete matching result set.
-  2. ANSWER CONTEXT: only the most relevant evidence records are sent to the
-     LLM, because asking an LLM to read thousands of abstracts is neither
-     efficient nor necessary.
-"""
 import html
 import re
 import time

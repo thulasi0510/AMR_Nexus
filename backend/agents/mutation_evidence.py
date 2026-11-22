@@ -1,16 +1,3 @@
-"""Extract explicitly reported mutation/phenotype statements from relevant literature.
-
-This is a conservative text-extraction layer, not a mutation-effect predictor.
-A paper contributes only if it passes the same content-based assessment used by
-the PubMed filter (agents.mutation_matching.assess_paper): gene + drug + queried
-organism as the subject + a mutation in gene context. Mutations are recognised in
-any accepted notation and reported in the reference's own one-letter form, with
-the wording used by the paper kept in "as_written".
-
-Source classifications are never overwritten: a literature mention of a mutation
-that is graded in the reference keeps the reference grade in
-"reference_classification"; the paper's wording is reported separately.
-"""
 import re
 
 from agents.mutation_matching import AA3, assess_paper, parse_substitution, records_for_matching  # AA3 re-exported for compatibility

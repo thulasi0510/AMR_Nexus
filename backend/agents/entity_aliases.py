@@ -1,16 +1,3 @@
-"""Central organism / antibiotic alias handling.
-
-Every component that needs to decide "does this text mention organism X / drug Y"
-goes through this module, so that:
-
-* rifampin == rifampicin (one canonical entity, many accepted surface forms);
-* organism abbreviations (M. tuberculosis, Mtb, MTBC ...) are accepted;
-* matching uses word boundaries, never raw substrings;
-* a paper whose subject is a DIFFERENT organism can be detected.
-
-Entity lists shown to the user / sent to the planner hold canonical names only.
-Alias expansion happens at match time and when building PubMed queries.
-"""
 import re
 from collections import Counter
 

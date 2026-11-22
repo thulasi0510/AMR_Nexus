@@ -1,4 +1,3 @@
-"""Final report assembly and citation reconciliation for the LangGraph workflow."""
 import html
 import re
 

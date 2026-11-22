@@ -1,11 +1,3 @@
-"""Sequence and Structural Analysis Agent for Antimicrobial Resistance (AMR).
-
-Fulfills:
-- Objective 1: Biological database integration (UniProt, RCSB PDB, AlphaFold).
-- Objective 2: 5-facet characterization (Occurrence, Genetic Context, Sequence Characteristics, Functional Effects, Resistance Associations).
-- Objective 3: Sequence & structural modeling, molecular consequences, and evidence-supported hypotheses for poorly characterized/novel AMR mutations.
-- Objective 4: Computational evidence generation and evidence gap identification.
-"""
 from functools import lru_cache
 import re
 from typing import Any, Dict, Optional

@@ -1,16 +1,3 @@
-"""Notation-aware mutation matching and content-based paper assessment.
-
-One implementation shared by the PubMed filter (literature.py), the evidence
-tiering (evidence_analysis.py) and the literature mutation extractor
-(mutation_evidence.py), so a paper cannot be "relevant" in one stage and
-"direct evidence" in another for different reasons.
-
-Accepted notations for the same substitution:
-  S450L   p.S450L   Ser450Leu   p.Ser450Leu   Ser-450-Leu   S450->L   Ser450→Leu
-and, where a documented numbering scheme exists (amr_lexicon.NUMBERING_SCHEMES),
-the alternative-scheme position (e.g. rpoB S450L in M. tuberculosis == S531L in
-E. coli numbering).
-"""
 import re
 
 from agents.amr_lexicon import NUMBERING_SCHEMES

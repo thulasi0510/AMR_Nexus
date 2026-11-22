@@ -1,9 +1,3 @@
-"""CARD + NCBI entity verification and disambiguation agent.
-
-This module deliberately knows nothing about PubMed, Flask, or LangGraph.
-It receives extracted mentions and returns reference-supported candidates.
-"""
-
 import re
 
 from agents.card_reference import normalize_name, search_card_candidates

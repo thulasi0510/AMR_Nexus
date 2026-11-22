@@ -1,11 +1,3 @@
-"""AMR retrieval-planning agent.
-
-Turns structured query understanding into a source/tool plan. The planner is
-source-agnostic: adding Europe PMC, PMC, OpenAlex, etc. later means adding a
-retrieval agent and registering it here, without rewriting query understanding.
-"""
-
-
 def _has_gene_resolution(understanding):
     return any(r.get("selected") for r in understanding.get("resolutions", []))
 

@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""Optional scholarly-source adapters for mutation-focused AMR retrieval.
-
-The adapters use documented JSON APIs, return a common paper shape, and keep
-provider provenance. They are disabled by default for deterministic local runs;
-set AMR_ADDITIONAL_SOURCES=1 to enable them.
-"""
 import os
 import re
 import requests

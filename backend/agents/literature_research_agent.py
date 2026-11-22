@@ -1,10 +1,3 @@
-"""Dedicated multi-source Literature Research Agent.
-
-This component owns literature discovery orchestration and returns a stable
-report contract to the main AMR LangGraph workflow. It deliberately does not
-resolve entities or generate the final scientific answer; those remain main
-agent responsibilities.
-"""
 from dataclasses import dataclass, field
 from typing import Any
 

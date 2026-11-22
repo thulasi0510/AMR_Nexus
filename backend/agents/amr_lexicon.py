@@ -1,11 +1,3 @@
-"""Small deterministic AMR vocabulary used to stabilize query understanding.
-
-The LLM remains responsible for interpreting the user's question.  This file
-only provides high-confidence lexical aliases for common antibiotics and AMR
-mechanism terms so a missing LLM extraction cannot silently remove a key
-concept from a PubMed query.
-"""
-
 ANTIBIOTIC_ALIASES = {
     "colistin": ["colistin", "polymyxin E"],
     "polymyxin": ["polymyxin", "colistin", "polymyxin E"],

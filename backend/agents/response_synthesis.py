@@ -1,23 +1,3 @@
-"""Evidence-grounded natural-language response synthesis for AMR queries.
-
-Design note (why this file was rewritten): the previous prompt handed the
-LLM a raw json.dumps() of the full understanding/evidence structures,
-truncated at tens of thousands of characters, including every candidate
-paper's full abstract. That is a large, undifferentiated blob for a local
-model to reason over, and in practice it produced exactly the symptom
-reported: a single concatenated paragraph that reads like one paper's
-abstract/conclusion, not a multi-paper synthesis -- and a heavy prompt like
-that also makes an Ollama timeout (falling back to the thin `_fallback`
-answer) far more likely.
-
-This version builds a compact, pre-digested brief instead: each candidate
-paper is shown with its already-computed evidence tier (from
-evidence_analysis.py's exact/family/related/verify alignment), its article
-type, and the 2-3 highest-scoring extracted sentences (from
-literature.py's/evidence_analysis.py's snippet extraction) rather than the
-full abstract. That is both smaller and structurally easier for the model
-to turn into claim-by-claim citations.
-"""
 import html
 import re
 import sys

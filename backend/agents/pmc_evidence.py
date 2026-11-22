@@ -1,4 +1,3 @@
-"""Bounded PMC full-text enrichment agent."""
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from services.pmc_client import fetch_full_text_with_status

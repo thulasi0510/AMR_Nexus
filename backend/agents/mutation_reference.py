@@ -1,11 +1,3 @@
-"""Specialized mutation reference agent.
-
-This agent is intentionally narrow: it retrieves mutation candidates for the
-requested gene + organism + antibiotic. CARD/NCBI establish AMR identity and
-known determinant annotations; the WHO TB catalogue is used conditionally for
-M. tuberculosis drug-resistance queries. It never converts "uncertain" into
-"susceptible".
-"""
 from functools import lru_cache
 import os
 import re

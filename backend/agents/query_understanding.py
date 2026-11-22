@@ -1,14 +1,3 @@
-"""General AMR query-understanding agent.
-
-
-The module separates *what the user asks* from *which database is queried*.
-
-The current release is deliberately restricted to mutation-focused AMR
-
-questions, with resistance/susceptibility as the phenotype layer.
-
-"""
-
 import json
 from functools import lru_cache
 

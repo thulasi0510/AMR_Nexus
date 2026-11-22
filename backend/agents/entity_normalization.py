@@ -1,18 +1,3 @@
-"""Database-backed entity normalization agent.
-
-Organisms -> NCBI Taxonomy
-Antibiotics -> ChEBI 2.0 REST (with local ChEBI OBO fallback)
-
-Rules:
-* One entity per real-world thing: rifampin/rifampicin, "M. tuberculosis" /
-  "Mycobacterium tuberculosis" / "Mtb" collapse to a single canonical name.
-  Accepted aliases are kept in understanding["entity_aliases"] for matching and
-  PubMed query building; they are NOT repeated in the entity lists.
-* A database hit is accepted as the canonical name only when it is an exact
-  name/synonym match. A loosely-similar first hit is recorded but never
-  replaces what the user (or the lexicon) named.
-* A database being unreachable never blocks the pipeline.
-"""
 from agents.entity_aliases import (
     canonical_drug,
     canonical_organism,

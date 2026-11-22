@@ -1,9 +1,3 @@
-"""Evidence-analysis agent for the AMR research assistant.
-
-The layer distinguishes exact-entity evidence from broader family-level evidence
-and from merely related AMR papers.  It does not claim causality or scientific
-quality from keyword overlap alone.
-"""
 import html
 import re
 from agents.entity_aliases import ORGANISM_OK_STATUSES, organism_assessment

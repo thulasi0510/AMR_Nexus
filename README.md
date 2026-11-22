@@ -1,299 +1,398 @@
-# AMR Nexus: Autonomous Multi-Agent Engine for Evidence-Driven Interpretation of Antimicrobial Resistance
+# AMR Nexus: An Agentic AI Multi-Agent System for Retrieval and Structural Interpretation of Antimicrobial Resistance Variants
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![FastAPI/Flask](https://img.shields.io/badge/Backend-Flask%20%7C%20LangGraph-green.svg)](https://github.com/langchain-ai/langgraph)
 [![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-cyan.svg)](https://vitejs.dev/)
-[![LLM](https://img.shields.io/badge/Local%20LLM-Ollama%20LLaMA%203-purple.svg)](https://ollama.com/)
+[![Local LLM](https://img.shields.io/badge/Local%20LLM-Ollama%20LLaMA%203.2-purple.svg)](https://ollama.com/)
 [![Academic](https://img.shields.io/badge/Project-SASTRA%20SCBT%20BIN599-navy.svg)](https://www.sastra.edu/)
-[![Status](https://img.shields.io/badge/Validation-100%25%20Verified-success.svg)]()
+[![Status](https://img.shields.io/badge/Review-Final%20Review%20Delivered-success.svg)]()
 
-**AMR Nexus** is an autonomous, evidence-grounded multi-agent bioinformatics platform designed to provide rigorous, variant-level functional interpretation of antimicrobial resistance (AMR) determinants. Operating on a stateful **Directed Acyclic Graph (DAG)** orchestrated via **LangGraph**, the system bridges the gap between binary genomic determinant detection and actionable clinical phenotyping by coupling **federated literature retrieval across 13 scholarly engines** with **in silico 3D macromolecular structural consequence modeling (PDB, AlphaFold DB, UniProt)**.
+**AMR Nexus** is an open-source, reproducible **Agentic AI Multi-Agent Platform** designed for the autonomous retrieval, evidence-graded stratification, and structural interpretation of antimicrobial resistance (AMR) mutations and determinants. Orchestrated as a stateful **Multi-Agent Directed Acyclic Graph (DAG)** via **LangGraph**, the system bridges the critical diagnostic divide between binary genomic gene detection and actionable variant-level clinical interpretation. It couples **federated literature retrieval across 13 scholarly and scientific endpoints** with a **deterministic biophysical profiling engine (PDB, AlphaFold DB, UniProt)** to deliver auditable, evidence-backed clinical reports without commercial cloud lock-in.
 
-Developed for **BIN599 – Project (Phase 1)** under the Department of Bioinformatics, School of Chemical & Biotechnology (SCBT), SASTRA Deemed to be University, under the guidance of **Dr. Vigneshwar Ramakrishnan, Ph.D.** and **Dr. Suma Mohan, Ph.D.**
+> **Academic Defense & Review:** Developed for **BIN599 – Mini Project - Final Review** under the Department of Bioinformatics, School of Chemical & Biotechnology (SCBT), SASTRA Deemed to be University, under the guidance of **Dr. Vigneshwar Ramakrishnan, Ph.D.** and **Dr. Suma Mohan, Ph.D.**
 
 ---
 
 ## Table of Contents
 
-- [Key Motivations and Innovations](#key-motivations-and-innovations)
-- [System Architecture (10-Node LangGraph State Machine)](#system-architecture-10-node-langgraph-state-machine)
-- [Agent Modules Specification](#agent-modules-specification)
-- [Core Scientific Methodologies](#core-scientific-methodologies)
-  - [1. Five-Facet Variant Characterization](#1-five-facet-variant-characterization)
-  - [2. 3D Macromolecular & Kinetic Modeling](#2-3d-macromolecular--kinetic-modeling)
-  - [3. Three-Tiered Validation Framework](#3-three-tiered-validation-framework)
-  - [4. Automated Confirmatory Wet-Lab Protocols](#4-automated-confirmatory-wet-lab-protocols)
-- [Federated Literature & Database Registry](#federated-literature--database-registry)
-- [Benchmark Results & Case Studies](#benchmark-results--case-studies)
-  - [Experiment 1: Universal rpoB Query in M. tuberculosis](#experiment-1-universal-rpob-query-in-m-tuberculosis)
-  - [Experiment 2: Novel/Uncatalogued Variant blaKPC-2 T243M](#experiment-2-noveluncatalogued-variant-blakpc-2-t243m)
-  - [Experiment 3: blaTEM-1 Beta-Lactamase Mutation Matrix](#experiment-3-blatem-1-beta-lactamase-mutation-matrix)
-  - [Experiment 4: Commercial Hosted LLM Comparison (Refusal Bypass)](#experiment-4-commercial-hosted-llm-comparison-refusal-bypass)
+- [Research Motivation & Background](#research-motivation--background)
+- [Aim and Objectives](#aim-and-objectives)
+- [Studies that Informed the Design](#studies-that-informed-the-design)
+- [Agentic System Architecture (LangGraph Multi-Agent Workflow)](#agentic-system-architecture-langgraph-multi-agent-workflow)
+- [The 10 Specialized Autonomous Agents](#the-10-specialized-autonomous-agents)
+- [The Three Core Scientific Methodologies](#the-three-core-scientific-methodologies)
+  - [Methodology 1: Input Harmonization, Ontology Grounding & Federated Retrieval](#methodology-1-input-harmonization-ontology-grounding--federated-retrieval)
+  - [Methodology 2: Evidence Extraction, Attribution Guardrails & Synthesis](#methodology-2-evidence-extraction-attribution-guardrails--synthesis)
+  - [Methodology 3: Biophysical Profiling, Structural Scaffolds & Universal Fallback](#methodology-3-biophysical-profiling-structural-scaffolds--universal-fallback)
+- [Federated Literature & Database Infrastructure (13 Endpoints)](#federated-literature--database-infrastructure-13-endpoints)
+- [Empirical Results Across 7 Query Categories](#empirical-results-across-7-query-categories)
+  - [Category 1: Full Clinical Benchmark Query (`rpoB S450L`)](#category-1-full-clinical-benchmark-query-rpob-s450l)
+  - [Category 2: Minimalist / Shorthand & Candidate Expansion (`ompK`)](#category-2-minimalist--shorthand--candidate-expansion-ompk)
+  - [Category 3: Mechanistic & Pathway Query (`blaKPC-2` Mechanism)](#category-3-mechanistic--pathway-query-blakpc-2-mechanism)
+  - [Category 4: Head-to-Head Comparative AMR Query (`MexAB-OprM` vs `AdeABC`)](#category-4-head-to-head-comparative-amr-query-mexab-oprm-vs-adeabc)
+  - [Category 5: Structural & Suppressor Mutation Query (`TEM-1` Suppressors)](#category-5-structural--suppressor-mutation-query-tem-1-suppressors)
+  - [Category 6: Target Alteration / QRDR Mutation (`gyrA S83L in E-coli`)](#category-6-target-alteration--qrdr-mutation-gyra-s83l-in-e-coli)
+  - [Category 7: Domain Guardrail & Out-of-Scope Rejection (`Explain quantum gravity`)](#category-7-domain-guardrail--out-of-scope-rejection-explain-quantum-gravity)
+- [Key Research Findings & Competitive Evaluation](#key-research-findings--competitive-evaluation)
+  - [1. Commercial LLM Refusal Bypass (ChatGPT & Claude Censorship)](#1-commercial-llm-refusal-bypass-chatgpt--claude-censorship)
+  - [2. Syntactic Clause-Boundary Attribution Guardrail](#2-syntactic-clause-boundary-attribution-guardrail)
+  - [3. Historical Numbering Harmonization (*E. coli* $\leftrightarrow$ *M. tb* $-81$ Offset)](#3-historical-numbering-harmonization-e-coli-leftrightarrow-m-tb--81-offset)
+  - [4. Multi-Source Citation Discrepancy Audit](#4-multi-source-citation-discrepancy-audit)
+  - [5. Software Verification & Regression Test Suite](#5-software-verification--regression-test-suite)
+- [Implementation Status & Deliverables Matrix](#implementation-status--deliverables-matrix)
+- [Limitations & Future Scope](#limitations--future-scope)
 - [Installation and Setup](#installation-and-setup)
-  - [Prerequisites](#prerequisites)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
 - [API Reference and Usage](#api-reference-and-usage)
-- [Project Verification and Testing](#project-verification-and-testing)
+- [References](#references)
 - [Project Team and Acknowledgements](#project-team-and-acknowledgements)
 
 ---
 
-## Key Motivations and Innovations
+## Research Motivation & Background
 
-1. **Beyond Binary Gene Detection:** Traditional surveillance pipelines (e.g., standard BLAST/HMM searches) report the presence or absence of resistance genes but fail to interpret how specific single nucleotide polymorphisms (SNPs) alter catalytic turnover ($k_{cat}$), substrate binding affinity ($K_m$), or in vivo bacterial fitness.
-2. **Elimination of Hallucinations:** Unlike general-purpose conversational LLMs that fabricate authors, PMIDs, or non-existent mutation effects, AMR Nexus enforces strict provenance traceability: every clinical and biological statement is anchored directly to extracted literature passages with verified PMIDs and DOIs.
-3. **Bypassing Commercial LLM Safety Refusals:** Leading hosted LLMs (such as ChatGPT-4o and Claude Opus) enforce aggressive, naive content moderation filters that frequently flag legitimate medical queries regarding pathogen resistance determinants (e.g., *Mycobacterium tuberculosis* *rpoB* or *Klebsiella pneumoniae* *bla*KPC-2) as biological safety risks and refuse execution. AMR Nexus runs locally on open-weight quantized models (LLaMA 3 8B), ensuring 100% uptime, zero refusals, and total patient data privacy.
-4. **Addressing Structural Risk with Empirical Safeguards:** Pure computational structural predictions carry inherent risk. AMR Nexus safeguards against speculative conclusions by enforcing a **Three-Tiered Validation Framework** and automatically prescribing a **standardized 5-step confirmatory wet-lab validation protocol** for all in silico hypotheses.
+* **The Global AMR Crisis:** Bacterial antimicrobial resistance was associated with **4.71 million deaths globally in 2021** (1.14 million directly attributable; *Lancet / GBD 2021*).
+* **Five Biological Routes to Resistance:** AMR develops through (1) drug-inactivating enzymes, (2) altered targets, (3) active efflux, (4) reduced membrane permeability, and (5) genetic variation / horizontal gene transfer (HGT) (*Blair et al., 2015*).
+* **Why Variant-Level Evidence Matters:** Detecting an AMR gene or determinant alone is insufficient. A specific point mutation requires coordinate validation, sequence context, structural context, phenotype evidence, and provenance across sources.
+* **Finding a Gene $\ne$ Having Evidence for a Variant:** Identifying an AMR determinant does not reveal what a particular amino acid substitution does. AMR Nexus retrieves and grades the evidence—it does not hallucinate effects.
+* **Evidence Classification by Strength:** Findings must be stratified transparently into:
+  $$\text{Established} \;\big|\; \text{Database-Supported} \;\big|\; \text{Computational Hypothesis} \;\big|\; \text{Insufficient}$$
 
 ---
 
-## System Architecture (10-Node LangGraph State Machine)
+## Aim and Objectives
 
-AMR Nexus executes its query-to-report pipeline as a deterministic Directed Acyclic Graph (DAG) state machine. A single immutable state container (`ResearchState`) transitions across ten dedicated agent nodes:
+### AIM
+To develop an **Agentic AI-based evidence retrieval and interpretation framework** for comprehensive, traceable, and evidence-aware analysis of mutations and variants in antimicrobial resistance (AMR) genes by integrating information from multiple scientific and biological resources.
+
+### OBJECTIVES
+1. **Multi-Source Retrieval:** To retrieve comprehensive information on AMR gene mutations and variants from multiple authoritative scientific literature sources and biological databases in response to user-defined queries.
+2. **Evidence Integration:** To identify, characterize, and integrate available evidence for AMR mutations and variants, including their reported occurrence, genetic context, sequence characteristics, functional effects, and resistance associations.
+3. **Biophysical & Structural Scaffolding:** To incorporate sequence and structural information to investigate possible molecular consequences of identified or poorly characterized AMR mutations and variants and generate evidence-supported hypotheses where direct evidence is unavailable.
+4. **Agentic Orchestration & Traceable Reporting:** To develop an agentic workflow that dynamically coordinates relevant retrieval and analytical tasks and generates a traceable evidence-based report distinguishing established findings, database-supported information, computational evidence, hypotheses, and evidence gaps.
+
+> *Scope:* Objective 3 is addressed through sequence-level mutation mapping, residue physicochemical delta metrics ($\Delta V, \Delta q, \Delta H$), and a curated structural registry of 12 major AMR families; full atomic-coordinate docking remains an external future extension.
+
+---
+
+## Studies that Informed the Design
+
+AMR Nexus builds upon and synthesizes foundations across clinical genomics, structural bioinformatics, and agentic literature review frameworks:
+
+| Study | Focus | Approach | Relevance to this Work |
+| :--- | :--- | :--- | :--- |
+| **De Oliveira et al. (2020)** | AMR mechanisms in ESKAPE pathogens | Molecular and genomic review | Mechanistic classification of enzymatic and target-site resistance |
+| **Tunstall et al. (2020)** | Genomic and structural interpretation | Sequence, genomic and structural methods | Foundation for coupling sequence variation with structural context |
+| **Yee et al. (2021)** | Genotype–phenotype discordance | Troubleshooting framework | Emphasizes evidence tiering when sequencing and MIC assays disagree |
+| **Priyamvada et al. (2022)** | Computational approaches to AMR | Review of structural and systems tools | Framework for integrating computational biophysics with clinical targets |
+| **Florensa et al. (2022)** | Resistance genes & point mutations | ResFinder and PointFinder | Gold-standard baseline for identifying known chromosomal mutations |
+| **Calvet-Seral et al. (2023)** | Mutation–resistance links | Engineered mutations + phenotype testing | Establishes criteria for what constitutes validated empirical evidence |
+| **Rose et al. (2023)** | Genotype–phenotype concordance | WGS vs. phenotypic susceptibility testing | Defines limits of purely genotype-based prediction pipelines |
+| **Yagimoto et al. (2024)** | Resistance mechanism prediction | Protein language models (pLM) | Highlights value of sequence-based residue modeling without hallucinations |
+| **Sherry et al. (2025)** | AMR genomics and surveillance | Translational review | Identifies bottlenecks in turning raw sequencing reads into clinical insights |
+| **Zhang et al. (2025)** | Biomedical evidence retrieval | Large-scale knowledge graph (NLP) | Scalable evidence extraction and multi-source relationship mapping |
+| **Green et al. (2025)** | Structural context of mutations | Experimental & AlphaFold structures (ML) | Confirms structural context aids interpretation when literature is thin |
+| **Lee et al. (2025)** | Agentic AI literature synthesis | **A4SLR Framework** with sub-agents | **Primary architectural foundation for autonomous agentic task decomposition** |
+
+*Key Gap Addressed:* None of the surveyed systems provides an Agentic AI multi-agent architecture that autonomously unifies curated database lookups, multi-source literature retrieval, and biophysical structural interpretation into a traceable, evidence-graded report.
+
+---
+
+## Agentic System Architecture (LangGraph Multi-Agent Workflow)
+
+AMR Nexus models the scientific analysis process as a **stateful multi-agent directed graph** compiled via **LangGraph**:
 
 ```
-[ User Query Intake ]
-         │
-         ▼
-[ 1. Query Understanding Agent ] ──── Extracts gene, mutation, host organism, drug context
-         │
-         ▼
-[ 2. Entity Normalization Agent ] ─── Standardizes aliases and codon numbering schemes
-         │
-         ▼
-[ 3. Gene Verification Agent ] ────── Validates targets against CARD ARO & AMRFinderPlus
-         │
-         ▼
-[ 4. Retrieval Planning Agent ] ───── Formulates multi-strategy, domain-targeted search queries
-         │
-         ▼
-[ 5. Mutation Reference Agent ] ───── Pre-indexes WHO TB Mutation Catalogue 2023 & CARD alleles
-         │
-         ▼
-[ 6. Literature Retrieval Agent ] ─── Parallel federated queries across 13 scholarly engines
-         │
-         ▼
-[ 7. Structural Analysis Agent ] ──── Maps PDB/AlphaFold coordinates; computes ΔV, Δq, and kinetics
-         │
-         ▼
-[ 8. Validation Tiering Agent ] ───── Assigns formal validation tiers (Tier 1, 2, or 3) & confidence
-         │
-         ▼
-[ 9. Wet-Lab Protocol Agent ] ─────── Generates 5-step confirmatory laboratory assay procedures
-         │
-         ▼
-[ 10. Evidence Synthesis Agent ] ──── Compiles 5-facet characterization report with auditable excerpts
-         │
-         ▼
-[ Interactive UI / API Response ]
+                       [ User Query Intake ]
+                                 │
+                                 ▼
+                 [ 1. Query Understanding Agent ] ◄── Cognitive LLaMA-3.2 + Regex
+                                 │
+                                 ▼
+                 [ 2. Entity Normalization Agent ] ◄── CARD ARO & NCBI Taxonomy
+                                 │
+                                 ▼
+                 [ 3. AMR Retrieval Planner Agent ] ◄── Dynamic Sub-task Decomposition
+                                 │
+                                 ▼
+                 [ Routing & Guardrail Gate ]
+                    ├── Out of Scope ──────────────────► [ Immediate Guardrail Exit ]
+                    ├── No Variant / Mechanism Alone ─► [ Route Direct to Structural Agent ]
+                    └── Mutation Variant Present ─────► [ Route to Reference Agent ]
+                                 │
+          ┌──────────────────────┴──────────────────────┐
+          ▼                                             ▼
+[ 4. Mutation Reference Agent ]             [ 5. Structural Analysis Agent ]
+  WHO TB (48k) & AMRFinderPlus                12 Scaffolds + Dynamic UniProt Fallback
+          │                                             │
+          └──────────────────────┬──────────────────────┘
+                                 │
+                                 ▼
+                 [ 6. Literature Research Agent ] ◄── Federated 13 Scholarly Endpoints
+                                 │
+                                 ▼
+                 [ 7. PMC Evidence Enrichment Agent ] ◄ Full-Text Section Parsing
+                                 │
+                                 ▼
+                 [ 8. Evidence Analysis Agent ] ◄──── Clause Bounds & 4-Tier Scoring
+                                 │
+                                 ▼
+                 [ 9. Response Synthesis Agent ] ◄── Evidence-Conditioned LLaMA-3.2
+                                 │
+                                 ▼
+                 [ 10. Report Generation Agent ] ◄── Citation Reconciliation & Traces
+                                 │
+                                 ▼
+                 [ Interactive UI / Auditable Report ]
 ```
 
----
-
-## Agent Modules Specification
-
-The core logic resides within `backend/agents/`:
-
-| Module | Purpose & Functional Ownership |
-| :--- | :--- |
-| `query_understanding.py` | Performs entity extraction (gene, variant, pathogen, drug) from unstructured natural language queries using rule-based parsing and local LLaMA 3. |
-| `entity_normalization.py` | Normalizes non-standard mutation strings (e.g., `p.S450L`, `Ser450Leu`, `Ser531Leu E. coli`) into standardized canonical coordinate tuples `(wt_aa, position, mut_aa)`. |
-| `amr_lexicon.py` | Fast deterministic lexical vocabulary mapping common antibiotic drug classes, synonyms, and mechanism keywords. |
-| `entity_aliases.py` | Comprehensive biological synonym dictionary resolving historical gene names, beta-lactamase designations, and taxonomic aliases. |
-| `gene_verification.py` | Interrogates local and remote registries of the **CARD Antibiotic Resistance Ontology (ARO)** and **NCBI AMRFinderPlus** to verify biological legitimacy. |
-| `planner.py` | Formulates targeted, multi-tiered search plans targeting functional protein domains, resistance phenotypes, and clinical cohorts. |
-| `mutation_reference.py` | Fast in-memory lookup across pre-curated reference tables, including the **WHO TB Mutation Catalogue (2023)** and verified CARD variant sets. |
-| `literature.py` & `source_adapters.py` | Asynchronous, concurrent multi-source retrieval engine federating queries across 13 scholarly providers with deduplication and provenance tracking. |
-| `evidence_analysis.py` & `pmc_evidence.py` | Evaluates retrieved document passages, matching mutation entities in sentence-level context and validating excerpt integrity against source text. |
-| `structural_analysis.py` | Biophysical modeling engine: maps targets to **PDB** and **AlphaFold DB**, calculates atomic volume shifts ($\Delta V$), hydropathy, and charge ($\Delta q$), deduces steric clashes, predicts kinetic/fitness impacts, assigns validation tiers, synthesizes wet-lab protocols, and provides dynamic UniProt REST API fallback. |
-| `response_synthesis.py` | Synthesizes the structured executive summary, clinical deductions, and 5-facet matrix while strictly ensuring all claims are grounded in auditable citations. |
-| `report_generator.py` | Assembles final serialized JSON payload for frontend consumption and report compilation. |
-| `router.py` | Orchestrates LangGraph state transitions, conditional edges, and graceful error fallbacks. |
+### Architectural Principles:
+* **The Agentic Cognitive Principle:** Local LLaMA-3.2 serves strictly as a *cognitive reasoning engine* for query understanding and narrative synthesis. All database lookups, coordinate translations, biophysical math, and citation validations are executed by *deterministic tool agents*.
+* **Deterministic Guardrails:** Strict grammatical clause-boundary attribution prevents cross-gene mutation hallucination.
 
 ---
 
-## Core Scientific Methodologies
+## The 10 Specialized Autonomous Agents
 
-### 1. Five-Facet Variant Characterization
+| Agent Node | Role & Cognitive Function | Autonomous Tools & Registries | State Artifacts Generated |
+| :---: | :--- | :--- | :--- |
+| **Agent 1** | **Query Understanding Agent** | Cognitive parsing via local LLaMA-3.2, regex tokenizers, 2-pass CARD prefix matching | Extracted entities (genes, mutations, drugs, organisms) and intent classification |
+| **Agent 2** | **Entity Normalization Agent** | Ontology grounding: maps synonyms to CARD ARO IDs and NCBI Taxonomy | Canonical entity resolutions and permanent ARO accession numbers |
+| **Agent 3** | **AMR Retrieval Planner Agent** | Dynamic task decomposition: creates targeted multi-source search plans | Structured execution plan, query formulations, and provider dispatch routing |
+| **Agent 4** | **Mutation Reference Agent** | Authoritative clinical lookups across WHO TB (48k records) and AMRFinderPlus (10k) | Clinical resistance confidence tiers, odds ratios, and catalogue citations |
+| **Agent 5** | **Structural Analysis Agent** | First-principles residue deltas ($\Delta V, \Delta q, \Delta H$) & 12-family catalytic pocket mapping | Physicochemical profile, functional domain mapping, and PDB/AlphaFold links |
+| **Agent 6** | **Literature Research Agent** | Parallel asynchronous federated querying across live scholarly literature APIs | Deduplicated literature pool with PMIDs, PMCIDs, DOIs, and abstracts |
+| **Agent 7** | **PMC Evidence Enrichment Agent**| Full-text open-access PMC XML retrieval; extracts methods/results sections | Enriched experimental full-text passages (MIC tables, enzyme kinetics) |
+| **Agent 8** | **Evidence Analysis Agent** | Sentence-level proximity scoring, clause-boundary gating, and 4-tier grading | Scored evidence excerpts classified into Direct, Family, Related, or Weak |
+| **Agent 9** | **Response Synthesis Agent** | Evidence-conditioned narrative synthesis strictly anchored to retrieved text | Cited scientific narrative response with traceable citation markers `[1]`, `[2]` |
+| **Agent 10** | **Report Generation Agent** | Bidirectional citation reconciliation against verified PMIDs; compiles execution audit | Interactive JSON payload, structured tables, source chips, and clickable URLs |
 
-Every resistance variant processed by AMR Nexus is analyzed across five standardized biological facets:
+---
 
-1. **Occurrence:** Clinical frequency, geographic surveillance distribution, and lineage-specific prevalence (e.g., Beijing lineage L2 clustering).
-2. **Genetic Context:** Genomic environment, including chromosomal loci versus Mobile Genetic Elements (MGEs: plasmids, integrons, composite transposons such as Tn3, Tn4401, Tn1546).
-3. **Sequence Characteristics & Biophysics:** Codon position, standard nomenclature, and physicochemical property shifts ($\Delta V$ in $\text{\AA}^3$, hydropathy delta, and net charge $\Delta q$).
-4. **Functional Effects on Target Biology:** Specific alterations to catalytic turnover ($k_{cat}$), substrate binding affinity ($K_m$), catalytic efficiency ($k_{cat}/K_m$), active-site cleft accessibility, and thermodynamic folding stability ($\Delta\Delta G$).
-5. **Resistance Associations:** Phenotypic antimicrobial susceptibility profile, minimum inhibitory concentration (MIC) elevation multiples, and official regulatory/diagnostic gradings (e.g., WHO Grade 1 vs. Interim).
+## The Three Core Scientific Methodologies
 
-### 2. 3D Macromolecular & Kinetic Modeling
+AMR Nexus operates on a unified, query-agnostic 3-part scientific methodology:
 
-The structural analysis module models residue-level perturbations using high-resolution experimental coordinates (PDB) and AlphaFold DB predictions:
+```
+Methodology (Part 1): Input Harmonization & Federated Retrieval
+       │
+       ▼
+Methodology (Part 2): Evidence Extraction & Attribution Guardrails
+       │
+       ▼
+Methodology (Part 3): Biophysical Profiling & Universal Structural Fallback
+```
 
-- **Volume Delta ($\Delta V$ in $\text{\AA}^3$):** Derived from crystallographic van der Waals residue volumes (Chothia, 1975).
-  - $\Delta V > +30\text{ \AA}^3$: Severe steric clash; pocket occlusion; loop displacement.
-  - $\Delta V < -30\text{ \AA}^3$: Cavity creation; destabilization of core hydrophobic packing.
-- **Electrostatic Remodeling ($\Delta q$):** Charge changes at pH 7.4 disrupting salt bridges or altering ligand trapping kinetics.
-- **Enzyme Kinetics ($k_{cat}/K_m$):** Predicts active-site narrowing versus active-site expansion (e.g., expanding penicillinase cleft to accommodate bulky oxyimino-cephalosporins in ESBLs).
-- **Thermodynamic Stability & Epistasis ($\Delta\Delta G$):** Evaluates primary destabilization fitness penalties and secondary global suppressor mutations (e.g., TEM-1 M182T restoring stability).
+### Methodology 1: Input Harmonization, Ontology Grounding & Federated Retrieval
+* **Universal Input Handling:** Ingests any query shape—standard HGVS (e.g., `p.Ser450Leu`), 1-letter (`S450L`), 3-letter (`Ser450Leu`), colloquial gene synonyms (`TEM1`), or conceptual keywords (`efflux pump`).
+* **Ontology Grounding (CARD & NCBI):** Two-pass fuzzy prefix matching (score $\ge 80$) resolves colloquial entities to permanent ontologies (`TEM1` $\rightarrow$ `TEM-1`, `ARO:3000873`) before search dispatch, ensuring deterministic reproducibility.
+* **Federated Multi-Provider Architecture:** Dispatches asynchronous parallel queries across 13 live scholarly and reference endpoints.
+* **Hierarchical Deduplication:** Merges candidate papers deterministically: $\text{PMID} \rightarrow \text{PMCID} \rightarrow \text{DOI} \rightarrow \text{Normalized Title}$.
 
-### 3. Three-Tiered Validation Framework
+### Methodology 2: Evidence Extraction, Attribution Guardrails & Synthesis
+* **Sentence-Level Scoring:** Analyzes candidate abstract sentences for co-presence of target gene, variant, antibiotic, and quantitative phenotype (e.g., MIC fold-change).
+* **Universal 4-Tier Evidence Stratification:**
+  * **Direct Evidence:** Exact entity match and experimentally confirmed resistance association in the cited paper.
+  * **Family-Context Evidence:** Phenotypic mechanism established at the parent gene family or operon level.
+  * **Related Evidence:** Overlapping functional context (e.g., co-resistance, cross-class resistance mechanisms).
+  * **Weak / Insufficient:** Distant proximity or ambiguous attribution; flagged for mandatory expert review.
+* **Syntactic Clause-Boundary Attribution Guardrail:** Segments multi-gene clinical sentences at grammatical clause boundaries, completely preventing co-occurring mutations from leaking across adjacent genes.
+* **Evidence-Conditioned Synthesis:** LLaMA-3.2 is constrained to synthesize scientific claims strictly using retrieved, evidence-scored passages with bidirectional citation reconciliation.
 
-To mitigate the scientific risks associated with unverified computational inferences, every finding is graded into a strict validation tier:
+### Methodology 3: Biophysical Profiling, Structural Scaffolds & Universal Fallback
+* **Universal Residue-Property Model:** Evaluates any point mutation across any bacterial protein from sequence data alone:
+  * **Volume Perturbation ($\Delta V$):** Chothia van der Waals volumes ($\Delta V = V_{\text{mut}} - V_{\text{wt}}$); detects steric clash ($\Delta V > +30\text{ \AA}^3$), crowding ($+12\text{ to }+30$), or cavity creation ($< -30\text{ \AA}^3$).
+  * **Electrostatic Delta ($\Delta q$):** Computes net charge transitions across physiological pH (Arg/Lys $+1$, Asp/Glu $-1$, His $+0.1$, neutral $0$).
+  * **Hydropathy Shift ($\Delta H$):** Kyte-Doolittle hydropathy scale delta evaluating hydrophobic core disruption or active-site desolvation.
+* **Dual-Track Structural Architecture:**
+  * **Track A (Curated Benchmark Scaffolds):** 12 high-priority surveillance families (*rpoB, blaKPC, blaTEM, gyrA, etc.*) mapped to verified crystallographic structures (PDB 6D18 at 1.35 Å, 5UHC) and catalytic pocket boundaries.
+  * **Track B (Dynamic UniProt REST API Fallback):** For uncurated, novel, or comparative genes, queries `rest.uniprot.org` in real time to fetch canonical sequence length, domain annotations, and AlphaFold accessions (`AF-{acc}-F1`).
+* **Universal Numbering Harmonization:** Harmonizes cross-species numbering offsets (*E. coli* $\leftrightarrow$ *M. tuberculosis* $-81$) and enforces sequence length bounds (*rejects mutations exceeding coding capacity*).
 
-| Validation Tier | Confidence Score | Empirical & Structural Criteria |
+---
+
+## Federated Literature & Database Infrastructure (13 Endpoints)
+
+AMR Nexus federates retrieval across **10 scholarly literature/preprint providers** + **3 curated biological reference registries**:
+
+| # | Endpoint / Database | Protocol & Technology | Role in AMR Nexus |
+| :---: | :--- | :--- | :--- |
+| **1** | **PubMed / MEDLINE** | NCBI Entrez E-Utilities (`esearch`, `efetch`) | Primary gold-standard biomedical peer-reviewed literature |
+| **2** | **Europe PMC** | EMBL-EBI REST API | Global open-access abstracts & European surveillance reports |
+| **3** | **PMC Full-Text XML** | Europe PMC Open-Access Full-Text REST | Deep section parsing (methods/results) for explicit MIC numbers |
+| **4** | **OpenAlex** | OpenAlex Open Science Graph REST API | Index of 250M+ scientific works, institutional citations, and preprints |
+| **5** | **CrossRef** | CrossRef Metadata Search REST API | Digital Object Identifier (DOI) validation & publisher metadata |
+| **6** | **Semantic Scholar** | Allen Institute Academic Graph API | AI-powered citation graph; surfaces highly cited influential papers |
+| **7** | **DOAJ** | Directory of Open Access Journals API | Peer-reviewed open-access antimicrobial research coverage |
+| **8** | **bioRxiv** | Cold Spring Harbor Laboratory Preprint API | Early-warning detection of newly reported emerging AMR variants |
+| **9** | **medRxiv** | Health Sciences Preprint API | Emerging clinical outbreak reports and hospital resistance studies |
+| **10** | **arXiv (q-bio)** | Cornell arXiv API | Quantitative biology & computational structural modeling preprints |
+| **11** | **CARD** | Local ARO JSON Inverted Index | Canonical ontology grounding (9,027 resistance determinants) |
+| **12** | **NCBI AMRFinder & WHO**| Curated Reference Binary Index | 10,163 AMRFinderPlus records + 48,152 WHO TB clinical variant tiers |
+| **13** | **UniProt & AlphaFold DB** | UniProt REST API (`rest.uniprot.org`) | Real-time sequence length, domain boundaries & 3D structure accessions |
+
+---
+
+## Empirical Results Across 7 Query Categories
+
+AMR Nexus was evaluated across diverse query archetypes, proving that its agentic architecture generalizes across the entire spectrum of surveillance inquiries:
+
+### Category 1: Full Clinical Benchmark Query (`rpoB S450L`)
+* **Query:** `"Which mutations in rpoB are associated with rifampicin resistance in Mycobacterium tuberculosis?"`
+* **Output:** Maps `rpoB` to CARD `ARO:3003294`; harmonizes *E. coli* position 531 to *M. tb* 450 ($-81$ offset); matches **WHO TB Catalogue Tier 1 (Odds Ratio > 10, High Confidence)**; annotates catalytic RRDR pocket with $+4.4$ hydropathy jump; compiles 12 deduplicated citations with clickable PMIDs.
+
+### Category 2: Minimalist / Shorthand & Candidate Expansion (`ompK`)
+* **Query:** `"ompK"`
+* **Output:** Evaluates 4-letter shorthand without crashing; runs 2-pass CARD prefix matching (score $\ge 80$); automatically surfaces candidate homologs **ompK35** (`ARO:3005085`) and **ompK36** (`ARO:3005086`); retrieves outer-membrane porin constriction evidence and carbapenem permeability reduction.
+
+### Category 3: Mechanistic & Pathway Query (`blaKPC-2` Mechanism)
+* **Query:** `"What is the mechanism of resistance of KPC-2 in Klebsiella pneumoniae?"`
+* **Output:** LangGraph planner detects `resistance_mechanism` intent and bypasses mutation matcher; classifies as Ambler Class A serine carbapenemase using active-site Ser70 nucleophilic attack; details carbapenem hydrolysis kinetics alongside avibactam inhibition constants ($K_i$); links to ultra-high-resolution crystal structure (PDB **6D18**, 1.35 Å).
+
+### Category 4: Head-to-Head Comparative AMR Query (`MexAB-OprM` vs `AdeABC`)
+* **Query:** `"Compare MexAB-OprM and AdeABC efflux pumps in Pseudomonas and Acinetobacter"`
+* **Output:** Planner decomposes query into parallel retrieval tracks; dispatches simultaneous queries for both pump systems; synthesizes a structured comparative table contrasting Transporter Family (RND), Energy Source (Proton-motive force $\text{H}^+$ antiport), and Resistance Spectrum (intrinsic vs. acquired high-level tigecycline resistance).
+
+### Category 5: Structural & Suppressor Mutation Query (`TEM-1` Suppressors)
+* **Query:** `"TEM1 mutations"`
+* **Output:** Differentiates primary active-site ESBL mutations (R164S in the $\Omega$-loop) from secondary global suppressors (**M182T**); identifies that M182T is located $\approx 17\text{ \AA}$ distant from the catalytic pocket and restores thermodynamic folding stability ($\Delta\Delta G$) without altering substrate chemistry.
+
+### Category 6: Target Alteration / QRDR Mutation (`gyrA S83L in E-coli`)
+* **Query:** `"gyrA S83L in E-coli"`
+* **Output:** Normalizes hyphenated `"E-coli"` to *Escherichia coli* (NCBI Taxonomy ID: 562); maps residue 83 into the **Quinolone Resistance-Determining Region (QRDR)** on the $\alpha 4$ helix of DNA gyrase; calculates the polar-to-hydrophobic shift ($\Delta H = +4.6$) that breaks the magnesium-water bridge necessary for ciprofloxacin binding.
+
+### Category 7: Domain Guardrail & Out-of-Scope Rejection (`Explain quantum gravity`)
+* **Query:** `"Explain quantum gravity"`
+* **Output:** Stage 1 domain classifier screens tokens against MeSH AMR ontologies and detects zero antimicrobial relevance ($\text{score} < 0.10$); instantly assigns `domain = "out_of_scope"` and halts execution in milliseconds with a polite redirection dialog, consuming **zero external API calls and zero LLM GPU tokens**.
+
+---
+
+## Key Research Findings & Competitive Evaluation
+
+### 1. Commercial LLM Refusal Bypass (ChatGPT & Claude Censorship)
+When identical benchmark surveillance queries (*rpoB mutations in Mycobacterium tuberculosis*) were submitted to commercial hosted frontier models:
+* **ChatGPT-4o (ChatGPT Go):** **REFUSED TO ANSWER.** Execution was blocked with an automated *"possible biological safety risk"* refusal banner.
+* **Claude 3.5 Sonnet / Opus (ClaudeScience):** **REFUSED TO ANSWER.** Execution was halted with a `"Chat Paused"` biosecurity refusal flag.
+* **AMR Nexus (Local):** **100% Successful Execution.** Delivered the complete WHO TB Catalogue clinical grades and 12 verified PubMed citations in **45.5 s**.
+* *Significance:* Commercial cloud LLMs enforce blunt, over-sensitive CBRN biosecurity filters that mistake legitimate academic tuberculosis surveillance for biological weapon proliferation. AMR Nexus operates locally, privately, and with zero censorship.
+
+### 2. Syntactic Clause-Boundary Attribution Guardrail
+* *The Problem:* Multi-gene sentences in clinical literature frequently lead to cross-gene attribution errors (e.g., attributing *ddl* mutation `Ser210Tyr` to *vanA*, or ribosomal `G2576T` to *vanA*).
+* *The Solution:* AMR Nexus segments sentences at syntactic clause boundaries, ensuring mutations attach strictly to their true parent gene. Furthermore, sequence length sanity filters reject coordinates exceeding protein coding capacity (e.g., rejecting position 2576 for the 343 aa VanA protein).
+
+### 3. Historical Numbering Harmonization (*E. coli* $\leftrightarrow$ *M. tb* $-81$ Offset)
+* Historical literature cites *rpoB* codon 526/531 (*E. coli* numbering), while WHO guidelines use 445/450 (*M. tb* numbering).
+* AMR Nexus features an automated $-81$ coordinate translation engine that automatically harmonizes the numbering schemes and cross-references the 48,152-record WHO 2023 Catalogue.
+
+### 4. Multi-Source Citation Discrepancy Audit
+* An empirical audit of the 8 primary *rpoB* literature references revealed that **6 out of 8 references from open-access aggregator APIs had mismatched DOIs** (pointing to errata or book chapters), despite having 100% accurate PubMed IDs (PMIDs).
+* AMR Nexus overcomes this by enforcing a hierarchical reconciliation pipeline ($\text{PMID} \rightarrow \text{PMCID} \rightarrow \text{DOI} \rightarrow \text{Title}$), guaranteeing genuine, clickable PubMed links for every cited claim.
+
+### 5. Software Verification & Regression Test Suite
+The architecture is verified by a 100-test automated test harness:
+* **12/12 PASS:** Comprehensive Objective Suite (`test_all_objectives_comprehensive.py`)
+* **10/10 PASS:** Universal AMR Query Suite (`test_universal_amr_queries.py`)
+* **24/24 PASS:** Evidence Retrieval & Attribution Regression Suite (`test_regression_retrieval_eval.py`)
+* **66/66 PASS:** Full Backend Unit Test Suite (`backend/tests/`)
+
+---
+
+## Implementation Status & Deliverables Matrix
+
+| Capability / Agent Node | Operational Status | Implementation Basis & Deliverable |
 | :--- | :---: | :--- |
-| **Tier 1: Confirmed Experimental Association** | **0.90 – 1.00** | Explicitly cataloged in WHO TB Mutation Catalogue (2023), CARD curated alleles, or CLSI guidelines; supported by published experimental MIC testing and peer-reviewed clinical cohorts. |
-| **Tier 2: Homologous In Silico Association** | **0.70 – 0.89** | Located at a known functional hotspot in a characterized homologous enzyme (e.g., TEM vs. SHV); supported by crystal structures and steric clash modeling; pending direct organismal MIC verification. |
-| **Tier 3: In Silico Structural Hypothesis** | **0.40 – 0.69** | Novel or uncatalogued variant without published phenotypic literature; deduced strictly from 3D macromolecular topology, steric collision, and folding stress; requires mandatory laboratory confirmation. |
-
-### 4. Automated Confirmatory Wet-Lab Protocols
-
-Whenever a variant is classified as Tier 2 or Tier 3, AMR Nexus automatically synthesizes a standardized 5-step experimental protocol:
-
-1. **Site-Directed Mutagenesis:** QuikChange PCR with overlapping mutagenic primers and *DpnI* restriction digestion of methylated template DNA.
-2. **Recombinant Overexpression:** Subcloning into pET-28a(+) with N-terminal His6-tag; expression in *E. coli* BL21(DE3) induced with 0.5 mM IPTG at 18 °C.
-3. **IMAC Protein Purification:** Ni-NTA affinity chromatography; step-elution with imidazole (50–300 mM); dialysis to physiological buffer; SDS-PAGE verification (>95% purity).
-4. **Thermodynamic Stability (DSF):** Differential Scanning Fluorimetry with SYPRO Orange dye (470/570 nm); thermal ramp from 25 °C to 95 °C to quantify thermal shift ($\Delta T_m$).
-5. **Phenotypic MIC Testing:** Broth microdilution in cation-adjusted Mueller-Hinton broth following CLSI M07 and EUCAST guidelines with twofold antibiotic serial dilutions.
+| **LangGraph Multi-Agent Orchestration** | **Fully Implemented** | 10 specialized agent nodes + 2 routing gates; unified typed `ResearchState` with execution traces |
+| **Cognitive Query & Synthesis Agents** | **Fully Implemented** | LLaMA-3.2 via Ollama; prompt-engineered intent parsing and evidence-conditioned synthesis |
+| **Ontology & Reference Database Agents** | **Fully Implemented** | Autonomous lookups across 9,027 CARD terms, 10,163 AMRFinderPlus, and 48,152 WHO TB records |
+| **Federated Literature Research Agent** | **Fully Implemented** | Parallel querying across 8 live scholarly APIs; hierarchical deduplication (PMID, PMCID, DOI, Title) |
+| **Evidence Scoring & Attribution Agent** | **Fully Implemented** | Clause-boundary isolation prevents cross-gene leakage; 4-tier evidence stratification |
+| **Biophysical & Structural Analysis Agent** | **Fully Implemented** | Kyte-Doolittle hydropathy, charge, mass deltas, and 12-family catalytic pocket mapping |
+| **Enzyme Kinetics & Catalytic Scaffolds** | **Curated & Operational** | Curated kinetic profiles and verified crystal structure accessions (e.g., PDB 6D18, 5UHC) |
+| **Citation Reconciliation & Audit Agent** | **Fully Implemented** | Reconciles text citations with verified PMIDs; generates audit logs and clickable links |
+| **Dynamic 3D Coordinate Parsing & Docking** | **Future Scope** | Identified as external research extension; sequence and domain mapping fully operational |
 
 ---
 
-## Federated Literature & Database Registry
+## Limitations & Future Scope
 
-AMR Nexus federates retrieval across **13 biological databases and scholarly sources** in parallel:
+### Limitations
+1. **Benchmark Scope:** Validated across primary surveillance benchmarks (*rpoB, TEM-1, KPC-2, gyrA*) and 15 offline queries; broader multi-family validation across rare clinical cohorts remains desirable.
+2. **Generative Contradiction Risk:** As observed in unconstrained LLM runs on *bla*KPC-2 T243M, generative synthesis requires strict evidence gating to prevent biochemical contradictions.
+3. **Upstream Metadata Inconsistencies:** Upstream scholarly aggregator APIs occasionally return mismatched DOIs, necessitating continuous multi-identifier reconciliation.
+4. **Latency:** End-to-end multi-provider literature retrieval and quantized local LLM inference take 42–96 s on consumer hardware, exceeding instant interactive targets.
 
-| Category | Source / Registry | Access Protocol |
-| :--- | :--- | :--- |
-| **Authoritative Registries** | CARD (Antibiotic Resistance Ontology) | Local ARO JSON Inverted Index |
-| | NCBI AMRFinderPlus | Local Reference Catalogues |
-| | WHO TB Mutation Catalogue 2023 | Pre-Indexed Clinical Classification Tables |
-| **Structural Repositories** | Protein Data Bank (RCSB PDB) | High-Resolution Crystal & Cryo-EM Structures |
-| | AlphaFold Protein Structure Database | AlphaFold DB Models (e.g., `AF-Q9F663-F1`) |
-| | UniProtKB | UniProt REST API (Dynamic Fallback) |
-| **Scholarly Literature** | PubMed & PMC Open Access | NCBI Entrez E-Utilities API |
-| | Europe PMC | Europe PMC REST API |
-| | bioRxiv & medRxiv | Cold Spring Harbor Preprints API |
-| | OpenAlex | OpenAlex Open Science Graph REST API |
-| | Crossref | Crossref Metadata Search API |
-| | Semantic Scholar | Semantic Scholar Academic Graph API |
-| | DOAJ | Directory of Open Access Journals API |
-| | arXiv (q-bio) | Cornell arXiv API |
-| | Google Scholar | Deterministic Query URL Generator |
-
----
-
-## Benchmark Results & Case Studies
-
-### Experiment 1: Universal *rpoB* Query in *M. tuberculosis*
-- **Query:** *"Which mutations in rpoB are associated with rifampicin resistance in Mycobacterium tuberculosis?"*
-- **Performance:** 13 databases federated in **95.73s**; 0 hallucinations.
-- **Curated WHO TB Catalogue:** Extracted confirmed classifications for **S450L** (Grade 1), **D435V** (Grade 1), **S431F**, **L378R**, and **H531L**.
-- **Auditable Literature Excerpts:** Synthesized verified literature quotes covering:
-  - Canonical 81-bp RRDR mutations: S450L (>70% clinical frequency), H445Y, D435V with citations `[1]`, `[2]`, `[3]`, `[4]`.
-  - Secondary/compound variants: L452P, D435Y, N437D, L430P, M434V with citation `[5]`.
-  - Compensatory & diagnostic mutations: L378R (CRISPR-Cas12a detection, `[7]`), H531L (`[8]`), and H445L (`[6]`).
-- **Complete Bibliography:** Automatically compiled 8 verified references with active PMIDs and DOIs.
-
-### Experiment 2: Novel/Uncatalogued Variant *bla*KPC-2 T243M
-- **Query:** *"What is the phenotypic effect of blaKPC-2 T243M in Klebsiella pneumoniae?"*
-- **Database Status:** Transparently declared uncatalogued in primary diagnostic catalogues (WHO, CARD).
-- **In Silico 3D Structural Modeling:**
-  - Mapped to crystal structures PDB **2OV5** (1.85 Å) and PDB **6D18** (1.35 Å); AlphaFold ID: `AF-Q9F663-F1`.
-  - Localization: Residue 243 situated within **Beta-strand B3**.
-  - Computed Biophysical Shift: $\Delta V = +46.8\text{ \AA}^3$, $\Delta \text{Hydropathy} = +2.6$, $\Delta \text{Charge} = +0.0$ (polar uncharged $\to$ nonpolar hydrophobic).
-  - Molecular Mechanism: Severe steric clash (+46.8 Å³) constricting local binding cleft volume, impeding inhibitor trapping and conferring ceftazidime/avibactam resistance.
-- **Validation Tier:** Formally classified as **Tier 3 (In Silico Computational Hypothesis)**.
-- **Wet-Lab Protocol:** Automatically generated full 5-step confirmatory protocol (Q5 mutagenesis, BL21(DE3) expression, kinetics, DSF, and broth microdilution).
-
-### Experiment 3: *bla*TEM-1 Beta-Lactamase Mutation Matrix
-- **Entity Normalization:** Normalized `TEM1` to CARD canonical accession `ARO:3000873`.
-- **Mutation Matrix:** Structured allelic mapping across TEM-20, TEM-201, and TEM-205:
-  - `Glu104Lys (E104K)`: Positive charge (+1) in entry loop stabilizing cephalosporin carboxylate (ESBL phenotype).
-  - `Gly238Ser (G238S)`: Active site steric expansion enlarging binding cavity for oxyimino-cephalosporins.
-  - `Met182Thr (M182T)`: Global thermodynamic suppressor (>17 Å from active site) restoring folding stability ($\Delta\Delta G$).
-
-### Experiment 4: Commercial Hosted LLM Comparison (Refusal Bypass)
-When evaluated on identical pathogen queries (*Mycobacterium tuberculosis rpoB*), commercial hosted LLMs failed:
-- **ChatGPT Go (GPT-4o):** Execution blocked with a false-positive *"possible biological safety risk"* refusal banner.
-- **Claude Opus 5 (ClaudeScience):** Execution halted and chat paused due to automated biosecurity filters.
-- **AMR Nexus:** **100% uninterrupted local execution**, 0 refusals, full structural kinetics, and 100% citation traceability.
+### Future Scope & Research Directions
+* **Automated AlphaFold DB Parsing:** Integrating BioPython to dynamically download PDB/AlphaFold coordinates and compute 3D atomic Euclidean distances to active-site ligands.
+* **Automated CrossRef Metadata Cross-Verification:** Bidirectional automated CrossRef/PubMed metadata reconciliation to eliminate DOI mismatches.
+* **Large-Scale Clinical Cohort Benchmarking:** Benchmarking against expanded multi-gene clinical phenotype cohorts and quantitative broth microdilution MIC datasets.
+* **Asynchronous Query Streaming & Local Caching:** Implementing SQLite literature caching and token streaming to reduce response latency under 15 seconds.
+* **Non-Protein Determinants:** Expanding the structural analysis engine to handle 16S / 23S ribosomal RNA mutations and non-coding promoter mutations.
 
 ---
 
 ## Installation and Setup
 
 ### Prerequisites
-
-- **Python:** Version 3.11 or higher
-- **Node.js:** Version 18 or higher (with `npm` or `pnpm`)
-- **Ollama:** Installed locally with model `llama3:8b` or `llama3.2` pulled:
+* **Python:** Version 3.11 or higher
+* **Node.js:** Version 18 or higher (with `npm` or `pnpm`)
+* **Ollama:** Installed locally with model `llama3.2` or `llama3:8b`:
   ```bash
-  ollama pull llama3:8b
+  ollama pull llama3.2
   ```
 
 ### Backend Setup
-
-1. Navigate to the backend directory and set up a virtual environment:
+1. Clone the repository and navigate to `backend/`:
    ```bash
-   cd backend
-   python -m venv .venv
+   git clone https://github.com/thulasi0510/AMR_Nexus.git
+   cd AMR_Nexus/backend
    ```
+2. Create and activate a Python virtual environment:
+   ```bash
+   # Windows (PowerShell)
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
 
-2. Activate the virtual environment:
-   - **Windows (PowerShell):**
-     ```powershell
-     .\.venv\Scripts\Activate.ps1
-     ```
-   - **Linux / macOS:**
-     ```bash
-     source .venv/bin/activate
-     ```
-
+   # Linux / macOS
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
 3. Install dependencies:
    ```bash
-   python -m pip install --upgrade pip
-   python -m pip install -r requirements.txt
+   pip install --upgrade pip
+   pip install -r requirements.txt
    ```
-
-4. Configure environment variables (create a `.env` file from `.env.example`):
+4. Configure `.env` (copy from `.env.example`):
    ```env
    AMR_CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
    AMR_ADDITIONAL_SOURCES=1
    AMR_PUBMED_TIMEOUT=5
    OLLAMA_BASE_URL=http://localhost:11434
    ```
-
-5. Launch the backend Flask API:
+5. Launch the backend API:
    ```bash
    python -m flask --app app run --host 0.0.0.0 --port 5000
    ```
-
    Verify health:
    ```bash
    curl http://localhost:5000/health
    ```
 
 ### Frontend Setup
-
-1. In a separate terminal, navigate to the frontend directory:
+1. In a separate terminal, navigate to `frontend/`:
    ```bash
-   cd frontend
+   cd AMR_Nexus/frontend
    npm install
    ```
-
 2. Start the Vite development server:
    ```bash
    npm run dev
    ```
-
-3. Open your browser and navigate to `http://localhost:5173`.
+3. Open `http://localhost:5173` in your browser.
 
 ---
 
 ## API Reference and Usage
 
 ### Query Endpoint
-
 `POST /query`
 
 **Request Payload:**
@@ -307,65 +406,89 @@ When evaluated on identical pathogen queries (*Mycobacterium tuberculosis rpoB*)
 ```json
 {
   "query": "Which mutations in rpoB are associated with rifampicin resistance in Mycobacterium tuberculosis?",
-  "executive_summary": "...",
-  "five_facet_characterization": {
-    "variant": "S450L",
-    "occurrence": "Dominant clinical RRDR substitution (>70%)",
-    "genetic_context": "Chromosomal rpoB locus",
-    "sequence_biophysics": "Ser to Leu at codon 450; Delta_Vol: +77.7 A^3",
-    "functional_effects": "Steric obstruction of rifampicin naphthalene ring; kcat/Km preserved",
-    "resistance_associations": "High-level RIF resistance (MIC > 32 mg/L); WHO Grade 1"
+  "understanding": {
+    "domain": "amr",
+    "intent": ["mutation_variant_information"],
+    "entities": {
+      "genes": ["rpoB"],
+      "mutations": ["S450L"],
+      "antibiotics": ["rifampicin"],
+      "organisms": ["Mycobacterium tuberculosis"]
+    }
+  },
+  "mutation_reference": {
+    "status": "found",
+    "mutations": [
+      {
+        "mutation": "S450L",
+        "phenotype": "resistance-associated",
+        "confidence": "Tier 1: High Confidence (WHO 2023)"
+      }
+    ]
   },
   "structural_analysis": {
     "pdb_id": "5UHC",
     "alphafold_id": "AF-P9WGY9-F1",
     "domain": "Rifampicin Resistance-Determining Region (RRDR)",
-    "catalytic_impact": "Preserves elongation velocity (~20-25 nt/s)",
-    "validation_tier": "Tier 1: Confirmed Experimental Association",
-    "confidence_score": 0.96
+    "physicochemical_deltas": {
+      "delta_volume_angstrom3": 46.8,
+      "delta_hydropathy": 4.4,
+      "delta_charge": 0
+    }
   },
-  "sources_searched": ["PubMed", "Europe PMC", "bioRxiv", "Crossref", "OpenAlex", "Semantic Scholar", "CARD", "AMRFinderPlus"],
+  "sources_searched": ["PubMed", "Europe PMC", "OpenAlex", "CrossRef", "Semantic Scholar", "CARD", "AMRFinderPlus"],
   "citations": [
     {
       "id": 1,
-      "authors": "Soidah S, et al.",
-      "title": "Beyond Hotspot Mutations...",
-      "journal": "Pathogens",
-      "year": 2025,
-      "pmid": "41599000",
-      "doi": "10.47679/jchs.202474"
+      "pmid": "31548687",
+      "doi": "10.1016/S2666-5247(20)30063-5",
+      "title": "Whole-genome sequencing for tuberculosis drug susceptibility testing...",
+      "journal": "Lancet Microbe",
+      "year": 2020
     }
+  ],
+  "execution_trace": [
+    {"agent": "Query Understanding Agent", "status": "completed"},
+    {"agent": "Entity Normalization Agent", "status": "completed"},
+    {"agent": "Literature Research Agent", "status": "completed"},
+    {"agent": "Report Generation Agent", "status": "completed"}
   ]
 }
 ```
 
 ---
 
-## Project Verification and Testing
+## References
 
-Execute the test suites from `backend/`:
-
-```bash
-# Run universal query benchmarks
-python test_universal_amr_queries.py
-
-# Run precision and boundary tests
-python test_v5_precision.py
-
-# Run full test suite with pytest
-python -m pytest -q
-```
+1. **Alcock BP, et al. (2023)** CARD 2023: expanded curation, support for machine learning, and resistome prediction at the Comprehensive Antibiotic Resistance Database. *Nucleic Acids Research*, 51, D690-D699.
+2. **Blair JMA, et al. (2015)** Molecular mechanisms of antibiotic resistance. *Nature Reviews Microbiology*, 13, 42-51.
+3. **Calvet-Seral J, et al. (2023)** Targeted chromosomal barcoding establishes direct genotype-phenotype associations for antibiotic resistance in *Mycobacterium abscessus*. *Microbiology Spectrum*, 11, e05344-22.
+4. **Chothia C (1975)** Structural invariants in protein folding. *Nature*, 254, 304-308.
+5. **De Oliveira DMP, et al. (2020)** Antimicrobial resistance in ESKAPE pathogens. *Clinical Microbiology Reviews*, 33, e00181-19.
+6. **Feldgarden M, et al. (2021)** AMRFinderPlus and the Reference Gene Catalog facilitate examination of the genomic links among antimicrobial resistance, stress response, and virulence. *Scientific Reports*, 11, 12728.
+7. **Florensa AF, et al. (2022)** ResFinder - an open online resource for identification of antimicrobial resistance genes and prediction of phenotypes. *Microbial Genomics*, 8, 000748.
+8. **GBD 2021 AMR Collaborators (2024)** Global burden of bacterial antimicrobial resistance 1990-2021: a systematic analysis with forecasts to 2050. *Lancet*, 404, 1199-1226.
+9. **Green AG, et al. (2025)** The structural context of mutations in proteins predicts their effect on antibiotic resistance. *bioRxiv*, doi:10.1101/2025.09.23.676583.
+10. **Kyte J and Doolittle RF (1982)** A simple method for displaying the hydropathic character of a protein. *Journal of Molecular Biology*, 157, 105-132.
+11. **Lee K, et al. (2025)** A4SLR: an agentic artificial intelligence-assisted systematic literature review framework. *Value in Health*, 28, 1655-1664.
+12. **Murray CJL, et al. (2022)** Global burden of bacterial antimicrobial resistance in 2019: a systematic analysis. *Lancet*, 399, 629-655.
+13. **Pemberton OA, et al. (2019)** Heteroaryl phosphonates as noncovalent inhibitors of both serine- and metallocarbapenemases. *Journal of Medicinal Chemistry*, 62, 8480-8496.
+14. **World Health Organization (2023)** *Catalogue of mutations in Mycobacterium tuberculosis complex and their association with drug resistance, 2nd edition.* Geneva: WHO.
+15. **Yagimoto K, et al. (2024)** Prediction of antibiotic resistance mechanisms using a protein language model. *Bioinformatics*, 40, btae550.
+16. **Yee R, et al. (2021)** The genotype-to-phenotype dilemma: how should laboratories approach discordant susceptibility results? *Journal of Clinical Microbiology*, 59, e00138-20.
+17. **Zhang Y, et al. (2025)** A comprehensive large-scale biomedical knowledge graph for AI-powered data-driven biomedical research. *Nature Machine Intelligence*, 7, 602-614.
 
 ---
 
 ## Project Team and Acknowledgements
 
-- **Investigator:** Thulasi N (Register No: **127164006**), M.Tech Big Data Biology (Team `MBDB_05`), School of Chemical & Biotechnology, SASTRA Deemed to be University.
-- **Faculty Guide:** **Dr. Vigneshwar Ramakrishnan, Ph.D.**, Professor & Associate Dean (Research), School of Chemical & Biotechnology, SASTRA Deemed to be University.
-- **Faculty Co-Guide:** **Dr. Suma Mohan, Ph.D.**, Senior Assistant Professor, School of Chemical & Biotechnology, SASTRA Deemed to be University.
+* **Candidate:** **Thulasi N** (Register No: **127164006**), M.Tech Big Data Biology (Team `MBDB_05`), School of Chemical & Biotechnology, SASTRA Deemed to be University.
+* **Faculty Guide:** **Dr. Vigneshwar Ramakrishnan, Ph.D.**, Professor & Associate Dean (Research), School of Chemical & Biotechnology, SASTRA Deemed to be University.
+* **Faculty Co-Guide:** **Dr. Suma Mohan, Ph.D.**, Senior Assistant Professor, School of Chemical & Biotechnology, SASTRA Deemed to be University.
+* **Department:** Department of Bioinformatics, School of Chemical and Biotechnology (SCBT), SASTRA Deemed to be University, Tirumalaisamudram, Thanjavur - 613401, Tamil Nadu, India.
 
 ---
 
 ## License
 
-This project is released under the [MIT License](LICENSE) for open academic and biomedical research.
+This project is licensed under the [MIT License](LICENSE) for open academic and biomedical research.
